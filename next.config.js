@@ -1,0 +1,41 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mariapistache.com.br',
+        pathname: '/uploads/**',
+      }
+    ],
+    unoptimized: true,
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+
+  experimental: {
+    serverComponentsExternalPackages: ['pg'],
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'mariapistache.com.br']
+    }
+  },
+
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+}
+
+module.exports = nextConfig
