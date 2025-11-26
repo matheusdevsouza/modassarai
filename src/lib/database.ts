@@ -100,15 +100,26 @@ interface TestimonialFilters {
   limit?: number
 }
 
-const dbConfig: DBConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || '',
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+function getDbConfig(): DBConfig | { connectionString: string; max?: number; idleTimeoutMillis?: number; connectionTimeoutMillis?: number } {
+  if (process.env.DATABASE_URL) {
+    return {
+      connectionString: process.env.DATABASE_URL,
+      max: 20,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 2000,
+    }
+  }
+  
+  return {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || '',
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+  }
 }
 
 let pool: Pool | null = null
@@ -116,13 +127,15 @@ let pool: Pool | null = null
 function initializePool() {
   if (pool) return pool;
   
+  const config = getDbConfig()
+  
   if (process.env.NODE_ENV === 'development') {
     if (!(globalThis as any)._pgPool) {
-      (globalThis as any)._pgPool = new Pool(dbConfig)
+      (globalThis as any)._pgPool = new Pool(config)
     }
     pool = (globalThis as any)._pgPool
   } else {
-    pool = new Pool(dbConfig)
+    pool = new Pool(config)
   }
   return pool;
 }

@@ -196,7 +196,6 @@ a {
     padding-right: 2rem;
   }
 }
-/* Exceção para indicadores de slider - não aplicar min-height/min-width */
 .slider-indicator,
 .slider-dot {
   min-height: auto !important;
