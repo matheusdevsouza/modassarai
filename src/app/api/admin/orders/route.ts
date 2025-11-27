@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import database from '@/lib/database';
 import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const user = await authenticateUser(request);

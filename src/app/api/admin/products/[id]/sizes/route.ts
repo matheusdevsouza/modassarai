@@ -8,6 +8,9 @@ import database, {
   getProductById 
 } from '@/lib/database';
 import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }

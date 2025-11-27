@@ -11,6 +11,9 @@ import {
   generateAuditHash 
 } from '@/lib/security';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }

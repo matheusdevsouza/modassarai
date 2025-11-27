@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getProductBySlug, getProductById, getProductStats, recordProductStat } from '@/lib/database'
 import { getUserIdentifier, getRequestInfo } from '@/lib/user-identifier'
 import { authenticateUser } from '@/lib/auth'
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }

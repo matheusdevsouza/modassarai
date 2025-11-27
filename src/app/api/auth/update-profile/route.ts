@@ -3,6 +3,8 @@ import { authenticateUser, isAuthenticated } from "@/lib/auth";
 import database from "@/lib/database";
 import { encryptForDatabase } from "@/lib/transparent-encryption";
 import { processSafeUserData } from "@/lib/safe-user-data";
+
+export const dynamic = 'force-dynamic';
 export async function PATCH(request: NextRequest) {
   try {
     const payload = await authenticateUser(request);

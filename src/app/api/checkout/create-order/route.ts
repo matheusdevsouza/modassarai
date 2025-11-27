@@ -3,6 +3,8 @@ import database from '@/lib/database';
 import { authenticateUser } from '@/lib/auth';
 import { encryptForDatabase } from '@/lib/transparent-encryption';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
+
+export const dynamic = 'force-dynamic';
 import { detectSQLInjection } from '@/lib/sql-injection-protection';
 const client = new MercadoPagoConfig({
   accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,

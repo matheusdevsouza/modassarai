@@ -3,6 +3,8 @@ import database from '@/lib/database';
 import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
 import { generateAuditHash, formatAddress } from '@/lib/security';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
+
+export const dynamic = 'force-dynamic';
 import bcrypt from 'bcryptjs';
 export async function POST(
   request: NextRequest,

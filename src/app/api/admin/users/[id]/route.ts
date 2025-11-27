@@ -3,6 +3,8 @@ import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
 import database from '@/lib/database';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
 import { processSafeUserData } from '@/lib/safe-user-data';
+
+export const dynamic = 'force-dynamic';
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }

@@ -3,6 +3,8 @@ import { authenticateUser, verifyAdminAccess } from '@/lib/auth'
 import database from '@/lib/database'
 import { join } from 'path'
 import { existsSync, statSync } from 'fs'
+
+export const dynamic = 'force-dynamic';
 import { mkdir, writeFile } from 'fs/promises'
 export async function POST(
   request: NextRequest,

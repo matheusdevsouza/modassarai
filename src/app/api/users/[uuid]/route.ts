@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUserByUuid } from '@/lib/database';
 import { authenticateUser, isAuthenticated } from '@/lib/auth';
 import { processSafeUserData } from '@/lib/safe-user-data';
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { uuid: string } }

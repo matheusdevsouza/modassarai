@@ -3,6 +3,8 @@ import database from '@/lib/database'
 import { authenticateUser, verifyAdminAccess } from '@/lib/auth'
 import { writeFile, mkdir, unlink } from 'fs/promises'
 import { join } from 'path'
+
+export const dynamic = 'force-dynamic';
 import { existsSync } from 'fs'
 import { validateFileContent, sanitizeFilename } from '@/lib/secure-upload'
 export async function GET(

@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authenticateUser, isAuthenticated, isEmailVerified } from '@/lib/auth';
 import database from '@/lib/database';
 import { processSafeUserData } from '@/lib/safe-user-data';
+
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const payload = await authenticateUser(request);
