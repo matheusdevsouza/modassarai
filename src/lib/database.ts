@@ -635,8 +635,8 @@ export interface CreateUserData {
 }
 async function createUser(userData: CreateUserData): Promise<any> {
   const sql = `
-    INSERT INTO users (name, email, password, phone, cpf, birth_date, gender, email_verified_at, is_active)
-    VALUES (?, ?, ?, ?, ?, ?, ?, NULL, TRUE)
+    INSERT INTO users (name, email, password, phone, cpf, birth_date, gender, email_verified_at, is_active, auth_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, NULL, TRUE, gen_random_uuid())
   `;
   const params = [
     userData.name,
