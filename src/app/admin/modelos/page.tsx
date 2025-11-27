@@ -175,7 +175,7 @@ export default function AdminModels() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <FaSpinner className="animate-spin text-4xl text-primary-500 mx-auto mb-4" />
-          <p className="text-gray-400">Carregando modelos...</p>
+          <p className="text-sage-600">Carregando modelos...</p>
         </div>
       </div>
     );
@@ -184,14 +184,16 @@ export default function AdminModels() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <FaExclamationTriangle className="text-4xl text-red-500 mx-auto mb-4" />
-          <p className="text-red-400 mb-4">{error}</p>
-          <button
-            onClick={refreshModels}
-            className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
-          >
-            Tentar Novamente
-          </button>
+          <div className="bg-white border border-red-200 rounded-xl p-6">
+            <FaExclamationTriangle className="text-4xl text-red-500 mx-auto mb-4" />
+            <p className="text-red-600 mb-4">{error}</p>
+            <button
+              onClick={refreshModels}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            >
+              Tentar Novamente
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -205,18 +207,18 @@ export default function AdminModels() {
         className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
       >
         <div className="flex-1">
-          <h1 className="text-xl md:text-2xl font-bold text-white mb-1">Gestão de Modelos</h1>
-          <p className="text-gray-400 text-xs md:text-sm">Gerencie todos os modelos da sua loja</p>
+          <h1 className="text-xl md:text-2xl font-bold text-sage-900 mb-1">Gestão de Modelos</h1>
+          <p className="text-sage-600 text-xs md:text-sm">Gerencie todos os modelos da sua loja</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           {!isMobile && (
-            <div className="flex bg-dark-800/50 rounded-xl p-1">
+            <div className="flex bg-white border border-primary-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode('table')}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'table' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBars size={12} />
@@ -227,7 +229,7 @@ export default function AdminModels() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'grid' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBox size={12} />
@@ -238,7 +240,7 @@ export default function AdminModels() {
           <button
             onClick={refreshModels}
             disabled={loading}
-            className="px-3 py-2 bg-dark-800/50 text-gray-400 rounded-xl hover:text-white hover:bg-dark-700/50 transition-all duration-300 flex items-center gap-2 text-sm"
+            className="px-3 py-2 bg-white border border-primary-100 text-sage-600 rounded-xl hover:text-primary-600 hover:bg-primary-100 transition-all duration-300 flex items-center gap-2 text-sm"
           >
             <FaRedo className={loading ? 'animate-spin' : ''} size={12} />
             <span className="hidden sm:inline">Atualizar</span>
@@ -259,55 +261,55 @@ export default function AdminModels() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
         >
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Total</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Total</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.total}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaBox className="text-white" size={14} />
+              <div className="bg-primary-200 p-2 rounded-full">
+                <FaBox className="text-primary-600" size={14} />
               </div>
             </div>
           </div>
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Ativos</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Ativos</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.active}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaUsers className="text-white" size={14} />
+              <div className="bg-green-200 p-2 rounded-full">
+                <FaUsers className="text-green-600" size={14} />
               </div>
             </div>
           </div>
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Inativos</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Inativos</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.inactive}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaUsers className="text-white" size={14} />
+              <div className="bg-red-200 p-2 rounded-full">
+                <FaUsers className="text-red-600" size={14} />
               </div>
             </div>
           </div>
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Com Produtos</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Com Produtos</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.withProducts}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaBox className="text-white" size={14} />
+              <div className="bg-primary-200 p-2 rounded-full">
+                <FaBox className="text-primary-600" size={14} />
               </div>
             </div>
           </div>
@@ -317,12 +319,12 @@ export default function AdminModels() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-dark-800/50 rounded-xl p-4 border border-dark-700/50"
+        className="bg-white border border-primary-100 rounded-xl p-4"
       >
         {isMobile && (
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="w-full flex items-center justify-between p-3 text-white mb-4 bg-dark-700/50 rounded-lg"
+            className="w-full flex items-center justify-between p-3 text-sage-900 mb-4 bg-primary-50 rounded-lg"
           >
             <span className="flex items-center gap-2">
               <FaFilter size={14} />
@@ -334,13 +336,13 @@ export default function AdminModels() {
         <div className={`space-y-4 ${isMobile && !showFilters ? 'hidden' : ''}`}>
           <form onSubmit={handleSearch} className="flex gap-3">
             <div className="flex-1 relative">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sage-500 text-sm" />
               <input
                 type="text"
                 placeholder="Buscar por nome ou descrição..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-dark-700/50 border border-dark-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 text-sm"
+                className="w-full pl-10 pr-4 py-2 bg-primary-50 border border-primary-100 rounded-lg text-sage-900 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:bg-white text-sm"
               />
             </div>
             <button
@@ -355,7 +357,7 @@ export default function AdminModels() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 bg-dark-700/50 border border-dark-600/50 rounded-lg text-white text-sm focus:outline-none focus:border-primary-500"
+              className="px-3 py-2 bg-primary-50 border border-primary-100 rounded-lg text-sage-900 text-sm focus:outline-none focus:border-primary-500 focus:bg-white"
             >
               <option value="all">Todos os Status</option>
               <option value="active">Ativos</option>
@@ -364,7 +366,7 @@ export default function AdminModels() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2 bg-dark-700/50 border border-dark-600/50 rounded-lg text-white text-sm focus:outline-none focus:border-primary-500"
+              className="px-3 py-2 bg-primary-50 border border-primary-100 rounded-lg text-sage-900 text-sm focus:outline-none focus:border-primary-500 focus:bg-white"
             >
               <option value="created_at">Data de Criação</option>
               <option value="name">Nome</option>
@@ -373,7 +375,7 @@ export default function AdminModels() {
             </select>
             <button
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className="px-3 py-2 bg-dark-700/50 border border-dark-600/50 rounded-lg text-white text-sm hover:bg-dark-600/50 transition-colors flex items-center justify-center gap-2"
+              className="px-3 py-2 bg-primary-50 border border-primary-100 rounded-lg text-sage-700 text-sm hover:text-primary-600 hover:bg-primary-100 transition-colors flex items-center justify-center gap-2"
             >
               {sortOrder === 'asc' ? <FaSortAmountUp /> : <FaSortAmountDown />}
               {sortOrder === 'asc' ? 'Crescente' : 'Decrescente'}
@@ -386,7 +388,7 @@ export default function AdminModels() {
                 setSortOrder('desc');
                 setPage(1);
               }}
-              className="px-3 py-2 bg-dark-700/50 border border-dark-600/50 rounded-lg text-gray-400 text-sm hover:text-white hover:bg-dark-600/50 transition-colors"
+              className="px-3 py-2 bg-white border border-primary-100 rounded-lg text-sage-600 text-sm hover:text-primary-600 hover:bg-primary-100 transition-colors"
             >
               Limpar Filtros
             </button>
@@ -399,39 +401,39 @@ export default function AdminModels() {
         transition={{ duration: 0.5, delay: 0.3 }}
       >
         {viewMode === 'table' && !isMobile ? (
-          <div className="bg-dark-800/50 rounded-xl border border-dark-700/50 overflow-hidden">
+          <div className="bg-white border border-primary-100 rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-dark-700/50">
+                <thead className="bg-primary-50 border-b border-primary-100">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider">
                       Modelo
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider">
                       Produtos
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider">
                       Ordem
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider">
                       Criado em
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-right text-xs font-medium text-sage-700 uppercase tracking-wider">
                       Ações
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-dark-700/50">
+                <tbody className="divide-y divide-primary-100">
                   {models.map((model, index) => (
                     <motion.tr
                       key={model.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="hover:bg-dark-700/30 transition-colors"
+                      className="hover:bg-primary-50 transition-colors"
                     >
                       <td className="px-4 py-4">
                         <div className="flex items-center space-x-3">
@@ -445,19 +447,19 @@ export default function AdminModels() {
                                 className="w-10 h-10 rounded-lg object-cover"
                               />
                             ) : (
-                              <div className="w-10 h-10 bg-dark-600 rounded-lg flex items-center justify-center">
-                                <FaImage className="text-gray-400 text-lg" />
+                              <div className="w-10 h-10 bg-sand-50 border border-primary-100 rounded-lg flex items-center justify-center">
+                                <FaImage className="text-sage-400 text-lg" />
                               </div>
                             )}
                           </div>
                           <div>
-                            <p className="text-white font-medium text-sm">{model.name}</p>
-                            <p className="text-gray-400 text-xs">{model.slug}</p>
+                            <p className="text-sage-900 font-medium text-sm">{model.name}</p>
+                            <p className="text-sage-500 text-xs">{model.slug}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900/50 text-blue-300">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-200 text-blue-600 border border-blue-300">
                           {model.product_count} produto{model.product_count !== 1 ? 's' : ''}
                         </span>
                       </td>
@@ -466,18 +468,18 @@ export default function AdminModels() {
                           onClick={() => handleToggleStatus(model.id, model.is_active)}
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors ${
                             model.is_active
-                              ? 'bg-green-900/50 text-green-300 hover:bg-green-800/50'
-                              : 'bg-red-900/50 text-red-300 hover:bg-red-800/50'
+                              ? 'bg-green-200 text-green-600 border border-green-300 hover:bg-green-300'
+                              : 'bg-red-200 text-red-600 border border-red-300 hover:bg-red-300'
                           }`}
                         >
                           {model.is_active ? 'Ativo' : 'Inativo'}
                         </button>
                       </td>
                       <td className="px-4 py-4">
-                        <span className="text-gray-300 text-sm">{model.sort_order}</span>
+                        <span className="text-sage-700 text-sm">{model.sort_order}</span>
                       </td>
                       <td className="px-4 py-4">
-                        <span className="text-gray-300 text-sm">
+                        <span className="text-sage-700 text-sm">
                           {new Date(model.created_at).toLocaleDateString('pt-BR')}
                         </span>
                       </td>
@@ -485,21 +487,21 @@ export default function AdminModels() {
                         <div className="flex items-center justify-end space-x-2">
                           <button
                             onClick={() => router.push(`/admin/modelos/${model.id}`)}
-                            className="p-2 text-gray-400 hover:text-blue-400 transition-colors"
+                            className="p-2 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-colors"
                             title="Visualizar"
                           >
                             <FaEye size={14} />
                           </button>
                           <button
                             onClick={() => router.push(`/admin/modelos/${model.id}/editar`)}
-                            className="p-2 text-gray-400 hover:text-yellow-400 transition-colors"
+                            className="p-2 text-yellow-600 hover:text-yellow-700 hover:bg-yellow-100 rounded-lg transition-colors"
                             title="Editar"
                           >
                             <FaEdit size={14} />
                           </button>
                           <button
                             onClick={() => handleDelete(model.id, model.name)}
-                            className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                            className="p-2 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg transition-colors"
                             title="Excluir"
                           >
                             <FaTrash size={14} />
@@ -520,9 +522,9 @@ export default function AdminModels() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="bg-dark-800/50 rounded-xl border border-dark-700/50 overflow-hidden hover:border-primary-500/50 transition-all duration-300"
+                className="bg-white rounded-xl border border-primary-100 overflow-hidden hover:border-primary-200 transition-all duration-300 hover:shadow-lg hover:shadow-primary-100/50"
               >
-                <div className="aspect-video relative bg-dark-700/50">
+                <div className="aspect-video relative bg-sand-50">
                   {getModelImage(model) ? (
                     <Image
                       src={getModelImage(model)!}
@@ -532,7 +534,7 @@ export default function AdminModels() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <FaImage className="text-gray-400 text-3xl" />
+                      <FaImage className="text-sage-400 text-3xl" />
                     </div>
                   )}
                   <div className="absolute top-2 right-2">
@@ -540,8 +542,8 @@ export default function AdminModels() {
                       onClick={() => handleToggleStatus(model.id, model.is_active)}
                       className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
                         model.is_active
-                          ? 'bg-green-900/80 text-green-300 hover:bg-green-800/80'
-                          : 'bg-red-900/80 text-red-300 hover:bg-red-800/80'
+                          ? 'bg-green-200 text-green-600 border border-green-300 hover:bg-green-300'
+                          : 'bg-red-200 text-red-600 border border-red-300 hover:bg-red-300'
                       }`}
                     >
                       {model.is_active ? 'Ativo' : 'Inativo'}
@@ -550,27 +552,27 @@ export default function AdminModels() {
                 </div>
                 <div className="p-4">
                   <div className="mb-3">
-                    <h3 className="text-white font-medium text-sm mb-1">{model.name}</h3>
-                    <p className="text-gray-400 text-xs">{model.slug}</p>
+                    <h3 className="text-sage-900 font-medium text-sm mb-1">{model.name}</h3>
+                    <p className="text-sage-500 text-xs">{model.slug}</p>
                     {model.description && (
-                      <p className="text-gray-400 text-xs mt-1 line-clamp-2">{model.description}</p>
+                      <p className="text-sage-500 text-xs mt-1 line-clamp-2">{model.description}</p>
                     )}
                   </div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-500/15 text-primary-300 border border-primary-500/30">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-200 text-blue-600 border border-blue-300">
                       {model.product_count} produto{model.product_count !== 1 ? 's' : ''}
                     </span>
-                    <span className="text-gray-400 text-xs">
+                    <span className="text-sage-500 text-xs">
                       Ordem: {model.sort_order}
                     </span>
                   </div>
-                  <p className="text-gray-400 text-xs mb-3">
+                  <p className="text-sage-500 text-xs mb-3">
                     Criado em {new Date(model.created_at).toLocaleDateString('pt-BR')}
                   </p>
                   <div className="flex items-center justify-between">
                     <button
                       onClick={() => router.push(`/admin/modelos/${model.id}`)}
-                      className="px-3 py-1.5 bg-primary-500/20 text-primary-400 rounded-lg hover:bg-primary-600/25 transition-colors text-xs flex items-center gap-1"
+                      className="px-3 py-1.5 bg-primary-100 text-primary-600 rounded-lg hover:bg-primary-200 transition-colors text-xs flex items-center gap-1"
                     >
                       <FaEye size={12} />
                       Ver
@@ -578,14 +580,14 @@ export default function AdminModels() {
                     <div className="flex items-center space-x-1">
                       <button
                         onClick={() => router.push(`/admin/modelos/${model.id}/editar`)}
-                        className="p-2 text-gray-400 hover:text-yellow-400 transition-colors"
+                        className="p-2 text-yellow-600 hover:text-yellow-700 hover:bg-yellow-100 rounded-lg transition-colors"
                         title="Editar"
                       >
                         <FaEdit size={14} />
                       </button>
                       <button
                         onClick={() => handleDelete(model.id, model.name)}
-                        className="p-2 text-gray-400 hover:text-red-400 transition-colors"
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg transition-colors"
                         title="Excluir"
                       >
                         <FaTrash size={14} />
@@ -599,8 +601,8 @@ export default function AdminModels() {
         )}
         {models.length === 0 && !loading && (
           <div className="text-center py-12">
-            <FaBox className="text-4xl text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-400 mb-4">Nenhum modelo encontrado</p>
+            <FaBox className="text-4xl text-sage-400 mx-auto mb-4" />
+            <p className="text-sage-600 mb-4">Nenhum modelo encontrado</p>
             <button
               onClick={() => setShowCreateModal(true)}
               className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
@@ -617,14 +619,14 @@ export default function AdminModels() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex items-center justify-between"
         >
-          <p className="text-gray-400 text-sm">
+          <p className="text-sage-600 text-sm">
             Mostrando {models.length} de {totalModels} modelos
           </p>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3 py-2 bg-dark-800/50 text-gray-400 rounded-lg hover:text-white hover:bg-dark-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="px-3 py-2 bg-white border border-primary-100 text-sage-600 rounded-lg hover:text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               Anterior
             </button>
@@ -634,7 +636,7 @@ export default function AdminModels() {
             <button
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
-              className="px-3 py-2 bg-dark-800/50 text-gray-400 rounded-lg hover:text-white hover:bg-dark-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="px-3 py-2 bg-white border border-primary-100 text-sage-600 rounded-lg hover:text-primary-600 hover:bg-primary-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               Próxima
             </button>

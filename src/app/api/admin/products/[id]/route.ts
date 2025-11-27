@@ -1,16 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import database from '@/lib/database';
-import { authenticateUser, isAdmin } from '@/lib/auth';
+import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const user = await authenticateUser(request);
-    if (!user || !isAdmin(user)) {
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
+        { status: 401 }
+      );
+    }
+    
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    if (!isAdmin) {
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
-        { status: 401 }
+        { status: 403 }
       );
     }
     const productId = parseInt(params.id);
@@ -45,10 +53,18 @@ export async function PATCH(
 ) {
   try {
     const user = await authenticateUser(request);
-    if (!user || !isAdmin(user)) {
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
+        { status: 401 }
+      );
+    }
+    
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    if (!isAdmin) {
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
-        { status: 401 }
+        { status: 403 }
       );
     }
     const productId = parseInt(params.id);
@@ -120,10 +136,18 @@ export async function DELETE(
 ) {
   try {
     const user = await authenticateUser(request);
-    if (!user || !isAdmin(user)) {
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
+        { status: 401 }
+      );
+    }
+    
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    if (!isAdmin) {
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
-        { status: 401 }
+        { status: 403 }
       );
     }
     const productId = parseInt(params.id);

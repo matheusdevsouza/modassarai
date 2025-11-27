@@ -117,29 +117,29 @@ export default function AdminOrders() {
   const getStatusInfo = (status: string) => {
     switch (status) {
       case 'pending':
-        return { label: 'Pendente', color: 'bg-yellow-100 text-yellow-800', icon: FaClock };
+        return { label: 'Pendente', color: 'bg-yellow-200 text-yellow-700 border border-yellow-300', icon: FaClock };
       case 'processing':
-        return { label: 'Processando', color: 'bg-blue-100 text-blue-800', icon: FaClock };
+        return { label: 'Processando', color: 'bg-blue-200 text-blue-700 border border-blue-300', icon: FaClock };
       case 'shipped':
-        return { label: 'Enviado', color: 'bg-purple-100 text-purple-800', icon: FaTruck };
+        return { label: 'Enviado', color: 'bg-purple-200 text-purple-700 border border-purple-300', icon: FaTruck };
       case 'delivered':
-        return { label: 'Entregue', color: 'bg-green-100 text-green-800', icon: FaCheckCircle };
+        return { label: 'Entregue', color: 'bg-green-200 text-green-700 border border-green-300', icon: FaCheckCircle };
       case 'cancelled':
-        return { label: 'Cancelado', color: 'bg-red-100 text-red-800', icon: FaExclamationTriangle };
+        return { label: 'Cancelado', color: 'bg-red-200 text-red-700 border border-red-300', icon: FaExclamationTriangle };
       default:
-        return { label: 'Desconhecido', color: 'bg-gray-100 text-gray-800', icon: FaClock };
+        return { label: 'Desconhecido', color: 'bg-sage-200 text-sage-700 border border-sage-300', icon: FaClock };
     }
   };
   const getPaymentStatusInfo = (status: string) => {
     switch (status) {
       case 'pending':
-        return { label: 'Pendente', color: 'bg-yellow-100 text-yellow-800' };
+        return { label: 'Pendente', color: 'bg-yellow-200 text-yellow-700 border border-yellow-300' };
       case 'paid':
-        return { label: 'Pago', color: 'bg-green-100 text-green-800' };
+        return { label: 'Pago', color: 'bg-green-200 text-green-700 border border-green-300' };
       case 'failed':
-        return { label: 'Falhou', color: 'bg-red-100 text-red-800' };
+        return { label: 'Falhou', color: 'bg-red-200 text-red-700 border border-red-300' };
       default:
-        return { label: 'Desconhecido', color: 'bg-gray-100 text-gray-800' };
+        return { label: 'Desconhecido', color: 'bg-sage-200 text-sage-700 border border-sage-300' };
     }
   };
   const clearFilters = () => {
@@ -157,13 +157,13 @@ export default function AdminOrders() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl p-4 hover:bg-dark-700/30 transition-all duration-300"
+        className="bg-white border border-primary-100 rounded-2xl p-4 hover:bg-primary-50 transition-all duration-300 hover:shadow-lg hover:shadow-primary-100/50"
       >
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <h3 className="text-white font-semibold text-sm mb-1">{order.order_number}</h3>
-            <div className="text-gray-400 text-xs mb-2">{order.items.length} item(s)</div>
-            <div className="text-primary-400 font-bold text-lg">
+            <h3 className="text-sage-900 font-semibold text-sm mb-1">{order.order_number}</h3>
+            <div className="text-sage-500 text-xs mb-2">{order.items.length} item(s)</div>
+            <div className="text-primary-600 font-bold text-lg">
               R$ {order.total_amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </div>
           </div>
@@ -176,41 +176,41 @@ export default function AdminOrders() {
         </div>
         <div className="space-y-2 mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-gray-400 text-xs">Cliente:</span>
-            <span className="text-white text-xs">{order.customer_name}</span>
+            <span className="text-sage-500 text-xs">Cliente:</span>
+            <span className="text-sage-900 text-xs">{order.customer_name}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400 text-xs">Email:</span>
-            <span className="text-white text-xs truncate">{order.customer_email}</span>
+            <span className="text-sage-500 text-xs">Email:</span>
+            <span className="text-sage-900 text-xs truncate">{order.customer_email}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400 text-xs">Pagamento:</span>
+            <span className="text-sage-500 text-xs">Pagamento:</span>
             <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${paymentInfo.color}`}>
               {paymentInfo.label}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400 text-xs">Data:</span>
-            <span className="text-white text-xs">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</span>
+            <span className="text-sage-500 text-xs">Data:</span>
+            <span className="text-sage-900 text-xs">{new Date(order.createdAt).toLocaleDateString('pt-BR')}</span>
           </div>
           {order.tracking_code && (
             <div className="flex items-center gap-2">
-              <span className="text-gray-400 text-xs">Rastreio:</span>
-              <span className="text-green-400 text-xs font-medium">{order.tracking_code}</span>
+              <span className="text-sage-500 text-xs">Rastreio:</span>
+              <span className="text-green-600 text-xs font-medium">{order.tracking_code}</span>
             </div>
           )}
         </div>
         <div className="flex items-center gap-2">
           <Link 
             href={`/admin/pedidos/${order.id}`} 
-            className="flex-1 bg-primary-500/20 hover:bg-primary-500/30 text-primary-400 hover:text-primary-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+            className="flex-1 bg-primary-100 hover:bg-primary-200 text-primary-600 hover:text-primary-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
           >
             <FaEye size={16} />
             Ver
           </Link>
           <Link 
             href={`/admin/pedidos/${order.id}`} 
-            className="flex-1 bg-primary-500/20 hover:bg-primary-500/30 text-primary-400 hover:text-primary-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+            className="flex-1 bg-primary-100 hover:bg-primary-200 text-primary-600 hover:text-primary-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
           >
             <FaEdit size={16} />
             Editar
@@ -260,18 +260,18 @@ export default function AdminOrders() {
         className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
       >
         <div className="flex-1">
-          <h1 className="text-xl md:text-2xl font-bold text-white mb-1">Gestão de Pedidos</h1>
-          <p className="text-gray-400 text-xs md:text-sm">Gerencie todos os pedidos da sua loja</p>
+          <h1 className="text-xl md:text-2xl font-bold text-sage-900 mb-1">Gestão de Pedidos</h1>
+          <p className="text-sage-600 text-xs md:text-sm">Gerencie todos os pedidos da sua loja</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           {!isMobile && (
-            <div className="flex bg-dark-800/50 rounded-xl p-1">
+            <div className="flex bg-white border border-primary-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode('table')}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'table' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBars size={12} />
@@ -282,7 +282,7 @@ export default function AdminOrders() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'grid' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBox size={12} />
@@ -292,7 +292,7 @@ export default function AdminOrders() {
           )}
           <button
             onClick={refreshOrders}
-            className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-3 lg:px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 flex items-center justify-center gap-1 text-xs lg:text-sm whitespace-nowrap"
+            className="bg-primary-500 hover:bg-primary-600 text-white px-3 lg:px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary-100/50 flex items-center justify-center gap-1 text-xs lg:text-sm whitespace-nowrap"
             title="Atualizar pedidos"
           >
             <FaRedo size={14} />
@@ -308,55 +308,55 @@ export default function AdminOrders() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
         >
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Pendentes</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Pendentes</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.statusBreakdown.pending || 0}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaClock className="text-white" size={14} />
+              <div className="bg-yellow-200 p-2 rounded-full">
+                <FaClock className="text-yellow-600" size={14} />
               </div>
             </div>
           </div>
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Processando</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Processando</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.statusBreakdown.processing || 0}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaClock className="text-white" size={14} />
+              <div className="bg-blue-200 p-2 rounded-full">
+                <FaClock className="text-blue-600" size={14} />
               </div>
             </div>
           </div>
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Enviados</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Enviados</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.statusBreakdown.shipped || 0}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaTruck className="text-white" size={14} />
+              <div className="bg-purple-200 p-2 rounded-full">
+                <FaTruck className="text-purple-600" size={14} />
               </div>
             </div>
           </div>
-          <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+          <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-xs">Entregues</p>
-                <p className="text-lg lg:text-xl font-bold text-white">
+                <p className="text-sage-600 text-xs">Entregues</p>
+                <p className="text-lg lg:text-xl font-bold text-sage-900">
                   {stats.statusBreakdown.delivered || 0}
                 </p>
               </div>
-              <div className="bg-primary-500 p-2 rounded-full">
-                <FaCheckCircle className="text-white" size={14} />
+              <div className="bg-green-200 p-2 rounded-full">
+                <FaCheckCircle className="text-green-600" size={14} />
               </div>
             </div>
           </div>
@@ -366,17 +366,17 @@ export default function AdminOrders() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl p-4 md:p-6"
+        className="bg-white border border-primary-100 rounded-2xl p-4 md:p-6"
       >
         {isMobile && (
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <FaFilter className="text-primary-500" size={16} />
-              <span className="text-white font-medium">Filtros</span>
+              <span className="text-sage-900 font-medium">Filtros</span>
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+              className="p-2 text-sage-600 hover:text-primary-600 transition-colors duration-300"
             >
               {showFilters ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
             </button>
@@ -385,20 +385,20 @@ export default function AdminOrders() {
         <div className={`${isMobile && !showFilters ? 'hidden' : ''} space-y-4`}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="relative sm:col-span-2 lg:col-span-1">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sage-500" size={16} />
               <input
                 type="text"
                 placeholder="Buscar pedidos..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-dark-700/50 border border-dark-600/50 rounded-xl px-4 py-3 pl-10 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:bg-dark-700 transition-all duration-300 text-sm md:text-base"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 pl-10 text-sage-900 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm md:text-base"
               />
             </div>
             <div className="relative">
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="w-full bg-dark-700/50 border border-dark-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:bg-dark-700 transition-all duration-300 text-sm md:text-base appearance-none"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm md:text-base appearance-none"
               >
                 <option value="all">Todos os Status</option>
                 <option value="pending">Pendente</option>
@@ -407,39 +407,39 @@ export default function AdminOrders() {
                 <option value="delivered">Entregue</option>
                 <option value="cancelled">Cancelado</option>
               </select>
-              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-500 pointer-events-none" size={14} />
             </div>
             <div className="relative">
               <select
                 value={selectedPaymentStatus}
                 onChange={(e) => setSelectedPaymentStatus(e.target.value)}
-                className="w-full bg-dark-700/50 border border-dark-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:bg-dark-700 transition-all duration-300 text-sm md:text-base appearance-none"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm md:text-base appearance-none"
               >
                 <option value="all">Todos os Pagamentos</option>
                 <option value="pending">Pendente</option>
                 <option value="paid">Pago</option>
                 <option value="failed">Falhou</option>
               </select>
-              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-500 pointer-events-none" size={14} />
             </div>
             <div className="relative">
               <select 
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="w-full bg-dark-700/50 border border-dark-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:bg-dark-700 transition-all duration-300 text-sm md:text-base appearance-none"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm md:text-base appearance-none"
               >
                 <option value="all">Todos</option>
                 <option value="today">Hoje</option>
                 <option value="week">Esta Semana</option>
                 <option value="month">Este Mês</option>
               </select>
-              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-500 pointer-events-none" size={14} />
             </div>
           </div>
           <div className="flex justify-center sm:justify-start">
             <button
               onClick={clearFilters}
-              className="bg-dark-700/50 hover:bg-dark-700 border border-dark-600/50 hover:border-dark-500/50 text-gray-300 hover:text-white px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm md:text-base"
+              className="bg-white hover:bg-primary-50 border border-primary-100 hover:border-primary-200 text-sage-600 hover:text-primary-600 px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm md:text-base"
             >
               <FaFilter size={16} />
               <span className="hidden sm:inline">Limpar Filtros</span>
@@ -447,8 +447,8 @@ export default function AdminOrders() {
             </button>
           </div>
           {isMobile && (
-            <div className="bg-dark-700/30 rounded-xl p-3">
-              <div className="text-center text-gray-400 text-sm">
+            <div className="bg-primary-50 rounded-xl p-3">
+              <div className="text-center text-sage-600 text-sm">
                 Mostrando {orders.length} de {totalOrders} pedidos
               </div>
             </div>
@@ -459,40 +459,40 @@ export default function AdminOrders() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl overflow-hidden"
+        className="bg-white border border-primary-100 rounded-2xl overflow-hidden"
       >
         {viewMode === 'table' ? (
           <div className="overflow-x-auto max-w-full">
             <table className="w-full table-fixed">
-              <thead className="bg-dark-700/50 border-b border-dark-600/50">
+              <thead className="bg-primary-50 border-b border-primary-100">
                 <tr>
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-32">
+                  <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider w-32">
                     Pedido
                   </th>
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden md:table-cell w-40">
+                  <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider hidden md:table-cell w-40">
                     Cliente
                   </th>
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-20">
+                  <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider w-20">
                     Total
                   </th>
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-24">
+                  <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider w-24">
                     Status
                   </th>
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden md:table-cell w-24">
+                  <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider hidden md:table-cell w-24">
                     Pagamento
                   </th>
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden lg:table-cell w-32">
+                  <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider hidden lg:table-cell w-32">
                     Rastreio
                   </th>
-                  <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden sm:table-cell w-20">
+                  <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider hidden sm:table-cell w-20">
                     Data
                   </th>
-                  <th className="px-2 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider w-16">
+                  <th className="px-2 py-3 text-center text-xs font-medium text-sage-700 uppercase tracking-wider w-16">
                     Ações
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-dark-600/30">
+              <tbody className="divide-y divide-primary-100">
                 {orders.map((order) => {
                   const statusInfo = getStatusInfo(order.status);
                   const paymentInfo = getPaymentStatusInfo(order.payment_status);
@@ -502,25 +502,25 @@ export default function AdminOrders() {
                       key={order.id} 
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="hover:bg-dark-700/30 transition-colors duration-300"
+                      className="hover:bg-primary-50 transition-colors duration-300"
                     >
                       <td className="px-2 py-3 w-32">
                         <div className="truncate">
-                          <div className="text-white font-medium text-xs truncate">{order.order_number}</div>
-                          <div className="text-gray-400 text-xs">{order.items.length} item(s)</div>
+                          <div className="text-sage-900 font-medium text-xs truncate">{order.order_number}</div>
+                          <div className="text-sage-500 text-xs">{order.items.length} item(s)</div>
                           <div className="md:hidden flex items-center gap-1 mt-1">
-                            <span className="text-gray-400 text-xs truncate">{order.customer_name}</span>
+                            <span className="text-sage-500 text-xs truncate">{order.customer_name}</span>
                           </div>
                         </div>
                       </td>
                       <td className="px-2 py-3 hidden md:table-cell w-40">
                         <div className="truncate">
-                          <div className="text-white font-medium text-xs truncate">{order.customer_name}</div>
-                          <div className="text-gray-400 text-xs truncate">{order.customer_email}</div>
+                          <div className="text-sage-900 font-medium text-xs truncate">{order.customer_name}</div>
+                          <div className="text-sage-500 text-xs truncate">{order.customer_email}</div>
                         </div>
                       </td>
                       <td className="px-2 py-3 w-20">
-                        <span className="text-white font-semibold text-xs">
+                        <span className="text-sage-900 font-semibold text-xs">
                           R$ {order.total_amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </span>
                       </td>
@@ -538,26 +538,26 @@ export default function AdminOrders() {
                       <td className="px-2 py-3 hidden lg:table-cell w-32">
                         {order.tracking_code ? (
                           <div className="text-xs truncate">
-                            <div className="text-green-400 font-medium truncate">{order.tracking_code}</div>
+                            <div className="text-green-600 font-medium truncate">{order.tracking_code}</div>
                             {order.shipping_company && (
-                              <div className="text-gray-400 text-xs truncate">{order.shipping_company}</div>
+                              <div className="text-sage-500 text-xs truncate">{order.shipping_company}</div>
                             )}
                           </div>
                         ) : (
-                          <span className="text-gray-500 text-xs">Sem rastreio</span>
+                          <span className="text-sage-400 text-xs">Sem rastreio</span>
                         )}
                       </td>
                       <td className="px-2 py-3 hidden sm:table-cell w-20">
-                        <span className="text-gray-300 text-xs">
+                        <span className="text-sage-700 text-xs">
                           {new Date(order.createdAt).toLocaleDateString('pt-BR')}
                         </span>
                       </td>
                       <td className="px-2 py-3 w-16">
                         <div className="flex items-center justify-center gap-0.5">
-                          <Link href={`/admin/pedidos/${order.id}`} className="p-0.5 text-primary-400 hover:text-primary-300 hover:bg-primary-500/10 rounded transition-all duration-300">
+                          <Link href={`/admin/pedidos/${order.id}`} className="p-0.5 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-300">
                             <FaEye size={14} />
                           </Link>
-                          <Link href={`/admin/pedidos/${order.id}`} className="p-0.5 text-primary-400 hover:text-primary-300 hover:bg-primary-500/10 rounded transition-all duration-300">
+                          <Link href={`/admin/pedidos/${order.id}`} className="p-0.5 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-300">
                             <FaEdit size={14} />
                           </Link>
                         </div>
@@ -578,10 +578,10 @@ export default function AdminOrders() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="text-gray-400">
+                <div className="text-sage-500">
                   <FaTruck className="mx-auto mb-4" size={48} />
-                  <h3 className="text-lg font-medium text-gray-300 mb-2">Nenhum pedido encontrado</h3>
-                  <p className="text-gray-500">Tente ajustar os filtros ou aguarde novos pedidos.</p>
+                  <h3 className="text-lg font-medium text-sage-700 mb-2">Nenhum pedido encontrado</h3>
+                  <p className="text-sage-500">Tente ajustar os filtros ou aguarde novos pedidos.</p>
                 </div>
               </div>
             )}
@@ -608,16 +608,16 @@ export default function AdminOrders() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl p-4 lg:p-6"
+          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white border border-primary-100 rounded-2xl p-4 lg:p-6"
         >
-          <div className="text-gray-400 text-sm text-center md:text-left">
+          <div className="text-sage-600 text-sm text-center md:text-left">
             Mostrando {orders.length} de {totalOrders} pedidos
           </div>
           <div className="flex items-center justify-center gap-2">
             <button 
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3 py-2 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
+              className="px-3 py-2 bg-white border border-primary-100 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
             >
               <span className="hidden md:inline">Anterior</span>
               <span className="md:hidden">‹</span>
@@ -634,14 +634,14 @@ export default function AdminOrders() {
                     <button
                       key={1}
                       onClick={() => setPage(1)}
-                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-dark-700/50 text-sm lg:text-base"
+                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-sage-600 hover:text-primary-600 hover:bg-primary-100 text-sm lg:text-base"
                     >
                       1
                     </button>
                   );
                   if (actualStartPage > 2) {
                     pages.push(
-                      <span key="ellipsis1" className="px-2 text-gray-500 text-sm lg:text-base">...</span>
+                      <span key="ellipsis1" className="px-2 text-sage-400 text-sm lg:text-base">...</span>
                     );
                   }
                 }
@@ -653,7 +653,7 @@ export default function AdminOrders() {
                       className={`px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base ${
                         i === page 
                           ? 'bg-primary-500 text-white' 
-                          : 'text-gray-400 hover:text-white hover:bg-dark-700/50'
+                          : 'text-sage-600 hover:text-primary-600 hover:bg-primary-100'
                       }`}
                     >
                       {i}
@@ -663,14 +663,14 @@ export default function AdminOrders() {
                 if (endPage < totalPages) {
                   if (endPage < totalPages - 1) {
                     pages.push(
-                      <span key="ellipsis2" className="px-2 text-gray-500 text-sm lg:text-base">...</span>
+                      <span key="ellipsis2" className="px-2 text-sage-400 text-sm lg:text-base">...</span>
                     );
                   }
                   pages.push(
                     <button
                       key={totalPages}
                       onClick={() => setPage(totalPages)}
-                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-dark-700/50 text-sm lg:text-base"
+                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-sage-600 hover:text-primary-600 hover:bg-primary-100 text-sm lg:text-base"
                     >
                       {totalPages}
                     </button>
@@ -682,7 +682,7 @@ export default function AdminOrders() {
             <button 
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
-              className="px-3 py-2 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
+              className="px-3 py-2 bg-white border border-primary-100 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
             >
               <span className="hidden md:inline">Próximo</span>
               <span className="md:hidden">›</span>

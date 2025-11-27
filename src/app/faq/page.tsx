@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaQuestionCircle } from 'react-icons/fa';
 const FAQSkeleton = () => (
   <div className="min-h-screen bg-sand-100 pt-48 pb-12 px-4 md:px-0">
@@ -11,7 +11,7 @@ const FAQSkeleton = () => (
       </div>
       <div className="space-y-4">
         {[...Array(15)].map((_, i) => (
-          <div key={i} className="overflow-hidden rounded-xl bg-primary-50 shadow-sm">
+          <div key={i} className="overflow-hidden rounded-xl bg-primary-50 border-2 border-primary-100">
             <div className="w-full flex items-center justify-between px-5 py-4">
               <div className="h-5 bg-cloud-100 rounded w-3/4"></div>
               <div className="w-5 h-5 bg-cloud-100 rounded"></div>
@@ -94,7 +94,9 @@ export default function FAQ() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + (i * 0.05), duration: 0.4 }}
-                className={`overflow-hidden rounded-xl transition-all duration-300 bg-primary-50 shadow-sm ${isOpen ? 'border-l-4 border-primary-600' : ''}`}
+                className={`overflow-hidden rounded-xl bg-primary-50 relative transition-all duration-300 ${
+                  isOpen ? 'border-2 border-primary-500 border-l-4' : 'border-2 border-primary-100'
+                }`}
               >
                 <button
                   type="button"
@@ -106,25 +108,31 @@ export default function FAQ() {
                   <motion.span 
                     className={`ml-4 flex-shrink-0 transition-all duration-300 text-primary-600`}
                     animate={{ rotate: isOpen ? 90 : 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
                   >
                     <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M6.293 7.293a1 1 0 011.414 0L10 9.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </motion.span>
                 </button>
-                <motion.div
-                  initial={false}
-                  animate={{ 
-                    height: isOpen ? 'auto' : 0,
-                    opacity: isOpen ? 1 : 0
-                  }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  className="overflow-hidden"
-                >
-                  <div className="px-5 pb-4 pt-1">
-                    <p className="text-sage-800 text-sm leading-relaxed">{faq.resposta}</p>
-                  </div>
-                </motion.div>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ 
+                        height: { duration: 0.3, ease: 'easeInOut' },
+                        opacity: { duration: 0.2, ease: 'easeInOut' }
+                      }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-5 pb-4 pt-1">
+                        <p className="text-sage-700 text-sm leading-relaxed">{faq.resposta}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             );
           })}

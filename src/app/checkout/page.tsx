@@ -668,22 +668,22 @@ export default function CheckoutPage() {
                   <div className="bg-white border border-cloud-100 rounded-lg p-4 shadow-sm">
                     <h3 className="font-semibold text-sage-900 mb-3">Resumo do Pedido</h3>
                     <div className="space-y-2 text-sm text-sage-800">
-                      <div className="flex justify-between">
-                        <span>Itens:</span>
-                        <span>{cartState.itemCount} produto{cartState.itemCount !== 1 ? 's' : ''}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Subtotal:</span>
+                       <div className="flex justify-between">
+                         <span>Itens:</span>
+                         <span>{cartState.itemCount} produto{cartState.itemCount !== 1 ? 's' : ''}</span>
+                       </div>
+                       <div className="flex justify-between">
+                         <span>Subtotal:</span>
                         <span>R$ {cartState.total.toFixed(2).replace('.', ',')}</span>
-                      </div>
+                       </div>
                       <div className="border-t border-cloud-200 pt-2 mt-2">
                         <div className="flex justify-between font-semibold text-sage-900">
-                          <span>Total Final:</span>
+                           <span>Total Final:</span>
                           <span className="text-lg text-primary-600">R$ {total.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
                    {!authenticated && (
                      <motion.div
                        initial={{ opacity: 0, y: 20 }}

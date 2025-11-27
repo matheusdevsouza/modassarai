@@ -1,27 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import database from '@/lib/database';
-import { authenticateUser, isAdmin, verifyAdminFromDatabase } from '@/lib/auth';
+import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
 export async function GET(request: NextRequest) {
   try {
     const user = await authenticateUser(request);
     if (!user) {
       console.error('[DASHBOARD] Usuário não autenticado');
       return NextResponse.json(
-        { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
         { status: 401 }
       );
     }
     
-    const dbIsAdmin = await verifyAdminFromDatabase(user.userId, database.query);
-    const tokenIsAdmin = isAdmin(user);
+    const isAdmin = await verifyAdminAccess(user, database.query);
     
-    console.log(`[DASHBOARD] Verificação de admin - UserId: ${user.userId}, Email: ${user.email}, Token isAdmin: ${tokenIsAdmin}, DB isAdmin: ${dbIsAdmin}`);
-    
-    if (!dbIsAdmin) {
+    if (!isAdmin) {
       console.error(`[DASHBOARD] Acesso negado - UserId: ${user.userId} não é admin no banco de dados`);
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
-        { status: 401 }
+        { status: 403 }
       );
     }
     const { searchParams } = new URL(request.url);

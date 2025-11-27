@@ -253,17 +253,80 @@ export async function verifyAdminFromDatabase(userId: number, queryFunction: Fun
   try {
     const users = await queryFunction('SELECT is_admin FROM users WHERE id = ?', [userId]);
     if (!users || users.length === 0) {
-      console.log(`[VERIFY_ADMIN] Usuário ${userId} não encontrado no banco de dados`);
+      console.log(`[VERIFY_ADMIN] ❌ Usuário ${userId} não encontrado no banco de dados`);
       return false;
     }
     const dbValue = users[0].is_admin;
-    const isAdmin = dbValue === 1 || dbValue === true || dbValue === '1' || dbValue === 'true' || dbValue === 'TRUE';
-    console.log(`[VERIFY_ADMIN] UserId: ${userId}, DB is_admin value: ${dbValue} (type: ${typeof dbValue}), Result: ${isAdmin}`);
-    return Boolean(isAdmin);
+    
+    let isAdmin = false;
+    
+    if (dbValue === null || dbValue === undefined) {
+      console.log(`[VERIFY_ADMIN] ❌ UserId: ${userId}, is_admin é null/undefined`);
+      return false;
+    }
+    
+    if (dbValue === true || dbValue === 1 || dbValue === '1' || dbValue === 't' || dbValue === 'T') {
+      isAdmin = true;
+    }
+    else if (typeof dbValue === 'string') {
+      const lowerValue = dbValue.toLowerCase().trim();
+      isAdmin = lowerValue === 'true' || lowerValue === '1' || lowerValue === 't' || lowerValue === 'yes' || lowerValue === 'y';
+    }
+    else if (typeof dbValue === 'number') {
+      isAdmin = dbValue === 1 || dbValue > 0;
+    }
+    else if (typeof dbValue === 'boolean') {
+      isAdmin = dbValue === true;
+    }
+    
+    console.log(`[VERIFY_ADMIN] UserId: ${userId}, DB is_admin value: ${JSON.stringify(dbValue)} (type: ${typeof dbValue}), Result: ${isAdmin ? '✅ ADMIN' : '❌ NÃO ADMIN'}`);
+    
+    return isAdmin;
   } catch (error) {
-    console.error('Erro ao verificar admin no banco de dados:', error);
+    console.error(`[VERIFY_ADMIN] ❌ Erro ao verificar admin no banco de dados para userId ${userId}:`, error);
     return false;
   }
+}
+
+/**
+ * @param user 
+ * @param queryFunction 
+ * @returns 
+ */
+export async function verifyAdminAccess(user: JWTPayload | null, queryFunction: Function): Promise<boolean> {
+  if (!user || !user.userId) {
+    console.log(`[VERIFY_ADMIN_ACCESS] Acesso negado: usuário não autenticado`);
+    return false;
+  }
+  
+  let userId: number;
+  if (typeof user.userId === 'number') {
+    userId = user.userId;
+  } else if (typeof user.userId === 'string') {
+    userId = parseInt(user.userId, 10);
+    if (isNaN(userId)) {
+      console.error(`[VERIFY_ADMIN_ACCESS] Acesso negado: userId não é um número válido (${user.userId})`);
+      return false;
+    }
+  } else {
+    console.error(`[VERIFY_ADMIN_ACCESS] Acesso negado: userId tipo inválido (${typeof user.userId}: ${user.userId})`);
+    return false;
+  }
+  
+  if (userId <= 0 || !Number.isInteger(userId)) {
+    console.error(`[VERIFY_ADMIN_ACCESS] Acesso negado: userId inválido (${userId})`);
+    return false;
+  }
+  
+  const dbIsAdmin = await verifyAdminFromDatabase(userId, queryFunction);
+  
+  if (dbIsAdmin) {
+    console.log(`[VERIFY_ADMIN_ACCESS] ✅ Usuário ${userId} (${user.email}) confirmado como admin no banco de dados`);
+  } else {
+    console.log(`[VERIFY_ADMIN_ACCESS] ❌ Usuário ${userId} (${user.email}) NÃO é admin no banco de dados`);
+  }
+  
+  return dbIsAdmin;
 }
 export function canAccessResource(payload: JWTPayload | null, resourceOwnerId: number): boolean {
   if (!payload) return false;

@@ -274,25 +274,25 @@ export default function CriarContaPage() {
               <div className="mt-2">
                 <div className="flex items-center gap-2 mb-2">
                 <div className="flex-1 bg-cloud-100 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor(passwordValidation.strength)}`}
-                    style={{ width: `${(passwordValidation.strength / 5) * 100}%` }}
-                  ></div>
-                </div>
-                <span className={`text-xs font-medium ${
+                    <div 
+                      className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor(passwordValidation.strength)}`}
+                      style={{ width: `${(passwordValidation.strength / 5) * 100}%` }}
+                    ></div>
+                  </div>
+                  <span className={`text-xs font-medium ${
                   passwordValidation.strength <= 2 ? 'text-red-600' :
                   passwordValidation.strength <= 3 ? 'text-yellow-600' :
                   passwordValidation.strength <= 4 ? 'text-blue-600' : 'text-green-600'
-                }`}>
-                  {getPasswordStrengthText(passwordValidation.strength)}
-                </span>
-              </div>
+                  }`}>
+                    {getPasswordStrengthText(passwordValidation.strength)}
+                  </span>
+                </div>
               <div className="text-xs text-sage-700 space-y-1">
                 <div className={`flex items-center gap-2 ${formData.password.length >= 8 ? 'text-green-600' : 'text-sage-500'}`}>
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    Mínimo 8 caracteres
+                    Mínimo 12 caracteres
                   </div>
                   <div className={`flex items-center gap-2 ${/[A-Z]/.test(formData.password) ? 'text-green-600' : 'text-sage-500'}`}>
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">

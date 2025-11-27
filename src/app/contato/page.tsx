@@ -13,7 +13,9 @@ const FAQItem = ({ faq, index }: FAQItemProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 + (index * 0.05), duration: 0.4 }}
-      className={`overflow-hidden rounded-xl transition-all duration-300 bg-primary-50 shadow-sm ${open ? 'border-l-4 border-primary-600' : ''}`}
+      className={`overflow-hidden rounded-xl bg-primary-50 relative transition-all duration-300 ${
+        open ? 'border-2 border-primary-500 border-l-4' : 'border-2 border-primary-100'
+      }`}
     >
       <button
         type="button"
@@ -25,23 +27,29 @@ const FAQItem = ({ faq, index }: FAQItemProps) => {
         <motion.span 
           className={`ml-4 transition-all duration-300 text-primary-600`}
           animate={{ rotate: open ? 90 : 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           <svg width="18" height="18" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M6.293 7.293a1 1 0 011.414 0L10 9.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
         </motion.span>
       </button>
-      <motion.div
-        initial={false}
-        animate={{ 
-          height: open ? 'auto' : 0,
-          opacity: open ? 1 : 0
-        }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="overflow-hidden"
-      >
-        <div className="px-5 pb-4 pt-1">
-          <p className="text-sage-800 text-sm leading-relaxed">{faq.resposta}</p>
-        </div>
-      </motion.div>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ 
+              height: { duration: 0.3, ease: 'easeInOut' },
+              opacity: { duration: 0.2, ease: 'easeInOut' }
+            }}
+            className="overflow-hidden"
+          >
+            <div className="px-5 pb-4 pt-1">
+              <p className="text-sage-700 text-sm leading-relaxed">{faq.resposta}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

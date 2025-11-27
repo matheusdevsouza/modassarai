@@ -154,7 +154,7 @@ export default function ProdutosPage() {
     setPage(1);
   };
   const getSortIcon = (field: string) => {
-    if (sortBy !== field) return <FaSort className="text-gray-400" />;
+    if (sortBy !== field) return <FaSort className="text-sage-400" />;
     return sortOrder === 'asc' ? <FaSortUp className="text-primary-500" /> : <FaSortDown className="text-primary-500" />;
   };
   const handleDeleteProduct = async (productId: number) => {
@@ -185,10 +185,10 @@ export default function ProdutosPage() {
   const ProductCard = ({ product }: { product: Product }) => (
     <motion.div
       variants={itemVariants}
-      className="bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-4 hover:border-[var(--logo-gold,#D4A574)]/30 transition-all duration-300"
+      className="bg-white border border-primary-100 rounded-2xl p-4 hover:border-primary-200 transition-all duration-300 hover:shadow-lg hover:shadow-primary-100/50"
     >
       <div className="flex items-start gap-3 mb-3">
-        <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#1f1f1f] border border-[#2a2a2a] flex-shrink-0">
+        <div className="w-16 h-16 rounded-xl overflow-hidden bg-sand-50 border border-primary-100 flex-shrink-0">
           {getProductImage(product) ? (
             <Image
               src={getProductImage(product)!}
@@ -198,14 +198,14 @@ export default function ProdutosPage() {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-[#1f1f1f] flex items-center justify-center">
-              <FaBox className="text-gray-400" size={24} />
+            <div className="w-full h-full bg-sand-50 flex items-center justify-center">
+              <FaBox className="text-sage-400" size={24} />
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-white font-semibold text-sm mb-1 truncate">{product.name}</h3>
-          <div className="text-[var(--logo-gold,#D4A574)] font-bold text-lg">
+          <h3 className="text-sage-900 font-semibold text-sm mb-1 truncate">{product.name}</h3>
+          <div className="text-primary-600 font-bold text-lg">
             R$ {product.price?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
           </div>
         </div>
@@ -217,42 +217,42 @@ export default function ProdutosPage() {
             (product.stock_quantity || 0) > 10 ? 'bg-yellow-500' : 'bg-red-500'
           }`}></div>
           <span className={`text-xs font-medium ${
-            (product.stock_quantity || 0) > 20 ? 'text-green-400' :
-            (product.stock_quantity || 0) > 10 ? 'text-yellow-400' : 'text-red-400'
+            (product.stock_quantity || 0) > 20 ? 'text-green-600' :
+            (product.stock_quantity || 0) > 10 ? 'text-yellow-600' : 'text-red-600'
           }`}>
             Estoque: {product.stock_quantity || 0}
           </span>
         </div>
         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
           product.is_active 
-            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-            : 'bg-red-500/20 text-red-400 border border-red-500/30'
+            ? 'bg-green-200 text-green-600 border border-green-300'
+            : 'bg-red-200 text-red-600 border border-red-300'
         }`}>
           {product.is_active ? 'Ativo' : 'Inativo'}
         </span>
       </div>
-      <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
+      <div className="flex items-center justify-between text-xs text-sage-500 mb-3">
         <span>ID: {product.id}</span>
         {product.sku && <span>SKU: {product.sku}</span>}
       </div>
       <div className="flex items-center gap-2">
         <Link 
           href={`/admin/produtos/${product.id}`} 
-          className="flex-1 bg-primary-500/20 hover:bg-primary-500/30 text-primary-400 hover:text-primary-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+          className="flex-1 bg-primary-100 hover:bg-primary-200 text-primary-600 hover:text-primary-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
         >
           <FaEye size={16} />
           Ver
         </Link>
         <Link 
           href={`/admin/produtos/${product.id}`} 
-          className="flex-1 bg-primary-500/20 hover:bg-primary-500/30 text-primary-400 hover:text-primary-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+          className="flex-1 bg-primary-100 hover:bg-primary-200 text-primary-600 hover:text-primary-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
         >
           <FaEdit size={16} />
           Editar
         </Link>
         <button 
           onClick={() => handleDeleteProduct(product.id)}
-          className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+          className="flex-1 bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
         >
           <FaTrash size={16} />
           Excluir
@@ -277,11 +277,11 @@ export default function ProdutosPage() {
     return (
       <div className="space-y-6">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-700 rounded w-1/4 mb-6"></div>
-          <div className="h-12 bg-gray-700 rounded mb-6"></div>
+          <div className="h-8 bg-white rounded w-1/4 mb-6"></div>
+          <div className="h-12 bg-white rounded mb-6"></div>
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-700 rounded"></div>
+              <div key={i} className="h-16 bg-white rounded"></div>
             ))}
           </div>
         </div>
@@ -291,13 +291,13 @@ export default function ProdutosPage() {
   if (error && products.length === 0) {
     return (
       <div className="space-y-6">
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-6 text-center">
-          <FaExclamationTriangle className="mx-auto text-red-400 mb-4" size={48} />
-          <h3 className="text-lg font-medium text-red-300 mb-2">Erro ao carregar produtos</h3>
-          <p className="text-red-400 mb-4">{error}</p>
+        <div className="bg-white border border-red-200 rounded-xl p-6 text-center">
+          <FaExclamationTriangle className="mx-auto text-red-500 mb-4" size={48} />
+          <h3 className="text-lg font-medium text-red-600 mb-2">Erro ao carregar produtos</h3>
+          <p className="text-red-500 mb-4">{error}</p>
           <button
             onClick={fetchProducts}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors duration-300"
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors duration-300"
           >
             Tentar novamente
           </button>
@@ -314,18 +314,18 @@ export default function ProdutosPage() {
         className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
       >
         <div className="flex-1">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Gerenciar Produtos</h1>
-          <p className="text-gray-400 text-sm md:text-base">Gerencie o catálogo de produtos da sua loja</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-sage-900 mb-2">Gerenciar Produtos</h1>
+          <p className="text-sage-600 text-sm md:text-base">Gerencie o catálogo de produtos da sua loja</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           {!isMobile && (
-            <div className="flex bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl p-1">
+            <div className="flex bg-white border border-primary-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode('table')}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'table' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBars size={12} />
@@ -336,7 +336,7 @@ export default function ProdutosPage() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'grid' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBox size={12} />
@@ -346,7 +346,7 @@ export default function ProdutosPage() {
           )}
           <button 
             onClick={() => setShowCreateModal(true)}
-            className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-4 lg:px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 flex items-center justify-center gap-2 text-sm lg:text-base whitespace-nowrap"
+            className="bg-primary-500 hover:bg-primary-600 text-white px-4 lg:px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary-100/50 flex items-center justify-center gap-2 text-sm lg:text-base whitespace-nowrap"
           >
             <FaPlus size={16} />
             <span className="hidden sm:inline">Adicionar Produto</span>
@@ -358,17 +358,17 @@ export default function ProdutosPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-4 md:p-6"
+        className="bg-white border border-primary-100 rounded-2xl p-4 md:p-6"
       >
         {isMobile && (
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <FaFilter className="text-primary-500" size={16} />
-              <span className="text-white font-medium">Filtros</span>
+              <span className="text-sage-900 font-medium">Filtros</span>
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+              className="p-2 text-sage-600 hover:text-primary-600 transition-colors duration-300"
             >
               {showFilters ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
             </button>
@@ -377,27 +377,27 @@ export default function ProdutosPage() {
         <div className={`${isMobile && !showFilters ? 'hidden' : ''} space-y-4`}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="relative md:col-span-2">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sage-500" size={16} />
               <input
                 type="text"
                 placeholder="Pesquisar produtos..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl px-4 py-3 pl-10 text-white placeholder-gray-400 focus:outline-none focus:border-[var(--logo-gold,#D4A574)] focus:bg-[#1f1f1f] transition-all duration-300 text-sm lg:text-base"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 pl-10 text-sage-900 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm lg:text-base"
               />
             </div>
             <div className="relative">
               <select
                 value={selectedModel}
                 onChange={(e) => setSelectedModel(e.target.value)}
-                className="w-full bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[var(--logo-gold,#D4A574)] focus:bg-[#1f1f1f] transition-all duration-300 text-sm lg:text-base appearance-none"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm lg:text-base appearance-none"
               >
                 <option value="all">Todos os Modelos</option>
                 {models && models.length > 0 && models.map(model => (
                   <option key={model.id} value={model.id}>{model.name}</option>
                 ))}
               </select>
-              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-500 pointer-events-none" size={14} />
             </div>
             <div className="flex items-center">
               <button
@@ -405,7 +405,7 @@ export default function ProdutosPage() {
                 className={`w-full px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm lg:text-base ${
                   newProducts 
                     ? 'bg-primary-500 text-white border border-primary-500' 
-                    : 'bg-[#1f1f1f] hover:bg-[var(--logo-gold,#D4A574)]/10 border border-[#2a2a2a] hover:border-[var(--logo-gold,#D4A574)]/30 text-gray-300 hover:text-white'
+                    : 'bg-white hover:bg-primary-100 border border-primary-100 hover:border-primary-200 text-sage-700 hover:text-primary-600'
                 }`}
               >
                 <FaStar size={16} />
@@ -416,7 +416,7 @@ export default function ProdutosPage() {
             <div className="flex items-center">
               <button
                 onClick={clearFilters}
-                className="w-full bg-[#1f1f1f] hover:bg-[var(--logo-gold,#D4A574)]/10 border border-[#2a2a2a] hover:border-[var(--logo-gold,#D4A574)]/30 text-gray-300 hover:text-white px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm lg:text-base"
+                className="w-full bg-white hover:bg-primary-100 border border-primary-100 hover:border-primary-200 text-sage-700 hover:text-primary-600 px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm lg:text-base"
               >
                 <FaFilter size={16} />
                 <span className="hidden sm:inline">Limpar Filtros</span>
@@ -425,8 +425,8 @@ export default function ProdutosPage() {
             </div>
           </div>
           {isMobile && (
-            <div className="bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl p-3">
-              <div className="text-center text-gray-400 text-sm">
+            <div className="bg-primary-50 border border-primary-100 rounded-xl p-3">
+              <div className="text-center text-sage-600 text-sm">
                 Mostrando {products.length} de {totalProducts} produtos
               </div>
             </div>
@@ -437,17 +437,17 @@ export default function ProdutosPage() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl overflow-hidden"
+        className="bg-white border border-primary-100 rounded-2xl overflow-hidden"
       >
         {viewMode === 'table' ? (
           <div className="overflow-x-auto max-w-full">
             <table className="w-full min-w-max">
-              <thead className="bg-[#1f1f1f] border-b border-[#2a2a2a]">
+              <thead className="bg-primary-50 border-b border-primary-100">
                 <tr>
                   <th className="px-2 lg:px-4 py-3 text-left">
                     <button
                       onClick={() => handleSort('name')}
-                      className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors duration-300 font-semibold text-xs lg:text-sm"
+                      className="flex items-center gap-1 text-sage-700 hover:text-primary-600 transition-colors duration-300 font-semibold text-xs lg:text-sm"
                     >
                       Produto
                       {getSortIcon('name')}
@@ -456,7 +456,7 @@ export default function ProdutosPage() {
                   <th className="px-2 lg:px-4 py-3 text-left">
                     <button
                       onClick={() => handleSort('price')}
-                      className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors duration-300 font-semibold text-xs lg:text-sm"
+                      className="flex items-center gap-1 text-sage-700 hover:text-primary-600 transition-colors duration-300 font-semibold text-xs lg:text-sm"
                     >
                       Preço
                       {getSortIcon('price')}
@@ -465,7 +465,7 @@ export default function ProdutosPage() {
                   <th className="px-2 lg:px-4 py-3 text-left hidden md:table-cell">
                     <button
                       onClick={() => handleSort('stock')}
-                      className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors duration-300 font-semibold text-xs lg:text-sm"
+                      className="flex items-center gap-1 text-sage-700 hover:text-primary-600 transition-colors duration-300 font-semibold text-xs lg:text-sm"
                     >
                       Estoque
                       {getSortIcon('stock')}
@@ -474,25 +474,25 @@ export default function ProdutosPage() {
                   <th className="px-2 lg:px-4 py-3 text-left hidden lg:table-cell">
                     <button
                       onClick={() => handleSort('status')}
-                      className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors duration-300 font-semibold text-xs lg:text-sm"
+                      className="flex items-center gap-1 text-sage-700 hover:text-primary-600 transition-colors duration-300 font-semibold text-xs lg:text-sm"
                     >
                       Status
                       {getSortIcon('status')}
                     </button>
                   </th>
-                  <th className="px-2 lg:px-4 py-3 text-center text-xs lg:text-sm">Ações</th>
+                  <th className="px-2 lg:px-4 py-3 text-center text-xs lg:text-sm text-sage-700">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-dark-600/30">
+              <tbody className="divide-y divide-primary-100">
                 {products && products.length > 0 ? products.map((product, index) => (
                   <motion.tr
                     key={product.id}
                     variants={itemVariants}
-                    className="hover:bg-[var(--logo-gold,#D4A574)]/10 transition-colors duration-300"
+                    className="hover:bg-primary-50 transition-colors duration-300"
                   >
                     <td className="px-2 lg:px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg overflow-hidden bg-[#1f1f1f] border border-[#2a2a2a] flex-shrink-0">
+                        <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg overflow-hidden bg-sand-50 border border-primary-100 flex-shrink-0">
                           {getProductImage(product) ? (
                             <Image
                               src={getProductImage(product)!}
@@ -502,22 +502,22 @@ export default function ProdutosPage() {
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full bg-[#1f1f1f] flex items-center justify-center">
-                              <FaBox className="text-gray-400" size={14} />
+                            <div className="w-full h-full bg-sand-50 flex items-center justify-center">
+                              <FaBox className="text-sage-400" size={14} />
                             </div>
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <div className="text-white font-medium text-xs lg:text-sm truncate">{product.name}</div>
-                          <div className="text-gray-400 text-xs">ID: {product.id}</div>
+                          <div className="text-sage-900 font-medium text-xs lg:text-sm truncate">{product.name}</div>
+                          <div className="text-sage-500 text-xs">ID: {product.id}</div>
                           {product.sku && (
-                            <div className="text-gray-400 text-xs">SKU: {product.sku}</div>
+                            <div className="text-sage-500 text-xs">SKU: {product.sku}</div>
                           )}
                         </div>
                       </div>
                     </td>
                     <td className="px-2 lg:px-4 py-3">
-                      <span className="text-white font-semibold text-xs lg:text-sm">
+                      <span className="text-sage-900 font-semibold text-xs lg:text-sm">
                         R$ {product.price?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
                       </span>
                     </td>
@@ -528,8 +528,8 @@ export default function ProdutosPage() {
                           (product.stock_quantity || 0) > 10 ? 'bg-yellow-500' : 'bg-red-500'
                         }`}></div>
                         <span className={`font-medium text-xs lg:text-sm ${
-                          (product.stock_quantity || 0) > 20 ? 'text-green-400' :
-                          (product.stock_quantity || 0) > 10 ? 'text-yellow-400' : 'text-red-400'
+                          (product.stock_quantity || 0) > 20 ? 'text-green-600' :
+                          (product.stock_quantity || 0) > 10 ? 'text-yellow-600' : 'text-red-600'
                         }`}>
                           {product.stock_quantity || 0}
                         </span>
@@ -538,23 +538,23 @@ export default function ProdutosPage() {
                     <td className="px-2 lg:px-4 py-3 hidden lg:table-cell">
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                         product.is_active 
-                          ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                          : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                          ? 'bg-green-200 text-green-600 border border-green-300'
+                          : 'bg-red-200 text-red-600 border border-red-300'
                       }`}>
                         {product.is_active ? 'Ativo' : 'Inativo'}
                       </span>
                     </td>
                     <td className="px-2 lg:px-4 py-3">
                       <div className="flex items-center justify-center gap-1">
-                        <Link href={`/admin/produtos/${product.id}`} className="p-1 text-primary-400 hover:text-primary-300 hover:bg-primary-500/10 rounded-lg transition-all duration-300">
+                        <Link href={`/admin/produtos/${product.id}`} className="p-1 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-300">
                           <FaEye size={16} />
                         </Link>
-                        <Link href={`/admin/produtos/${product.id}`} className="p-1 text-primary-400 hover:text-primary-300 hover:bg-primary-500/10 rounded-lg transition-all duration-300">
+                        <Link href={`/admin/produtos/${product.id}`} className="p-1 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-300">
                           <FaEdit size={16} />
                         </Link>
                         <button 
                           onClick={() => handleDeleteProduct(product.id)}
-                          className="p-1 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-300"
+                          className="p-1 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg transition-all duration-300"
                         >
                           <FaTrash size={16} />
                         </button>
@@ -564,10 +564,10 @@ export default function ProdutosPage() {
                 )) : (
                   <tr>
                     <td colSpan={5} className="px-6 py-12 text-center">
-                      <div className="text-gray-400">
-                        <FaBox className="mx-auto mb-4" size={48} />
-                        <h3 className="text-lg font-medium text-gray-300 mb-2">Nenhum produto encontrado</h3>
-                        <p className="text-gray-500">Tente ajustar os filtros ou adicionar novos produtos.</p>
+                      <div className="text-sage-500">
+                        <FaBox className="mx-auto mb-4 text-sage-400" size={48} />
+                        <h3 className="text-lg font-medium text-sage-700 mb-2">Nenhum produto encontrado</h3>
+                        <p className="text-sage-500">Tente ajustar os filtros ou adicionar novos produtos.</p>
                       </div>
                     </td>
                   </tr>
@@ -585,10 +585,10 @@ export default function ProdutosPage() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="text-gray-400">
-                  <FaBox className="mx-auto mb-4" size={48} />
-                  <h3 className="text-lg font-medium text-gray-300 mb-2">Nenhum produto encontrado</h3>
-                  <p className="text-gray-500">Tente ajustar os filtros ou adicionar novos produtos.</p>
+                <div className="text-sage-500">
+                  <FaBox className="mx-auto mb-4 text-sage-400" size={48} />
+                  <h3 className="text-lg font-medium text-sage-700 mb-2">Nenhum produto encontrado</h3>
+                  <p className="text-sage-500">Tente ajustar os filtros ou adicionar novos produtos.</p>
                 </div>
               </div>
             )}
@@ -597,7 +597,7 @@ export default function ProdutosPage() {
         {loading && products.length > 0 && (
           <div className="flex items-center justify-center py-8">
             <FaSpinner className="animate-spin text-primary-500 mr-2" size={20} />
-            <span className="text-gray-400">Carregando...</span>
+            <span className="text-sage-600">Carregando...</span>
           </div>
         )}
       </motion.div>
@@ -606,16 +606,16 @@ export default function ProdutosPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-[#1f1f1f] border border-[#2a2a2a] rounded-2xl p-4 lg:p-6"
+          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white border border-primary-100 rounded-2xl p-4 lg:p-6"
         >
-          <div className="text-gray-400 text-sm text-center md:text-left">
+          <div className="text-sage-600 text-sm text-center md:text-left">
             Mostrando {products.length} de {totalProducts} produtos
           </div>
           <div className="flex items-center justify-center gap-2">
             <button 
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3 py-2 text-gray-400 hover:text-white hover:bg-[var(--logo-gold,#D4A574)]/10 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
+              className="px-3 py-2 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
             >
               <span className="hidden md:inline">Anterior</span>
               <span className="md:hidden">‹</span>
@@ -632,14 +632,14 @@ export default function ProdutosPage() {
                     <button
                       key={1}
                       onClick={() => setPage(1)}
-                      className="px-2 md:px-3 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-[var(--logo-gold,#D4A574)]/10 text-sm md:text-base"
+                      className="px-2 md:px-3 py-2 rounded-lg transition-all duration-300 text-sage-600 hover:text-primary-600 hover:bg-primary-100 text-sm md:text-base"
                     >
                       1
                     </button>
                   );
                   if (actualStartPage > 2) {
                     pages.push(
-                      <span key="ellipsis1" className="px-2 text-gray-500 text-sm md:text-base">...</span>
+                      <span key="ellipsis1" className="px-2 text-sage-400 text-sm md:text-base">...</span>
                     );
                   }
                 }
@@ -651,7 +651,7 @@ export default function ProdutosPage() {
                       className={`px-2 md:px-3 py-2 rounded-lg transition-all duration-300 text-sm md:text-base ${
                         i === page 
                           ? 'bg-primary-500 text-white' 
-                          : 'text-gray-400 hover:text-white hover:bg-[var(--logo-gold,#D4A574)]/10'
+                          : 'text-sage-600 hover:text-primary-600 hover:bg-primary-100'
                       }`}
                     >
                       {i}
@@ -661,14 +661,14 @@ export default function ProdutosPage() {
                 if (endPage < totalPages) {
                   if (endPage < totalPages - 1) {
                     pages.push(
-                      <span key="ellipsis2" className="px-2 text-gray-500 text-sm md:text-base">...</span>
+                      <span key="ellipsis2" className="px-2 text-sage-400 text-sm md:text-base">...</span>
                     );
                   }
                   pages.push(
                     <button
                       key={totalPages}
                       onClick={() => setPage(totalPages)}
-                      className="px-2 md:px-3 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-[var(--logo-gold,#D4A574)]/10 text-sm md:text-base"
+                      className="px-2 md:px-3 py-2 rounded-lg transition-all duration-300 text-sage-600 hover:text-primary-600 hover:bg-primary-100 text-sm md:text-base"
                     >
                       {totalPages}
                     </button>
@@ -680,7 +680,7 @@ export default function ProdutosPage() {
             <button 
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
-              className="px-3 py-2 text-gray-400 hover:text-white hover:bg-[var(--logo-gold,#D4A574)]/10 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
+              className="px-3 py-2 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
             >
               <span className="hidden md:inline">Próximo</span>
               <span className="md:hidden">›</span>

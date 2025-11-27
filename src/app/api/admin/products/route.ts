@@ -1,15 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server'
 import database from '@/lib/database'
-import { authenticateUser, isAdmin } from '@/lib/auth'
+import { authenticateUser, verifyAdminAccess } from '@/lib/auth'
 export async function GET(request: NextRequest) {
   try {
     const user = await authenticateUser(request);
-    if (!user || !isAdmin(user)) {
+    if (!user) {
+      console.error('[PRODUTOS] ❌ Usuário não autenticado');
       return NextResponse.json(
-        { success: false, error: 'Acesso negado' },
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
+        { status: 401 }
+      );
+    }
+    
+    console.log(`[PRODUTOS] 🔍 Verificando acesso admin para userId: ${user.userId}, email: ${user.email}`);
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    
+    if (!isAdmin) {
+      const dbCheck = await database.query('SELECT id, is_admin, email FROM users WHERE id = ?', [user.userId]);
+      console.error(`[PRODUTOS] ❌ Acesso negado - UserId: ${user.userId}`);
+      console.error(`[PRODUTOS] 🔍 Debug - DB result:`, dbCheck?.[0] ? {
+        id: dbCheck[0].id,
+        is_admin: dbCheck[0].is_admin,
+        is_admin_type: typeof dbCheck[0].is_admin,
+        email: dbCheck[0].email
+      } : 'Usuário não encontrado');
+      
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Acesso negado. Apenas administradores autorizados.',
+          debug: process.env.NODE_ENV === 'development' ? {
+            userId: user.userId,
+            email: user.email,
+            dbUser: dbCheck?.[0] ? {
+              id: dbCheck[0].id,
+              is_admin: dbCheck[0].is_admin,
+              is_admin_type: typeof dbCheck[0].is_admin
+            } : null
+          } : undefined
+        },
         { status: 403 }
       );
     }
+    
+    console.log(`[PRODUTOS] ✅ Acesso permitido para admin userId: ${user.userId}`);
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -104,9 +138,17 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await authenticateUser(request);
-    if (!user || !isAdmin(user)) {
+    if (!user) {
       return NextResponse.json(
-        { success: false, error: 'Acesso negado' },
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
+        { status: 401 }
+      );
+    }
+    
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    if (!isAdmin) {
+      return NextResponse.json(
+        { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
         { status: 403 }
       );
     }

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useGSAP } from '@/hooks/useGSAP'
-import { Star, ArrowRight } from 'phosphor-react'
+import { Star, ArrowRight, ChatCircle } from 'phosphor-react'
 import gsap from 'gsap'
 interface Testimonial {
   id: number
@@ -16,28 +16,49 @@ interface Testimonial {
   created_at: string
   updated_at: string
 }
-const TestimonialSkeleton = () => (
-  <div className="bg-dark-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700/30 max-w-lg mx-auto">
-    <div className="mb-6 space-y-3">
-      <div className="h-4 bg-dark-800 rounded-md"></div>
-      <div className="h-4 bg-dark-800 rounded-md w-4/5"></div>
-      <div className="h-4 bg-dark-800 rounded-md w-3/5"></div>
-    </div>
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-full bg-dark-800"></div>
-        <div>
-          <div className="h-4 w-24 bg-dark-800 rounded-md mb-1"></div>
-          <div className="h-3 w-20 bg-dark-800 rounded-md"></div>
+const TestimonialsSkeleton = () => (
+  <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-sand-100 overflow-hidden">
+    <div className="container mx-auto px-4 sm:px-6">
+      <div className="text-center mb-8 sm:mb-12 md:mb-16 space-y-6">
+        <div className="h-5 w-40 bg-black/20 rounded-full mx-auto animate-pulse" />
+        <div className="h-12 md:h-16 w-full max-w-3xl bg-black/30 rounded-lg mx-auto animate-pulse" />
+        <div className="h-6 w-full max-w-2xl bg-black/20 rounded-lg mx-auto animate-pulse" />
+        <div className="h-px w-32 bg-black/10 mx-auto" />
+      </div>
+      <div className="relative">
+        <div className="overflow-hidden">
+          <div className="flex gap-6 pb-8 justify-center">
+            <div className="rounded-2xl p-6 sm:p-8 border border-black/10 w-full max-w-lg mx-auto" style={{ backgroundColor: '#FDF8F2' }}>
+              <div className="mb-6 space-y-3">
+                <div className="h-4 bg-black/30 rounded-md animate-pulse" />
+                <div className="h-4 bg-black/30 rounded-md w-4/5 animate-pulse" />
+                <div className="h-4 bg-black/30 rounded-md w-3/5 animate-pulse" />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-black/40 animate-pulse" />
+                  <div>
+                    <div className="h-4 w-24 bg-black/40 rounded-md mb-1 animate-pulse" />
+                    <div className="h-3 w-20 bg-black/30 rounded-md animate-pulse" />
+                  </div>
+                </div>
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="w-4 h-4 bg-black/30 rounded-sm animate-pulse" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-6">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-1 sm:h-1.5 rounded-full bg-black/20 w-1.5 sm:w-2 animate-pulse" />
+          ))}
         </div>
       </div>
-      <div className="flex gap-1">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="w-4 h-4 bg-dark-800 rounded-sm"></div>
-        ))}
-      </div>
     </div>
-  </div>
+  </section>
 )
 export function TestimonialsSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -141,39 +162,38 @@ export function TestimonialsSection() {
     return () => clearInterval(interval)
   }, [currentIndex, totalPages, isPaused, goToNextSlide])
   if (loading) {
-    return (
-      <section ref={sectionRef} className="py-12 sm:py-16 md:py-20 lg:py-24 bg-sand-100 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-8 sm:mb-12 md:mb-16"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 text-sage-900">
-              <span>O que nossas </span>
-              <span className="text-primary-600">clientes contam</span>
-            </h2>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-sage-700 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto px-4">
-              Depoimentos reais de quem já viveu a experiência Maria Pistache.
-            </p>
-          </motion.div>
-          <div className="relative">
-            <div className="overflow-hidden">
-              <div className="flex gap-6 pb-8 justify-center">
-                <TestimonialSkeleton />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    )
+    return <TestimonialsSkeleton />
   }
   if (!testimonials.length) {
     return (
-      <section ref={sectionRef} className="py-12 sm:py-16 md:py-20 lg:py-24 bg-sand-100 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6">
+      <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-primary-50 via-primary-50/95 to-primary-50 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <motion.div
+            animate={{
+              scale: [1, 1.15, 1],
+              opacity: [0.08, 0.12, 0.08],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            className="absolute -top-32 -right-10 w-[420px] h-[420px] bg-primary-500/10 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              opacity: [0.06, 0.1, 0.06],
+            }}
+            transition={{
+              duration: 14,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            className="absolute bottom-[-160px] left-[-40px] w-[520px] h-[520px] bg-sage-500/10 rounded-full blur-3xl"
+          />
+        </div>
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -197,8 +217,34 @@ export function TestimonialsSection() {
     )
   }
   return (
-    <section ref={sectionRef} className="py-12 sm:py-16 md:py-20 lg:py-24 bg-sand-100 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-primary-50 via-primary-50/95 to-primary-50 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div
+          animate={{
+            scale: [1, 1.15, 1],
+            opacity: [0.08, 0.12, 0.08],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="absolute -top-32 -right-10 w-[420px] h-[420px] bg-primary-500/10 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.06, 0.1, 0.06],
+          }}
+          transition={{
+            duration: 14,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="absolute bottom-[-160px] left-[-40px] w-[520px] h-[520px] bg-sage-500/10 rounded-full blur-3xl"
+        />
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -211,8 +257,9 @@ export function TestimonialsSection() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="inline-block text-sm uppercase tracking-[0.25em] text-primary-600 mb-4 font-semibold"
+            className="inline-flex items-center gap-2 justify-center text-xs uppercase tracking-[0.25em] text-primary-600 mb-4 font-semibold px-4 py-1 rounded-full border border-primary-600"
           >
+            <ChatCircle size={12} weight="fill" className="text-primary-600" />
             depoimentos
           </motion.span>
           <motion.h2
@@ -271,7 +318,7 @@ export function TestimonialsSection() {
                     {page.map((testimonial) => (
                       <div
                         key={testimonial.id}
-                        className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-cloud-100 w-full max-w-lg mx-auto shadow-sm flex-shrink-0"
+                        className="bg-primary-50 rounded-2xl p-6 sm:p-8 border border-primary-100 w-full max-w-lg mx-auto shadow-xl shadow-primary-500/15 flex-shrink-0"
                       >
                         <div className="mb-6">
                           <p className="text-sage-800 text-sm sm:text-base leading-relaxed">
@@ -340,7 +387,7 @@ export function TestimonialsSection() {
             </div>
           )}
           <div className="text-center mt-8">
-                <Link href="/contato">
+            <Link href="/contato">
               <motion.button
                 whileHover={{ 
                   scale: 1.02, 

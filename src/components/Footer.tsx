@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import {
   WhatsappLogo,
   Envelope,
@@ -58,21 +59,39 @@ export function Footer() {
     'visa', 'mastercard', 'pix', 'boleto', 'american-express'
   ]
   return (
-    <footer className="relative bg-primary-500 text-sand-100">
+    <footer className="relative bg-sand-100 text-sage-900 border-t border-sage-200">
       <div className="container mx-auto px-4 sm:px-6 py-10 sm:py-14">
         <div className="hidden lg:grid grid-cols-4 gap-10">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
-              Maria Pistache.
-            </h2>
-            <p className="text-sm text-sand-100/90 mb-6">
+            <div className="group inline-flex items-center mb-6">
+              <div className="relative w-16 h-16 transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src="/images/logo.png"
+                  alt="Maria Pistache"
+                  fill
+                  sizes="64px"
+                  className="object-contain filter brightness-110"
+                  priority
+                />
+              </div>
+            </div>
+            <p className="text-sm text-sage-600 mb-4">
               Moda feminina contemporânea, leve e sofisticada para todos os momentos.
             </p>
+            <div className="text-xs text-sage-500 mb-6 leading-relaxed">
+              <div className="flex items-start gap-2">
+                <MapPin size={14} className="text-sage-500 mt-0.5 flex-shrink-0" weight="regular" />
+                <div>
+                  <p>Rua João Meneghette 427 · Jardim Três Marias</p>
+                  <p>Taboão da Serra - SP · CEP 06790-100</p>
+                </div>
+              </div>
+            </div>
             <div className="flex space-x-3">
-              <a href="https://www.instagram.com/mariapistacheoficial?igsh=MTA3azFndWFtZXI1bQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-sand-100/10 hover:bg-sand-100 hover:text-primary-600 rounded-full flex items-center justify-center text-sand-100 border border-sand-100/20 hover:border-sand-100/50 transition-all duration-300 shadow-sm hover:shadow-md" aria-label="Instagram">
+              <a href="https://www.instagram.com/mariapistacheoficial?igsh=MTA3azFndWFtZXI1bQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 hover:bg-primary-500 hover:text-white rounded-lg flex items-center justify-center text-primary-700 transition-all duration-300 " aria-label="Instagram">
                 <FontAwesomeIcon icon={faInstagram} size="lg" />
               </a>
-              <a href="https://vt.tiktok.com/ZSy56s9h9/?page=TikTokShop&utm_campaign=client_share&utm_source=whatsapp&share_app_id=1233" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-sand-100/10 hover:bg-sand-100 hover:text-primary-600 rounded-full flex items-center justify-center text-sand-100 border border-sand-100/20 hover:border-sand-100/50 transition-all duration-300 shadow-sm hover:shadow-md" aria-label="TikTok">
+              <a href="https://vt.tiktok.com/ZSy56s9h9/?page=TikTokShop&utm_campaign=client_share&utm_source=whatsapp&share_app_id=1233" target="_blank" rel="noopener noreferrer" className="w-10 h-10 hover:bg-primary-500 hover:text-white rounded-lg flex items-center justify-center text-primary-700 transition-all duration-300 " aria-label="TikTok">
                 <FontAwesomeIcon icon={faTiktok} size="lg" />
               </a>
             </div>
@@ -80,7 +99,7 @@ export function Footer() {
           <div className="col-span-2 grid grid-cols-3 gap-8">
             {footerLinks.map((section) => (
               <div key={section.title}>
-                <h3 className="text-base font-semibold text-sand-100 mb-4">
+                <h3 className="text-base font-semibold text-primary-800 mb-4">
                   {section.title}
                 </h3>
                 <ul className="space-y-3">
@@ -88,7 +107,7 @@ export function Footer() {
                     <li key={link.href}>
                       <a
                         href={link.href}
-                        className="text-sm text-sand-100/80 hover:text-sand-100 transition-colors duration-300"
+                        className="text-sm text-sage-700 transition-colors duration-300 hover:text-primary-600"
                       >
                         {link.label}
                       </a>
@@ -99,10 +118,10 @@ export function Footer() {
             ))}
           </div>
           <div>
-            <h3 className="text-base font-semibold text-sand-100 mb-4">
+            <h3 className="text-base font-semibold text-primary-800 mb-4">
               Newsletter
             </h3>
-            <p className="text-sm text-sand-100/90 mb-6 font-light">
+            <p className="text-sm text-sage-600 mb-6 font-light">
               Fique por dentro das novidades e ofertas exclusivas!
             </p>
             <div className="relative w-full">
@@ -111,10 +130,10 @@ export function Footer() {
                 placeholder="Seu e-mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white border border-sand-100/20 rounded-lg px-4 py-3 pr-12 text-sage-900 placeholder-sage-400 focus:outline-none focus:border-sand-100 focus:ring-1 focus:ring-sand-100/30 transition-all duration-300 text-base font-light"
+                className="w-full bg-primary-50 border border-primary-100 rounded-lg px-4 py-3 pr-12 text-sage-900 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-200 transition-all duration-300 text-base font-light"
               />
               <button 
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-primary-600 hover:bg-sand-100 hover:text-primary-600 rounded-md transition-all duration-300"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-primary-600 hover:bg-primary-500/10 rounded-md transition-all duration-300"
                 aria-label="Inscrever-se"
               >
                 <ArrowRight size={20} weight="light" />
@@ -124,26 +143,44 @@ export function Footer() {
         </div>
         <div className="lg:hidden space-y-8">
           <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-              Maria Pistache.
-            </h2>
-            <p className="text-sm text-sand-100/90 mb-4 font-light">
+            <div className="group inline-flex mx-auto mb-4">
+              <div className="relative w-14 h-14 transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src="/images/logo.png"
+                  alt="Maria Pistache"
+                  fill
+                  sizes="56px"
+                  className="object-contain filter brightness-110"
+                  priority
+                />
+              </div>
+            </div>
+            <p className="text-sm text-sage-600 mb-3 font-light">
               Moda feminina contemporânea, leve e sofisticada para todos os momentos.
             </p>
+            <div className="text-xs text-sage-500 mb-4 leading-relaxed">
+              <div className="flex items-start gap-2 justify-center">
+                <MapPin size={14} className="text-sage-500 mt-0.5 flex-shrink-0" weight="regular" />
+                <div>
+                  <p>Rua João Meneghette 427 · Jardim Três Marias</p>
+                  <p>Taboão da Serra - SP · CEP 06790-100</p>
+                </div>
+              </div>
+            </div>
             <div className="flex justify-center space-x-3">
-              <a href="https://www.instagram.com/mariapistacheoficial?igsh=MTA3azFndWFtZXI1bQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-sand-100/10 hover:bg-sand-100 hover:text-primary-600 rounded-full flex items-center justify-center text-sand-100 border border-sand-100/20 hover:border-sand-100/50 transition-all duration-300 shadow-sm hover:shadow-md" aria-label="Instagram">
+              <a href="https://www.instagram.com/mariapistacheoficial?igsh=MTA3azFndWFtZXI1bQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="w-10 h-10 hover:bg-primary-500 hover:text-white rounded-lg flex items-center justify-center text-primary-700 transition-all duration-300 " aria-label="Instagram">
                 <FontAwesomeIcon icon={faInstagram} size="lg" />
               </a>
-              <a href="https://vt.tiktok.com/ZSy56s9h9/?page=TikTokShop&utm_campaign=client_share&utm_source=whatsapp&share_app_id=1233" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-sand-100/10 hover:bg-sand-100 hover:text-primary-600 rounded-full flex items-center justify-center text-sand-100 border border-sand-100/20 hover:border-sand-100/50 transition-all duration-300 shadow-sm hover:shadow-md" aria-label="TikTok">
+              <a href="https://vt.tiktok.com/ZSy56s9h9/?page=TikTokShop&utm_campaign=client_share&utm_source=whatsapp&share_app_id=1233" target="_blank" rel="noopener noreferrer" className="w-10 h-10 hover:bg-primary-500 hover:text-white rounded-lg flex items-center justify-center text-primary-700 transition-all duration-300 " aria-label="TikTok">
                 <FontAwesomeIcon icon={faTiktok} size="lg" />
               </a>
             </div>
           </div>
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-sand-100 mb-3">
+            <h3 className="text-lg font-semibold text-primary-800 mb-3">
               Newsletter
             </h3>
-            <p className="text-sm text-sand-100/90 mb-4">
+            <p className="text-sm text-sage-600 mb-4">
               Fique por dentro das novidades e ofertas exclusivas!
             </p>
             <div className="relative w-full max-w-sm mx-auto">
@@ -152,10 +189,10 @@ export function Footer() {
                 placeholder="Seu e-mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white border border-sand-100/20 rounded-lg px-4 py-3 pr-12 text-sage-900 placeholder-sage-400 focus:outline-none focus:border-sand-100 focus:ring-1 focus:ring-sand-100/30 transition-all duration-300 text-base font-light"
+                className="w-full bg-primary-50 border border-primary-100 rounded-lg px-4 py-3 pr-12 text-sage-900 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-200 transition-all duration-300 text-base font-light"
               />
               <button 
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-primary-600 hover:bg-sand-100 hover:text-primary-600 rounded-md transition-all duration-300"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-primary-600 hover:bg-primary-500/10 rounded-md transition-all duration-300"
                 aria-label="Inscrever-se"
               >
                 <ArrowRight size={20} weight="light" />
@@ -164,8 +201,8 @@ export function Footer() {
           </div>
           <div className="space-y-4">
             {footerLinks.map((section, index) => (
-              <div key={section.title} className="border-b border-sand-100/20 pb-4">
-                <h3 className="text-base font-semibold text-sand-100 mb-3">
+              <div key={section.title} className="border-b border-sage-200 pb-4">
+                <h3 className="text-base font-semibold text-primary-800 mb-3">
                   {section.title}
                 </h3>
                 <ul className="space-y-2">
@@ -173,7 +210,7 @@ export function Footer() {
                     <li key={link.href}>
                       <a
                         href={link.href}
-                        className="text-sm text-sand-100/80 hover:text-sand-100 transition-colors duration-300 block py-1"
+                        className="text-sm text-sage-700 transition-colors duration-300 hover:text-primary-600 block py-1"
                       >
                         {link.label}
                       </a>
@@ -185,11 +222,12 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 sm:mt-10 sm:pt-8 flex flex-col md:flex-row items-center justify-between gap-4 relative">
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-sand-100/5 to-transparent"></div>
-          <div className="text-center md:text-left text-xs text-sand-100/80">
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-sage-400/30 to-transparent"></div>
+          <div className="text-center md:text-left text-xs text-sage-600 space-y-1">
             <p>
               © {new Date().getFullYear()} Maria Pistache. Todos os direitos reservados.
             </p>
+            <p>CNPJ: 51.944.038/0001-05</p>
           </div>
           <div className="flex flex-wrap justify-center md:justify-end gap-3">
             {paymentMethods.map((method) => (
@@ -200,8 +238,8 @@ export function Footer() {
                 className="group relative"
                 title={method.toUpperCase()}
               >
-                <div className="w-12 h-8 rounded-sm flex items-center justify-center bg-sand-100/10 border border-sand-100/30 hover:bg-sand-100/20 hover:border-sand-100/50 transition-all duration-300 cursor-pointer">
-                  <span className="text-[10px] text-sand-100/90 tracking-wider font-medium">
+                <div className="w-12 h-8 rounded-sm flex items-center justify-center bg-primary-50 border border-primary-100 hover:bg-primary-100 hover:border-primary-300 transition-all duration-300 cursor-pointer">
+                  <span className="text-[10px] text-sage-700 tracking-wider font-medium">
                     {method === 'visa' && 'VISA'}
                     {method === 'mastercard' && 'MC'}
                     {method === 'pix' && 'PIX'}
@@ -217,7 +255,7 @@ export function Footer() {
       <div className="fixed bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex justify-between z-40">
         <motion.button
           onClick={handleScrollToTop}
-          className="relative w-12 h-12 sm:w-14 sm:h-14 bg-primary-500 hover:bg-primary-600 text-sand-100 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center overflow-hidden group"
+          className="relative w-12 h-12 sm:w-14 sm:h-14 bg-primary-500 hover:bg-primary-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center overflow-hidden group"
           whileHover={{ 
             scale: 1.1,
             y: -2,

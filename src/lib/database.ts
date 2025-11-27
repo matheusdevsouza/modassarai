@@ -104,18 +104,30 @@ function getDbConfig(): DBConfig | { connectionString: string; max?: number; idl
   if (process.env.DATABASE_URL) {
     return {
       connectionString: process.env.DATABASE_URL,
-      max: 20,
-      idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+    }
+  }
+  
+  const host = process.env.DB_HOST || 'localhost'
+  const port = parseInt(process.env.DB_PORT || '5432')
+  const user = process.env.DB_USER || 'postgres'
+  const password = process.env.DB_PASSWORD || ''
+  const database = process.env.DB_NAME || ''
+  
+  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+    if (host === 'localhost' || host === '127.0.0.1') {
+      throw new Error('DATABASE_URL ou variáveis DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME devem ser configuradas no Vercel. Não é possível conectar ao localhost em produção.')
     }
   }
   
   return {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || '',
+    host,
+    port,
+    user,
+    password,
+    database,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
@@ -178,9 +190,23 @@ async function query(sql: string, params: any[] = []): Promise<any> {
       affectedRows: result.rowCount,
       rows: result.rows
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro na query:', error)
     console.error('SQL Original:', sql)
+    
+    if (error?.code === 'ENOTFOUND') {
+      const hostname = error?.hostname || 'desconhecido'
+      console.error(`❌ ERRO DE DNS: Não foi possível resolver o hostname "${hostname}"`)
+      console.error(`💡 Verifique se:`)
+      console.error(`   1. A DATABASE_URL está correta no Vercel`)
+      console.error(`   2. O formato está correto: postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres`)
+      console.error(`   3. O projeto Supabase não está pausado`)
+      console.error(`   4. Se estiver usando formato antigo (db.xxx.supabase.co), tente o formato novo do pooler`)
+    } else if (error?.code === 'ECONNREFUSED') {
+      console.error(`❌ ERRO DE CONEXÃO: Conexão recusada`)
+      console.error(`💡 Verifique se a DATABASE_URL está configurada no Vercel`)
+    }
+    
     throw error
   }
 }

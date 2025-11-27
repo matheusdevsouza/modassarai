@@ -40,9 +40,8 @@ keys/
 # banco de dados
 
 *.sql
-.sql
-/database
-/migrations
+database/
+migrations/
 
 
 # dependencias

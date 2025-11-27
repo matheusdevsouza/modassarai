@@ -1,14 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import database from '@/lib/database';
-import { authenticateUser, isAdmin } from '@/lib/auth';
+import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
 export async function GET(request: NextRequest) {
   try {
     const user = await authenticateUser(request);
-    if (!user || !isAdmin(user)) {
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
+        { status: 401 }
+      );
+    }
+    
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    if (!isAdmin) {
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
-        { status: 401 }
+        { status: 403 }
       );
     }
     const { searchParams } = new URL(request.url);
@@ -167,10 +175,18 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await authenticateUser(request);
-    if (!user || !isAdmin(user)) {
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Acesso negado. Autenticação necessária.' },
+        { status: 401 }
+      );
+    }
+    
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    if (!isAdmin) {
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
-        { status: 401 }
+        { status: 403 }
       );
     }
     return NextResponse.json(

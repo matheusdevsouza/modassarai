@@ -208,30 +208,30 @@ export default function ProductSizesManager({ productId, productName }: ProductS
   }, [productId, fetchSizes]);
   if (loading) {
     return (
-      <div className="bg-dark-800/60 border border-dark-700/60 rounded-xl p-6">
+      <div className="bg-white border border-primary-100 rounded-xl p-6">
         <div className="flex items-center justify-center py-8">
           <FaSpinner className="animate-spin text-primary-500 mr-3" size={20} />
-          <span className="text-gray-300">Carregando tamanhos...</span>
+          <span className="text-sage-700">Carregando tamanhos...</span>
         </div>
       </div>
     );
   }
   return (
-    <div className="bg-dark-800/60 border border-dark-700/60 rounded-xl p-6 space-y-6">
+    <div className="bg-white border border-primary-100 rounded-xl p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-500/20 rounded-lg">
-            <FaRuler className="text-primary-400" size={20} />
+          <div className="p-2 bg-primary-200 rounded-lg">
+            <FaRuler className="text-primary-600" size={20} />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">Gerenciar Tamanhos</h3>
-            <p className="text-sm text-gray-400">{productName}</p>
+            <h3 className="text-lg font-semibold text-sage-900">Gerenciar Tamanhos</h3>
+            <p className="text-sm text-sage-600">{productName}</p>
           </div>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
           disabled={saving}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg disabled:opacity-60 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg disabled:opacity-60 transition-colors"
         >
           <FaPlus size={14} />
           Adicionar Tamanho
@@ -243,7 +243,7 @@ export default function ProductSizesManager({ productId, productName }: ProductS
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="bg-red-500/10 border border-red-500/30 text-red-300 p-4 rounded-lg flex items-center gap-2"
+            className="bg-red-200 border border-red-300 text-red-700 p-4 rounded-lg flex items-center gap-2"
           >
             <FaExclamationTriangle />
             {error}
@@ -254,7 +254,7 @@ export default function ProductSizesManager({ productId, productName }: ProductS
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="bg-green-500/10 border border-green-500/30 text-green-300 p-4 rounded-lg flex items-center gap-2"
+            className="bg-green-200 border border-green-300 text-green-700 p-4 rounded-lg flex items-center gap-2"
           >
             <FaCheck />
             {success}
@@ -262,19 +262,19 @@ export default function ProductSizesManager({ productId, productName }: ProductS
         )}
       </AnimatePresence>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-dark-700/30 rounded-lg p-4">
-          <div className="text-2xl font-bold text-white">{sizes.length}</div>
-          <div className="text-sm text-gray-400">Tamanhos Cadastrados</div>
+        <div className="bg-primary-50 border border-primary-100 rounded-lg p-4">
+          <div className="text-2xl font-bold text-sage-900">{sizes.length}</div>
+          <div className="text-sm text-sage-600">Tamanhos Cadastrados</div>
         </div>
-        <div className="bg-dark-700/30 rounded-lg p-4">
-          <div className="text-2xl font-bold text-white">{totalStock}</div>
-          <div className="text-sm text-gray-400">Estoque Total</div>
+        <div className="bg-primary-50 border border-primary-100 rounded-lg p-4">
+          <div className="text-2xl font-bold text-sage-900">{totalStock}</div>
+          <div className="text-sm text-sage-600">Estoque Total</div>
         </div>
-        <div className="bg-dark-700/30 rounded-lg p-4">
-          <div className="text-2xl font-bold text-white">
+        <div className="bg-primary-50 border border-primary-100 rounded-lg p-4">
+          <div className="text-2xl font-bold text-sage-900">
             {sizes.filter(s => s.stock_quantity > 0).length}
           </div>
-          <div className="text-sm text-gray-400">Tamanhos com Estoque</div>
+          <div className="text-sm text-sage-600">Tamanhos com Estoque</div>
         </div>
       </div>
       <AnimatePresence>
@@ -283,29 +283,29 @@ export default function ProductSizesManager({ productId, productName }: ProductS
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-dark-700/30 rounded-lg p-4 border border-dark-600"
+            className="bg-primary-50 border border-primary-100 rounded-lg p-4"
           >
-            <h4 className="text-white font-medium mb-4">Adicionar Novo Tamanho</h4>
+            <h4 className="text-sage-900 font-medium mb-4">Adicionar Novo Tamanho</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Tamanho</label>
+                <label className="block text-sm text-sage-700 mb-1">Tamanho</label>
                 <input
                   type="text"
                   value={newSize}
                   onChange={(e) => setNewSize(e.target.value)}
-                  className="w-full bg-dark-800 border border-dark-600 rounded-lg px-3 py-2 text-white"
+                  className="w-full bg-white border border-primary-100 rounded-lg px-3 py-2 text-sage-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                   placeholder="Ex: 38, 39, 40, P, M, G..."
                   maxLength={10}
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Estoque</label>
+                <label className="block text-sm text-sage-700 mb-1">Estoque</label>
                 <input
                   type="number"
                   min="0"
                   value={newStock}
                   onChange={(e) => setNewStock(parseInt(e.target.value) || 0)}
-                  className="w-full bg-dark-800 border border-dark-600 rounded-lg px-3 py-2 text-white"
+                  className="w-full bg-white border border-primary-100 rounded-lg px-3 py-2 text-sage-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                   placeholder="0"
                 />
               </div>
@@ -313,7 +313,7 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                 <button
                   onClick={handleAddSize}
                   disabled={saving || !newSize.trim()}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg disabled:opacity-60 flex items-center gap-2"
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-60 flex items-center gap-2"
                 >
                   {saving ? <FaSpinner className="animate-spin" size={14} /> : <FaSave size={14} />}
                   Adicionar
@@ -325,7 +325,7 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                     setNewStock(0);
                     setError(null);
                   }}
-                  className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg flex items-center gap-2"
+                  className="px-4 py-2 bg-sage-300 hover:bg-sage-400 text-white rounded-lg flex items-center gap-2"
                 >
                   <FaTimes size={14} />
                   Cancelar
@@ -336,30 +336,30 @@ export default function ProductSizesManager({ productId, productName }: ProductS
         )}
       </AnimatePresence>
       {sizes.length === 0 ? (
-        <div className="text-center py-8 text-gray-400">
+        <div className="text-center py-8 text-sage-600">
           <FaRuler size={48} className="mx-auto mb-3 opacity-50" />
           <p>Nenhum tamanho cadastrado para este produto</p>
           <p className="text-sm mt-1">Clique em &quot;Adicionar Tamanho&quot; para começar</p>
         </div>
       ) : (
         <div className="space-y-3">
-          <h4 className="text-white font-medium">Tamanhos Cadastrados</h4>
+          <h4 className="text-sage-900 font-medium">Tamanhos Cadastrados</h4>
           <div className="grid gap-3">
             {sizes.map((size) => (
               <motion.div
                 key={size.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-dark-700/30 rounded-lg p-4 border border-dark-600"
+                className="bg-primary-50 border border-primary-100 rounded-lg p-4"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full font-bold text-lg min-w-[3rem] text-center">
+                    <div className="bg-primary-500 text-white px-4 py-2 rounded-full font-bold text-lg min-w-[3rem] text-center">
                       {size.size}
                     </div>
                     <div className="flex items-center gap-4">
                       <div>
-                        <label className="block text-xs text-gray-400 mb-1">Estoque</label>
+                        <label className="block text-xs text-sage-600 mb-1">Estoque</label>
                         {editingSize === size.size ? (
                           <div className="flex items-center gap-2">
                             <input
@@ -382,23 +382,23 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                                 }
                                 setEditingSize(null);
                               }}
-                              className="w-20 bg-dark-800 border border-dark-600 rounded px-2 py-1 text-white text-sm"
+                              className="w-20 bg-white border border-primary-200 rounded px-2 py-1 text-sage-900 text-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                               autoFocus
                             />
                           </div>
                         ) : (
                           <button
                             onClick={() => setEditingSize(size.size)}
-                            className="text-white hover:text-primary-400 transition-colors"
+                            className="text-sage-900 hover:text-primary-600 transition-colors"
                           >
                             <span className="font-semibold">{size.stock_quantity}</span>
                           </button>
                         )}
                       </div>
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      <div className={`px-2.5 py-1 rounded-full text-xs font-medium ${
                         (size.is_active && size.stock_quantity > 0)
-                          ? 'bg-green-500/20 text-green-400'
-                          : 'bg-red-500/20 text-red-400'
+                          ? 'bg-green-200 text-green-700'
+                          : 'bg-red-200 text-red-700'
                       }`}>
                         {(size.is_active && size.stock_quantity > 0) ? 'Disponível' : 'Esgotado'}
                       </div>
@@ -408,16 +408,7 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                      <button
                        onClick={() => handleEditSize(size)}
                        disabled={saving}
-                       className="p-2 rounded-lg transition-colors disabled:opacity-50"
-                       style={{ color: '#E31F35' }}
-                       onMouseEnter={(e) => {
-                         e.currentTarget.style.backgroundColor = 'rgba(227, 31, 53, 0.1)';
-                         e.currentTarget.style.color = '#dc2626';
-                       }}
-                       onMouseLeave={(e) => {
-                         e.currentTarget.style.backgroundColor = 'transparent';
-                         e.currentTarget.style.color = '#E31F35';
-                       }}
+                       className="p-2 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-colors disabled:opacity-50"
                        title="Editar tamanho"
                      >
                        <FaEdit size={14} />
@@ -425,7 +416,7 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                     <button
                       onClick={() => handleRemoveSize(size.size)}
                       disabled={saving}
-                      className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
+                      className="p-2 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
                       title="Remover tamanho"
                     >
                       <FaTrash size={14} />
@@ -450,40 +441,40 @@ export default function ProductSizesManager({ productId, productName }: ProductS
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-dark-900/50 backdrop-blur-sm rounded-3xl w-full max-w-md border border-dark-700/50 shadow-2xl"
+              className="bg-white rounded-3xl w-full max-w-md border border-primary-100 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between p-6 border-b border-dark-700/50">
+              <div className="flex items-center justify-between p-6 border-b border-primary-100">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary-500/20 rounded-lg">
-                    <FaEdit className="text-primary-400" size={20} />
+                  <div className="p-2 bg-primary-200 rounded-lg">
+                    <FaEdit className="text-primary-600" size={20} />
                   </div>
-                  <h3 className="text-xl font-bold text-white">Editar Tamanho {editSizeData.size}</h3>
+                  <h3 className="text-xl font-bold text-sage-900">Editar Tamanho {editSizeData.size}</h3>
                 </div>
                 <button
                   onClick={handleCancelEdit}
                   disabled={saving}
-                  className="p-2 text-gray-400 hover:text-white hover:bg-dark-800 rounded-lg transition-all duration-300 disabled:opacity-50"
+                  className="p-2 text-sage-600 hover:text-sage-900 hover:bg-primary-50 rounded-lg transition-all duration-300 disabled:opacity-50"
                 >
                   <FaTimes size={20} />
                 </button>
               </div>
               <div className="p-6 space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">
+                  <label className="block text-sm font-medium text-sage-700 mb-3">
                     Tamanho
                   </label>
                   <input
                     type="text"
                     value={editSizeData.size}
                     onChange={(e) => setEditSizeData({ ...editSizeData, size: e.target.value })}
-                    className="w-full bg-dark-800/60 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 transition-all duration-300"
+                    className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 placeholder-sage-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:bg-white transition-all duration-300"
                     placeholder="Ex: 38, 39, 40, P, M, G..."
                     maxLength={10}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">
+                  <label className="block text-sm font-medium text-sage-700 mb-3">
                     Quantidade em Estoque
                   </label>
                   <input
@@ -498,15 +489,15 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                          isActive: newStock === 0 ? false : editSizeData.isActive
                        });
                      }}
-                    className="w-full bg-dark-800/60 border border-dark-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20 transition-all duration-300"
+                    className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 placeholder-sage-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:bg-white transition-all duration-300"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">
+                  <label className="block text-sm font-medium text-sage-700 mb-3">
                     Status do Tamanho
                   </label>
-                  <div className="bg-dark-800/30 rounded-xl p-4 border border-dark-700/50">
+                  <div className="bg-primary-50 rounded-xl p-4 border border-primary-100">
                     <label className="flex items-center gap-4 cursor-pointer group">
                       <div className="toggle-switch">
                         <input
@@ -517,15 +508,15 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                         <span className="toggle-slider"></span>
                       </div>
                       <div className="flex-1">
-                        <div className="text-white font-medium group-hover:text-red-400 transition-colors duration-300">
+                        <div className="text-sage-900 font-medium group-hover:text-red-600 transition-colors duration-300">
                           Esgotado
                         </div>
-                        <div className="text-sm text-gray-400">
+                        <div className="text-sm text-sage-600">
                           Tamanho indisponível (estoque zero)
                         </div>
                       </div>
                       {!editSizeData.isActive && (
-                        <div className="text-red-400 animate-pulse">
+                        <div className="text-red-600 animate-pulse">
                           <FaExclamationTriangle size={16} />
                         </div>
                       )}
@@ -533,18 +524,18 @@ export default function ProductSizesManager({ productId, productName }: ProductS
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-end gap-4 p-6 border-t border-dark-700/50">
+              <div className="flex items-center justify-end gap-4 p-6 border-t border-primary-100">
                 <button
                   onClick={handleCancelEdit}
                   disabled={saving}
-                  className="px-6 py-3 text-gray-300 hover:text-white hover:bg-dark-800 rounded-xl transition-all duration-300 disabled:opacity-50"
+                  className="px-6 py-3 text-sage-600 hover:text-sage-900 hover:bg-primary-50 rounded-xl transition-all duration-300 disabled:opacity-50"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleSaveEdit}
                   disabled={saving}
-                  className="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 disabled:opacity-50 flex items-center gap-2"
+                  className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-primary-200 disabled:opacity-50 flex items-center gap-2"
                 >
                   {saving ? (
                     <>

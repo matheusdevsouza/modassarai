@@ -895,16 +895,16 @@ export default function ProdutoPage() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="mb-12"
           >
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-cloud-100"></div>
-                </div>
-                <div className="relative flex justify-center">
+              </div>
+              <div className="relative flex justify-center">
                   <span className="bg-sand-100 px-6 text-lg md:text-xl font-semibold text-sage-900">
                     Produtos Semelhantes
                   </span>
-                </div>
               </div>
+            </div>
           </motion.div>
         )}
 

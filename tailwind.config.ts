@@ -43,7 +43,7 @@ const config: Config = {
           900: '#141817',
         },
         sand: {
-          50: '#fdf8f2',
+          50: '#FDF8F2',
           100: 'var(--brand-sand)',
           200: '#e5ddd2',
           300: '#ccc6bc',

@@ -5,7 +5,7 @@
 :root {
   --brand-forest: #0F4024;
   --brand-sage: #4F5955;
-  --brand-sand: #F2ECE4;
+  --brand-sand: #FDF8F2;
   --brand-cloud: #D9D9D9;
   --logo-gold: var(--brand-forest);
   --logo-gold-light: #1a5c35;
@@ -463,4 +463,38 @@ a {
 }
 .spinner-gold-slow {
   animation: spin 2s linear infinite !important;
+}
+.custom-shape-divider-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.custom-shape-divider-bottom svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 100px;
+}
+.custom-shape-divider-bottom .shape-fill {
+  fill: #F5FBF7;
+}
+.custom-shape-divider-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.custom-shape-divider-top svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 100px;
+}
+.custom-shape-divider-top .shape-fill {
+  fill: #F5FBF7;
 }

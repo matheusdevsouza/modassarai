@@ -76,12 +76,12 @@ export function Header() {
               className="flex items-center cursor-pointer group relative z-10"
               title="Maria Pistache - Ir para a página inicial"
             >
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 transition-transform duration-300 group-hover:scale-105">
+              <div className="relative w-12 h-12 sm:w-16 sm:h-16 transition-transform duration-300 group-hover:scale-105">
                 <Image
                   src="/images/logo.png"
                   alt="Maria Pistache"
                   fill
-                  sizes="(max-width: 640px) 80px, 96px"
+                  sizes="(max-width: 640px) 48px, 64px"
                   className="object-contain filter brightness-110"
                   priority
                 />
@@ -98,8 +98,8 @@ export function Header() {
                 onBlur={() => setIsSearchFocused(false)}
               >
                 <div
-                  className={`relative flex items-center bg-white border border-cloud-200 rounded-full px-4 py-2.5 transition-all duration-300 ${
-                    isSearchFocused ? 'ring-2 ring-primary-200 shadow-md shadow-primary-100' : ''
+                  className={`relative flex items-center bg-primary-50 border border-primary-100 rounded-full px-4 py-2.5 transition-all duration-300 ${
+                    isSearchFocused ? 'ring-2 ring-sand-100 shadow-md shadow-primary-100' : ''
                   }`}
                 >
                   <MagnifyingGlass 
@@ -261,19 +261,22 @@ export function Header() {
                               <span className="text-sm">Contato</span>
                             </a>
                             {user.is_admin && (
-                              <a href="/admin" className="group flex items-center gap-3 px-5 py-3 text-sage-800 hover:bg-primary-50 hover:text-primary-600 transition-colors mt-2 rounded-lg mx-2">
-                                <div className="w-6 h-6 bg-primary-500 rounded-lg flex items-center justify-center">
-                                  <span className="text-white text-xs font-bold">A</span>
-                                </div>
-                                <span className="text-sm">Dashboard Admin</span>
-                              </a>
+                              <>
+                                <div className="border-t border-cloud-100 my-2 mx-2"></div>
+                                <a href="/admin" className="group flex items-center gap-3 px-5 py-3 text-sage-800 hover:bg-primary-50 hover:text-primary-600 transition-colors rounded-lg mx-2">
+                                  <div className="w-6 h-6 bg-primary-500 rounded-lg flex items-center justify-center">
+                                    <span className="text-white text-xs font-bold">A</span>
+                                  </div>
+                                  <span className="text-sm">Dashboard Admin</span>
+                                </a>
+                              </>
                             )}
                           </div>
                           <div className="border-t border-cloud-100 my-2 mx-2"></div>
-                          <div className="pt-2">
+                          <div className="pt-2 px-2 pb-2">
                             <button
                               onClick={async () => { await logout(); setUserMenuOpen(false); }}
-                              className="group w-full flex items-center gap-3 px-5 py-3 text-sage-700 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg mx-2"
+                              className="group w-full flex items-center gap-3 px-5 py-3 text-sage-700 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg"
                             >
                               <SignOut size={18} className="text-sage-600 group-hover:text-red-600 transition-colors" weight="regular" />
                               <span className="text-sm">Sair</span>
@@ -343,8 +346,8 @@ export function Header() {
           <div className="lg:hidden pb-4">
             <form onSubmit={handleSearch} className="relative">
               <div
-                className={`relative flex items-center bg-white border border-cloud-200 rounded-full px-4 py-3 transition-all duration-300 ${
-                  isSearchFocused ? 'ring-2 ring-primary-200' : ''
+                className={`relative flex items-center bg-primary-50 border border-primary-100 rounded-full px-4 py-3 transition-all duration-300 ${
+                  isSearchFocused ? 'ring-2 ring-sand-100' : ''
                 }`}
               >
                 <MagnifyingGlass 
@@ -352,16 +355,16 @@ export function Header() {
                   weight="regular" 
                   className="text-sage-600 mr-3 flex-shrink-0" 
                 />
-                <input
-                  type="text"
-                  placeholder="Buscar produtos..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
+                  <input
+                    type="text"
+                    placeholder="Buscar produtos..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setIsSearchFocused(false)}
                   className="flex-1 bg-transparent text-sage-900 placeholder-sage-400 focus:outline-none text-sm"
-                />
+                  />
                 {searchQuery && (
                   <motion.button
                     type="button"
@@ -436,12 +439,12 @@ export function Header() {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             >
               <div className="flex items-center justify-between p-6 border-b border-cloud-200 bg-primary-50">
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16">
                   <Image
                     src="/images/logo.png"
                     alt="Maria Pistache"
                     fill
-                    sizes="(max-width: 640px) 80px, 96px"
+                    sizes="(max-width: 640px) 48px, 64px"
                     className="object-contain"
                     priority
                   />

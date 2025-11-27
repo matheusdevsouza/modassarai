@@ -1,7 +1,26 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
+
+const HeroSkeleton = () => (
+  <section className="relative min-h-[calc(100svh-112px)] sm:min-h-[calc(100vh-112px)] overflow-hidden bg-sand-100" style={{ marginTop: '112px' }}>
+    <div className="absolute inset-0 animate-pulse" style={{ background: 'linear-gradient(to bottom right, #FDF8F2, #F5F0E8, #FDF8F2)' }} />
+    <div className="absolute inset-0 flex items-center justify-center z-10 px-4">
+      <div className="text-center max-w-4xl w-full space-y-6">
+        <div className="h-4 w-48 bg-black/20 rounded-full mx-auto animate-pulse" />
+        <div className="h-16 md:h-20 w-full max-w-3xl bg-black/30 rounded-lg mx-auto animate-pulse" />
+        <div className="h-6 md:h-8 w-full max-w-2xl bg-black/20 rounded-lg mx-auto animate-pulse" />
+        <div className="h-12 w-64 bg-black/40 rounded-full mx-auto animate-pulse" />
+      </div>
+    </div>
+    <div className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 sm:gap-2.5 z-10">
+      <div className="w-6 sm:w-8 h-1.5 sm:h-1.5 bg-black/30 rounded-full animate-pulse" />
+      <div className="w-5 sm:w-6 h-1.5 sm:h-1.5 bg-black/20 rounded-full animate-pulse" />
+    </div>
+  </section>
+)
+
 const heroImages = [
   {
     id: 1,
@@ -17,10 +36,16 @@ const heroImages = [
   }
 ]
 export function HeroSection() {
+  const [loading, setLoading] = useState(true)
   const [currentImage, setCurrentImage] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const autoPlayRef = useRef<NodeJS.Timeout>()
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 800)
+    return () => clearTimeout(timer)
+  }, [])
+
   useEffect(() => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -32,7 +57,7 @@ export function HeroSection() {
   useEffect(() => {
     autoPlayRef.current = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % heroImages.length)
-    }, 5000)
+    }, 10000)
     return () => {
       if (autoPlayRef.current) {
         clearInterval(autoPlayRef.current)
@@ -45,74 +70,68 @@ export function HeroSection() {
     setCurrentImage(index)
     setTimeout(() => setIsAnimating(false), 500)
   }
-  const currentImageData = heroImages[currentImage]
+  
+  if (loading) {
+    return <HeroSkeleton />
+  }
+  
   return (
     <section className="relative min-h-[calc(100svh-112px)] sm:min-h-[calc(100vh-112px)] overflow-hidden bg-sand-100" style={{ marginTop: '112px' }}>
-      <AnimatePresence mode="sync">
-        <motion.div
-          key={currentImage}
-          initial={{ x: '100%', opacity: 1 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: '-100%', opacity: 1 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="absolute inset-0"
-        >
-          <div className="relative w-full h-full">
-            <Image
-              src={isMobile ? currentImageData.mobileImageUrl : currentImageData.imageUrl}
-              alt={currentImageData.alt}
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/50 to-primary-900/70 mix-blend-multiply" />
-          </div>
-        </motion.div>
-      </AnimatePresence>
+      <div className="absolute inset-0">
+        {heroImages.map((image, index) => {
+          const isActive = index === currentImage
+          return (
+            <motion.div
+              key={image.id}
+              initial={false}
+              animate={{
+                opacity: isActive ? 1 : 0,
+                zIndex: isActive ? 1 : 0,
+              }}
+              transition={{
+                duration: 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              className="absolute inset-0"
+              style={{ pointerEvents: isActive ? 'auto' : 'none' }}
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={isMobile ? image.mobileImageUrl : image.imageUrl}
+                  alt={image.alt}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  style={{ filter: 'blur(2px)' }}
+                  priority={index === 0}
+                  quality={90}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/65 to-black/80" />
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
       <div className="absolute inset-0 flex items-center justify-center z-10 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="text-center max-w-4xl"
-        >
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-white/80 text-sm md:text-base uppercase tracking-[0.3em] mb-4 font-semibold"
-          >
+        <div className="text-center max-w-4xl">
+          <p className="text-white/80 text-sm md:text-base uppercase tracking-[0.3em] mb-4 font-semibold">
             Maria Pistache
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-semibold text-white mb-6 leading-tight"
-          >
+          </p>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-white mb-6 leading-tight">
             Moda feminina para viver seus melhores dias.
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="text-white/85 text-lg md:text-xl mb-8 max-w-2xl mx-auto"
-          >
+          </h1>
+          <p className="text-white/85 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
             Peças leves, versáteis e contemporâneas, pensadas para acompanhar cada momento da sua rotina.
-          </motion.p>
+          </p>
           <motion.a
             href="/produtos"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-block px-8 py-4 bg-primary-500 text-white font-semibold uppercase tracking-[0.25em] transition-all duration-300 rounded-full shadow-lg hover:bg-primary-600"
           >
             VER COLEÇÕES
           </motion.a>
-        </motion.div>
+        </div>
       </div>
       <div className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 sm:gap-2.5 z-10">
         {heroImages.map((_, index) => (

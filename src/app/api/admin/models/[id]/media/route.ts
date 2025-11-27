@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { authenticateUser, isAdmin } from '@/lib/auth'
+import { authenticateUser, verifyAdminAccess } from '@/lib/auth'
 import database from '@/lib/database'
 import { join } from 'path'
 import { existsSync, statSync } from 'fs'
@@ -11,9 +11,15 @@ export async function POST(
   try {
     console.log('📤 [MODEL UPLOAD] Iniciando upload de imagem do modelo')
     const user = await authenticateUser(request)
-    if (!user || !isAdmin(user)) {
-      console.log('❌ [MODEL UPLOAD] Acesso negado')
-      return NextResponse.json({ success: false, error: 'Acesso negado' }, { status: 403 })
+    if (!user) {
+      console.log('❌ [MODEL UPLOAD] Usuário não autenticado')
+      return NextResponse.json({ success: false, error: 'Acesso negado. Autenticação necessária.' }, { status: 401 })
+    }
+    
+    const isAdmin = await verifyAdminAccess(user, database.query);
+    if (!isAdmin) {
+      console.log('❌ [MODEL UPLOAD] Acesso negado - não é admin')
+      return NextResponse.json({ success: false, error: 'Acesso negado. Apenas administradores autorizados.' }, { status: 403 })
     }
     const modelId = parseInt(params.id)
     if (isNaN(modelId)) {

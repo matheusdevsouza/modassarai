@@ -2,16 +2,44 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-  faEnvelope,
-  faPhone
-} from '@fortawesome/free-solid-svg-icons'
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { ArrowRight } from 'phosphor-react'
+
+const ContactSkeleton = () => (
+  <section className="py-24 md:py-32 bg-sand-100 relative overflow-hidden">
+    <div className="container mx-auto px-4 sm:px-6 relative z-10">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16 md:mb-20 space-y-6">
+          <div className="h-8 w-40 bg-black/20 rounded-full mx-auto animate-pulse" />
+          <div className="h-12 md:h-16 w-full max-w-2xl bg-black/30 rounded-lg mx-auto animate-pulse" />
+          <div className="h-6 w-full max-w-xl bg-black/20 rounded mx-auto animate-pulse" />
+        </div>
+        <div className="h-12 w-64 bg-black/40 rounded-xl mx-auto animate-pulse" />
+      </div>
+    </div>
+  </section>
+)
+
 export function ContactSection() {
   return (
     <section className="py-24 md:py-32 bg-sand-100 relative overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="custom-shape-divider-top absolute top-0 left-0 w-full overflow-hidden leading-none pointer-events-none" style={{ zIndex: 1 }}>
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+          className="relative block w-full"
+          style={{ width: 'calc(100% + 1.3px)', height: '100px', transform: 'scaleX(-1)' }}
+        >
+          <path
+            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+            className="shape-fill"
+            fill="#F5FBF7"
+          />
+        </svg>
+      </div>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
           animate={{
             scale: [1, 1.12, 1],
@@ -48,13 +76,13 @@ export function ContactSection() {
           }}
           className="max-w-5xl mx-auto"
         >
-          <div className="text-center mb-16 md:mb-20">
+          <div className="text-center mb-12 md:mb-16">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 mb-6 px-4 py-2 bg-primary-50 backdrop-blur-sm border border-primary-100 rounded-full"
+              className="inline-flex items-center gap-2 mb-6 px-4 py-2 border border-primary-700 rounded-full"
             >
               <FontAwesomeIcon 
                 icon={faEnvelope} 
@@ -83,7 +111,7 @@ export function ContactSection() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-lg md:text-xl text-sage-700 max-w-2xl mx-auto leading-relaxed"
             >
-              Estamos prontos para ajudar você com qualquer dúvida sobre nossos produtos ou pedidos
+              Estamos prontos para ajudar você com qualquer dúvida sobre nossos produtos ou pedidos.
             </motion.p>
           </div>
           <motion.div
@@ -108,7 +136,6 @@ export function ContactSection() {
               >
                 <motion.div
                   initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
                   animate={{
                     x: ['-100%', '100%'],
                   }}
@@ -123,24 +150,18 @@ export function ContactSection() {
                       ease: 'linear',
                     }
                   }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-500"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 />
-                <motion.span 
-                  className="relative z-10"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 2 }}
-                  transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                <span 
+                  className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5"
                 >
                   ENTRAR EM CONTATO
-                </motion.span>
-                <motion.div
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 4 }}
-                  transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="relative z-10"
+                </span>
+                <div
+                  className="relative z-10 transition-transform duration-300 group-hover:translate-x-1"
                 >
                   <ArrowRight size={18} weight="thin" />
-                </motion.div>
+                </div>
               </motion.button>
             </Link>
           </motion.div>

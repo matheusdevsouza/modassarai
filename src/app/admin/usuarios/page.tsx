@@ -150,34 +150,34 @@ export default function AdminUsers() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl p-4 hover:bg-dark-700/30 transition-all duration-300"
+        className="bg-white border border-primary-100 rounded-2xl p-4 hover:bg-primary-50 transition-all duration-300 hover:shadow-lg hover:shadow-primary-100/50"
       >
         <div className="flex items-start gap-3 mb-3">
           <div className="flex-shrink-0">
-            <div className="h-10 w-10 rounded-full bg-primary-500 flex items-center justify-center">
-              <span className="text-white font-medium text-sm">
+            <div className="h-10 w-10 rounded-full bg-primary-200 border border-primary-300 flex items-center justify-center">
+              <span className="text-primary-600 font-medium text-sm">
                 {(user.name || 'U').charAt(0).toUpperCase()}
               </span>
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-white font-semibold text-sm mb-1 truncate">{user.name || 'Nome não informado'}</h3>
-            <div className="text-gray-400 text-xs mb-2 truncate">{user.email || 'Email não informado'}</div>
+            <h3 className="text-sage-900 font-semibold text-sm mb-1 truncate">{user.name || 'Nome não informado'}</h3>
+            <div className="text-sage-500 text-xs mb-2 truncate">{user.email || 'Email não informado'}</div>
             {user.phone && (
-              <div className="text-gray-400 text-xs mb-2">{user.phone}</div>
+              <div className="text-sage-500 text-xs mb-2">{user.phone}</div>
             )}
             <div className="flex items-center gap-2 mb-2">
               <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                 user.role === 'admin' 
-                  ? 'bg-primary-500/20 text-primary-400' 
-                  : 'bg-primary-500/20 text-primary-400'
+                  ? 'bg-primary-200 text-primary-600 border border-primary-300' 
+                  : 'bg-sage-200 text-sage-600 border border-sage-300'
               }`}>
                 {user.role === 'admin' ? 'Admin' : 'Usuário'}
               </span>
               <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                 user.status === 'active' 
-                  ? 'bg-primary-500/20 text-primary-400' 
-                  : 'bg-red-500/20 text-red-400'
+                  ? 'bg-green-200 text-green-600 border border-green-300' 
+                  : 'bg-red-200 text-red-600 border border-red-300'
               }`}>
                 {user.status === 'active' ? 'Ativo' : 'Inativo'}
               </span>
@@ -186,38 +186,38 @@ export default function AdminUsers() {
         </div>
         <div className="space-y-2 mb-3">
           <div className="flex items-center justify-between">
-            <span className="text-gray-400 text-xs">Pedidos:</span>
-            <span className="text-white text-xs font-medium">{user.orderCount || 0}</span>
+            <span className="text-sage-500 text-xs">Pedidos:</span>
+            <span className="text-sage-900 text-xs font-medium">{user.orderCount || 0}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-400 text-xs">Total Gasto:</span>
-            <span className="text-primary-400 text-xs font-medium">
+            <span className="text-sage-500 text-xs">Total Gasto:</span>
+            <span className="text-primary-600 text-xs font-medium">
               R$ {(user.totalSpent || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-400 text-xs">Último Login:</span>
-            <span className="text-white text-xs">{user.lastLogin || 'Nunca'}</span>
+            <span className="text-sage-500 text-xs">Último Login:</span>
+            <span className="text-sage-900 text-xs">{user.lastLogin || 'Nunca'}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <button 
             onClick={() => handleViewUser(user.internalId)} 
-            className="flex-1 bg-primary-500/20 hover:bg-primary-500/30 text-primary-400 hover:text-primary-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+            className="flex-1 bg-primary-100 hover:bg-primary-200 text-primary-600 hover:text-primary-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
           >
             <FaEye size={16} />
             Ver
           </button>
           <button 
             onClick={() => handleEditUser(user.internalId)} 
-            className="flex-1 bg-primary-500/20 hover:bg-primary-500/30 text-primary-400 hover:text-primary-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+            className="flex-1 bg-primary-100 hover:bg-primary-200 text-primary-600 hover:text-primary-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
           >
             <FaEdit size={16} />
             Editar
           </button>
           <button 
             onClick={() => handleDeleteUser(user.internalId)} 
-            className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
+            className="flex-1 bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-700 px-3 py-2 rounded-lg transition-all duration-300 text-center text-sm font-medium flex items-center justify-center gap-1"
           >
             <FaTrash size={16} />
             Excluir
@@ -250,18 +250,18 @@ export default function AdminUsers() {
         className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
       >
         <div className="flex-1">
-          <h1 className="text-xl md:text-2xl font-bold text-white mb-1">Gestão de Usuários</h1>
-          <p className="text-gray-400 text-xs md:text-sm">Gerencie todos os usuários da sua loja</p>
+          <h1 className="text-xl md:text-2xl font-bold text-sage-900 mb-1">Gestão de Usuários</h1>
+          <p className="text-sage-600 text-xs md:text-sm">Gerencie todos os usuários da sua loja</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
           {!isMobile && (
-            <div className="flex bg-dark-800/50 rounded-xl p-1">
+            <div className="flex bg-white border border-primary-100 rounded-xl p-1">
               <button
                 onClick={() => setViewMode('table')}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'table' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBars size={12} />
@@ -272,7 +272,7 @@ export default function AdminUsers() {
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1 ${
                   viewMode === 'grid' 
                     ? 'bg-primary-500 text-white' 
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-sage-600 hover:text-primary-600'
                 }`}
               >
                 <FaBox size={12} />
@@ -282,7 +282,7 @@ export default function AdminUsers() {
           )}
           <button
             onClick={refreshUsers}
-            className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-3 lg:px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 flex items-center justify-center gap-1 text-xs lg:text-sm whitespace-nowrap"
+            className="bg-primary-500 hover:bg-primary-600 text-white px-3 lg:px-4 py-2 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary-100/50 flex items-center justify-center gap-1 text-xs lg:text-sm whitespace-nowrap"
             title="Atualizar usuários"
           >
             <FaRedo size={14} />
@@ -297,53 +297,53 @@ export default function AdminUsers() {
         transition={{ duration: 0.5, delay: 0.1 }}
         className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
       >
-        <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+        <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-xs">Total</p>
-              <p className="text-lg lg:text-xl font-bold text-white">{totalUsers}</p>
+              <p className="text-sage-600 text-xs">Total</p>
+              <p className="text-lg lg:text-xl font-bold text-sage-900">{totalUsers}</p>
             </div>
-            <div className="bg-primary-500 p-2 rounded-full">
-              <FaUser className="text-white" size={14} />
+            <div className="bg-primary-200 p-2 rounded-full">
+              <FaUser className="text-primary-600" size={14} />
             </div>
           </div>
         </div>
-        <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+        <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-xs">Ativos</p>
-              <p className="text-lg lg:text-xl font-bold text-white">
+              <p className="text-sage-600 text-xs">Ativos</p>
+              <p className="text-lg lg:text-xl font-bold text-sage-900">
                 {users.filter(u => u.status === 'active').length}
               </p>
             </div>
-            <div className="bg-primary-500 p-2 rounded-full">
-              <FaUserCheck className="text-white" size={14} />
+            <div className="bg-green-200 p-2 rounded-full">
+              <FaUserCheck className="text-green-600" size={14} />
             </div>
           </div>
         </div>
-        <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+        <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-xs">Admins</p>
-              <p className="text-lg lg:text-xl font-bold text-white">
+              <p className="text-sage-600 text-xs">Admins</p>
+              <p className="text-lg lg:text-xl font-bold text-sage-900">
                 {users.filter(u => u.role === 'admin').length}
               </p>
             </div>
-            <div className="bg-primary-500 p-2 rounded-full">
-              <FaUserShield className="text-white" size={14} />
+            <div className="bg-primary-200 p-2 rounded-full">
+              <FaUserShield className="text-primary-600" size={14} />
             </div>
           </div>
         </div>
-        <div className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
+        <div className="bg-white border border-primary-100 rounded-xl p-3 lg:p-4 border-l-4 border-primary-500">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-xs">Não Verificados</p>
-              <p className="text-lg lg:text-xl font-bold text-white">
+              <p className="text-sage-600 text-xs">Não Verificados</p>
+              <p className="text-lg lg:text-xl font-bold text-sage-900">
                 {users.filter(u => !u.emailVerified).length}
               </p>
             </div>
-            <div className="bg-primary-500 p-2 rounded-full">
-              <FaEnvelope className="text-white" size={14} />
+            <div className="bg-yellow-200 p-2 rounded-full">
+              <FaEnvelope className="text-yellow-600" size={14} />
             </div>
           </div>
         </div>
@@ -352,17 +352,17 @@ export default function AdminUsers() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl p-4 md:p-6"
+        className="bg-white border border-primary-100 rounded-2xl p-4 md:p-6"
       >
         {isMobile && (
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <FaFilter className="text-primary-500" size={16} />
-              <span className="text-white font-medium">Filtros</span>
+              <span className="text-sage-900 font-medium">Filtros</span>
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+              className="p-2 text-sage-600 hover:text-primary-600 transition-colors duration-300"
             >
               {showFilters ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
             </button>
@@ -371,44 +371,44 @@ export default function AdminUsers() {
         <div className={`${isMobile && !showFilters ? 'hidden' : ''} space-y-4`}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="relative sm:col-span-2 lg:col-span-1">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sage-500" size={16} />
               <input
                 type="text"
                 placeholder="Buscar usuários..."
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="w-full bg-dark-700/50 border border-dark-600/50 rounded-xl px-4 py-3 pl-10 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:bg-dark-700 transition-all duration-300 text-sm md:text-base"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 pl-10 text-sage-900 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm md:text-base"
               />
             </div>
             <div className="relative">
               <select
                 value={roleFilter}
                 onChange={(e) => handleRoleFilter(e.target.value)}
-                className="w-full bg-dark-700/50 border border-dark-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:bg-dark-700 transition-all duration-300 text-sm md:text-base appearance-none"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm md:text-base appearance-none"
               >
                 <option value="">Todos os Tipos</option>
                 <option value="admin">Administradores</option>
                 <option value="user">Usuários</option>
               </select>
-              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-500 pointer-events-none" size={14} />
             </div>
             <div className="relative">
               <select
                 value={statusFilter}
                 onChange={(e) => handleStatusFilter(e.target.value)}
-                className="w-full bg-dark-700/50 border border-dark-600/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:bg-dark-700 transition-all duration-300 text-sm md:text-base appearance-none"
+                className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 focus:outline-none focus:border-primary-500 focus:bg-white transition-all duration-300 text-sm md:text-base appearance-none"
               >
                 <option value="">Todos os Status</option>
                 <option value="active">Ativos</option>
                 <option value="inactive">Inativos</option>
               </select>
-              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+              <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sage-500 pointer-events-none" size={14} />
             </div>
           </div>
           <div className="flex justify-center sm:justify-start">
             <button
               onClick={clearFilters}
-              className="bg-dark-700/50 hover:bg-dark-700 border border-dark-600/50 hover:border-dark-500/50 text-gray-300 hover:text-white px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm md:text-base"
+              className="bg-white hover:bg-primary-50 border border-primary-100 hover:border-primary-200 text-sage-600 hover:text-primary-600 px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm md:text-base"
             >
               <FaFilter size={16} />
               <span className="hidden sm:inline">Limpar Filtros</span>
@@ -416,8 +416,8 @@ export default function AdminUsers() {
             </button>
           </div>
           {isMobile && (
-            <div className="bg-dark-700/30 rounded-xl p-3">
-              <div className="text-center text-gray-400 text-sm">
+            <div className="bg-primary-50 rounded-xl p-3">
+              <div className="text-center text-sage-600 text-sm">
                 Mostrando {users.length} de {totalUsers} usuários
               </div>
             </div>
@@ -425,14 +425,14 @@ export default function AdminUsers() {
         </div>
       </motion.div>
       {error && (
-        <div className="bg-red-500/10 border border-red-500/30 text-red-300 p-4 rounded-lg mb-6">
+        <div className="bg-white border border-red-200 text-red-600 p-4 rounded-lg mb-6">
           <div className="flex items-center gap-2">
             <FaExclamationTriangle />
             <span>Erro ao carregar usuários: {error}</span>
           </div>
           <button
             onClick={() => fetchUsers()}
-            className="mt-2 text-sm text-red-400 hover:text-red-300 underline"
+            className="mt-2 text-sm text-red-500 hover:text-red-600 underline"
           >
             Tentar novamente
           </button>
@@ -451,61 +451,61 @@ export default function AdminUsers() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl overflow-hidden"
+            className="bg-white border border-primary-100 rounded-2xl overflow-hidden"
           >
             {viewMode === 'table' ? (
               <div className="overflow-x-auto max-w-full">
                 <table className="w-full table-fixed">
-                  <thead className="bg-dark-700/50 border-b border-dark-600/50">
+                  <thead className="bg-primary-50 border-b border-primary-100">
                     <tr>
-                      <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-40">
+                      <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider w-40">
                         Usuário
                       </th>
-                      <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-20">
+                      <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider w-20">
                         Tipo
                       </th>
-                      <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider w-20">
+                      <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider w-20">
                         Status
                       </th>
-                      <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden md:table-cell w-20">
+                      <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider hidden md:table-cell w-20">
                         Pedidos
                       </th>
-                      <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden lg:table-cell w-24">
+                      <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider hidden lg:table-cell w-24">
                         Total Gasto
                       </th>
-                      <th className="px-2 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider hidden lg:table-cell w-24">
+                      <th className="px-2 py-3 text-left text-xs font-medium text-sage-700 uppercase tracking-wider hidden lg:table-cell w-24">
                         Último Login
                       </th>
-                      <th className="px-2 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider w-16">
+                      <th className="px-2 py-3 text-center text-xs font-medium text-sage-700 uppercase tracking-wider w-16">
                         Ações
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-dark-600/30">
+                  <tbody className="divide-y divide-primary-100">
                     {users.map((user) => (
                       <motion.tr 
                         key={user.id} 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="hover:bg-dark-700/30 transition-colors duration-300"
+                        className="hover:bg-primary-50 transition-colors duration-300"
                       >
                         <td className="px-2 py-3 w-40">
                           <div className="flex items-center gap-2">
                             <div className="flex-shrink-0 h-8 w-8">
-                              <div className="h-8 w-8 rounded-full bg-primary-500 flex items-center justify-center">
-                                <span className="text-white font-medium text-xs">
+                              <div className="h-8 w-8 rounded-full bg-primary-200 border border-primary-300 flex items-center justify-center">
+                                <span className="text-primary-600 font-medium text-xs">
                                   {(user.name || 'U').charAt(0).toUpperCase()}
                                 </span>
                               </div>
                             </div>
                             <div className="min-w-0 flex-1">
-                              <div className="text-white font-medium text-xs truncate">{user.name || 'Nome não informado'}</div>
-                              <div className="text-gray-400 text-xs truncate">{user.email || 'Email não informado'}</div>
+                              <div className="text-sage-900 font-medium text-xs truncate">{user.name || 'Nome não informado'}</div>
+                              <div className="text-sage-500 text-xs truncate">{user.email || 'Email não informado'}</div>
                               {user.phone && (
-                                <div className="text-gray-400 text-xs truncate">{user.phone}</div>
+                                <div className="text-sage-500 text-xs truncate">{user.phone}</div>
                               )}
                               <div className="md:hidden flex items-center gap-1 mt-1">
-                                <span className="text-xs text-gray-400">{user.orderCount || 0} pedidos</span>
+                                <span className="text-xs text-sage-500">{user.orderCount || 0} pedidos</span>
                               </div>
                             </div>
                           </div>
@@ -513,8 +513,8 @@ export default function AdminUsers() {
                         <td className="px-2 py-3 w-20">
                           <span className={`inline-flex px-1 py-0.5 text-xs font-medium rounded-full ${
                             user.role === 'admin' 
-                              ? 'bg-primary-500/20 text-primary-400' 
-                              : 'bg-primary-500/20 text-primary-400'
+                              ? 'bg-primary-200 text-primary-600 border border-primary-300' 
+                              : 'bg-sage-200 text-sage-600 border border-sage-300'
                           }`}>
                             {user.role === 'admin' ? 'Admin' : 'User'}
                           </span>
@@ -522,24 +522,24 @@ export default function AdminUsers() {
                         <td className="px-2 py-3 w-20">
                           <span className={`inline-flex px-1 py-0.5 text-xs font-medium rounded-full ${
                             user.status === 'active' 
-                              ? 'bg-primary-500/20 text-primary-400' 
-                              : 'bg-red-500/20 text-red-400'
+                              ? 'bg-green-200 text-green-600 border border-green-300' 
+                              : 'bg-red-200 text-red-600 border border-red-300'
                           }`}>
                             {user.status === 'active' ? 'Ativo' : 'Inativo'}
                           </span>
                         </td>
                         <td className="px-2 py-3 hidden md:table-cell w-20">
-                          <span className="text-gray-300 text-xs">
+                          <span className="text-sage-700 text-xs">
                             {user.orderCount || 0}
                           </span>
                         </td>
                         <td className="px-2 py-3 hidden lg:table-cell w-24">
-                          <span className="text-gray-300 text-xs">
+                          <span className="text-sage-700 text-xs">
                             R$ {(user.totalSpent || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                           </span>
                         </td>
                         <td className="px-2 py-3 hidden lg:table-cell w-24">
-                          <span className="text-gray-300 text-xs">
+                          <span className="text-sage-700 text-xs">
                             {user.lastLogin || 'Nunca'}
                           </span>
                         </td>
@@ -547,19 +547,19 @@ export default function AdminUsers() {
                           <div className="flex items-center justify-center gap-0.5">
                             <button 
                               onClick={() => handleViewUser(user.internalId)}
-                              className="p-0.5 text-primary-400 hover:text-primary-300 hover:bg-primary-500/10 rounded transition-all duration-300"
+                              className="p-0.5 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-300"
                             >
                               <FaEye size={14} />
                             </button>
                             <button 
                               onClick={() => handleEditUser(user.internalId)}
-                              className="p-0.5 text-primary-400 hover:text-primary-300 hover:bg-primary-500/10 rounded transition-all duration-300"
+                              className="p-0.5 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-300"
                             >
                               <FaEdit size={14} />
                             </button>
                             <button 
                               onClick={() => handleDeleteUser(user.internalId)}
-                              className="p-0.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded transition-all duration-300"
+                              className="p-0.5 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg transition-all duration-300"
                             >
                               <FaTrash size={14} />
                             </button>
@@ -580,10 +580,10 @@ export default function AdminUsers() {
                   </div>
                 ) : (
                   <div className="text-center py-12">
-                    <div className="text-gray-400">
+                    <div className="text-sage-500">
                       <FaUser className="mx-auto mb-4" size={48} />
-                      <h3 className="text-lg font-medium text-gray-300 mb-2">Nenhum usuário encontrado</h3>
-                      <p className="text-gray-500">
+                      <h3 className="text-lg font-medium text-sage-700 mb-2">Nenhum usuário encontrado</h3>
+                      <p className="text-sage-500">
                         {searchTerm || statusFilter || roleFilter 
                           ? 'Tente ajustar os filtros de busca'
                           : 'Não há usuários cadastrados no sistema'
@@ -621,16 +621,16 @@ export default function AdminUsers() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 rounded-2xl p-4 lg:p-6"
+          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white border border-primary-100 rounded-2xl p-4 lg:p-6"
         >
-          <div className="text-gray-400 text-sm text-center md:text-left">
+          <div className="text-sage-600 text-sm text-center md:text-left">
             Mostrando {users.length} de {totalUsers} usuários
           </div>
           <div className="flex items-center justify-center gap-2">
             <button 
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-3 py-2 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
+              className="px-3 py-2 bg-white border border-primary-100 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
             >
               <span className="hidden md:inline">Anterior</span>
               <span className="md:hidden">‹</span>
@@ -647,14 +647,14 @@ export default function AdminUsers() {
                     <button
                       key={1}
                       onClick={() => handlePageChange(1)}
-                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-dark-700/50 text-sm lg:text-base"
+                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-sage-600 hover:text-primary-600 hover:bg-primary-100 text-sm lg:text-base"
                     >
                       1
                     </button>
                   );
                   if (actualStartPage > 2) {
                     pages.push(
-                      <span key="ellipsis1" className="px-2 text-gray-500 text-sm lg:text-base">...</span>
+                      <span key="ellipsis1" className="px-2 text-sage-400 text-sm lg:text-base">...</span>
                     );
                   }
                 }
@@ -666,7 +666,7 @@ export default function AdminUsers() {
                       className={`px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base ${
                         i === currentPage 
                           ? 'bg-primary-500 text-white' 
-                          : 'text-gray-400 hover:text-white hover:bg-dark-700/50'
+                          : 'text-sage-600 hover:text-primary-600 hover:bg-primary-100'
                       }`}
                     >
                       {i}
@@ -676,14 +676,14 @@ export default function AdminUsers() {
                 if (endPage < totalPages) {
                   if (endPage < totalPages - 1) {
                     pages.push(
-                      <span key="ellipsis2" className="px-2 text-gray-500 text-sm lg:text-base">...</span>
+                      <span key="ellipsis2" className="px-2 text-sage-400 text-sm lg:text-base">...</span>
                     );
                   }
                   pages.push(
                     <button
                       key={totalPages}
                       onClick={() => handlePageChange(totalPages)}
-                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-gray-400 hover:text-white hover:bg-dark-700/50 text-sm lg:text-base"
+                      className="px-2 lg:px-3 py-2 rounded-lg transition-all duration-300 text-sage-600 hover:text-primary-600 hover:bg-primary-100 text-sm lg:text-base"
                     >
                       {totalPages}
                     </button>
@@ -695,7 +695,7 @@ export default function AdminUsers() {
             <button 
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-3 py-2 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
+              className="px-3 py-2 bg-white border border-primary-100 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base"
             >
               <span className="hidden md:inline">Próximo</span>
               <span className="md:hidden">›</span>
