@@ -77,11 +77,6 @@ export async function POST(
         { status: 403 }
       );
     }
-      return NextResponse.json(
-        { success: false, error: 'Acesso negado' },
-        { status: 403 }
-      );
-    }
     const modelId = parseInt(params.id);
     if (isNaN(modelId)) {
       return NextResponse.json({
@@ -151,11 +146,6 @@ export async function DELETE(
     if (!isAdmin) {
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
-        { status: 403 }
-      );
-    }
-      return NextResponse.json(
-        { success: false, error: 'Acesso negado' },
         { status: 403 }
       );
     }
