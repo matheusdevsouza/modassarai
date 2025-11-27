@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const email = (body.email || '').trim().toLowerCase();
     const password = body.password || '';
     const confirmPassword = body.confirmPassword || '';
-    const phone = body.phone ? String(body.phone).trim().substring(0, 50) : null;
+    const phone = body.phone && String(body.phone).trim() ? String(body.phone).trim().substring(0, 50) : null;
     const cpf = body.cpf ? String(body.cpf).trim() : null;
     const birthDate = body.birth_date ? String(body.birth_date).trim() : null;
     const gender = body.gender || null;

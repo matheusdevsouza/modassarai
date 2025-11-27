@@ -642,10 +642,10 @@ async function createUser(userData: CreateUserData): Promise<any> {
     userData.name,
     userData.email,
     userData.password, 
-    userData.phone || null,
-    userData.cpf || null,
-    userData.birth_date || null,
-    userData.gender || null,
+    userData.phone && userData.phone.trim() ? userData.phone.trim() : null,
+    userData.cpf && userData.cpf.trim() ? userData.cpf.trim() : null,
+    userData.birth_date && userData.birth_date.trim() ? userData.birth_date.trim() : null,
+    userData.gender && userData.gender.trim() ? userData.gender.trim() : null,
   ];
   return await queryWithEncryption(sql, params, 'users');
 }
