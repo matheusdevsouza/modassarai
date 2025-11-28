@@ -9,13 +9,20 @@ function generateLegacyKey(): Buffer {
   return crypto.createHash('sha256').update(LEGACY_SECRET_KEY, 'utf8').digest();
 }
 export function encryptValue(value: string | null | undefined): string | null {
-  if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) {
+  if (value === null || value === undefined) {
+    console.log('[ENCRYPT_VALUE] Valor é null/undefined, retornando null');
+    return null;
+  }
+  if (typeof value === 'string' && value.trim() === '') {
+    console.log('[ENCRYPT_VALUE] Valor é string vazia, retornando null');
     return null;
   }
   try {
-    return encrypt(String(value));
+    const encrypted = encrypt(String(value));
+    console.log('[ENCRYPT_VALUE] Valor criptografado com sucesso');
+    return encrypted;
   } catch (error) {
-    console.error('Erro ao criptografar valor:', error);
+    console.error('[ENCRYPT_VALUE] Erro ao criptografar valor:', error);
     return null;
   }
 }

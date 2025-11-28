@@ -179,7 +179,27 @@ async function query(sql: string, params: any[] = []): Promise<any> {
     const pool = getPool()
     const pgSql = convertQueryToPg(sql);
     
-    const result = await pool.query(pgSql, params)
+    const normalizedParams = params.map((param, index) => {
+      if (param === undefined || param === '' || (typeof param === 'string' && param.trim() === '')) {
+        console.log(`[QUERY] Parâmetro ${index + 1} normalizado para NULL (valor original: ${param}, tipo: ${typeof param})`);
+        return null;
+      }
+      return param;
+    });
+    
+    if (sql.toUpperCase().includes('INSERT INTO USERS') || sql.toUpperCase().includes('INSERT INTO users')) {
+      console.log('[QUERY] INSERT INTO users - Parâmetros normalizados:', {
+        sql: pgSql,
+        params: normalizedParams.map((p, i) => ({
+          index: i + 1,
+          value: p === null ? 'NULL' : (typeof p === 'string' ? p.substring(0, 20) + '...' : p),
+          type: p === null ? 'null' : typeof p,
+          isNull: p === null
+        }))
+      });
+    }
+    
+    const result = await pool.query(pgSql, normalizedParams)
     
     if (sql.trim().toUpperCase().startsWith('SELECT')) {
       return result.rows
@@ -647,6 +667,11 @@ async function createUser(userData: CreateUserData): Promise<any> {
     ? userData.gender.trim() 
     : null;
   
+  const cleanPhone = (phone === '' || phone === undefined || phone === null) ? null : phone;
+  const cleanCpf = (cpf === '' || cpf === undefined || cpf === null) ? null : cpf;
+  const cleanBirthDate = (birthDate === '' || birthDate === undefined || birthDate === null) ? null : birthDate;
+  const cleanGender = (gender === '' || gender === undefined || gender === null) ? null : gender;
+  
   const sql = `
     INSERT INTO users (name, email, password, phone, cpf, birth_date, gender, email_verified_at, is_active)
     VALUES (?, ?, ?, ?, ?, ?, ?, NULL, TRUE)
@@ -655,11 +680,21 @@ async function createUser(userData: CreateUserData): Promise<any> {
     userData.name,
     userData.email,
     userData.password, 
-    phone,
-    cpf,
-    birthDate,
-    gender,
+    cleanPhone,
+    cleanCpf,
+    cleanBirthDate,
+    cleanGender,
   ];
+  
+  console.log('[CREATE_USER] Params antes da criptografia:', {
+    phone: cleanPhone,
+    cpf: cleanCpf,
+    phoneType: typeof cleanPhone,
+    cpfType: typeof cleanCpf,
+    phoneIsNull: cleanPhone === null,
+    cpfIsNull: cleanCpf === null,
+  });
+  
   return await queryWithEncryption(sql, params, 'users');
 }
 async function getUserByEmail(email: string): Promise<any> {
@@ -1056,15 +1091,35 @@ export async function queryWithEncryption(sql: string, params: any[] = [], table
               const fieldIndex = fieldNames.indexOf(fieldToEncrypt);
               if (fieldIndex !== -1) {
                 const value = processedParams[fieldIndex];
-                if (value != null && value !== '' && typeof value === 'string') {
+                if (value === null || value === undefined || value === '' || (typeof value === 'string' && value.trim() === '')) {
+                  processedParams[fieldIndex] = null;
+                  console.log(`[ENCRYPTION] Campo ${fieldToEncrypt} (índice ${fieldIndex}) definido como NULL explícito`);
+                } else if (typeof value === 'string' && value.trim() !== '') {
                   const encrypted = encryptValue(value);
-                  processedParams[fieldIndex] = encrypted;
+                  processedParams[fieldIndex] = encrypted !== null ? encrypted : null;
+                  console.log(`[ENCRYPTION] Campo ${fieldToEncrypt} (índice ${fieldIndex}) criptografado: ${encrypted ? 'SIM' : 'NULL (erro na criptografia)'}`);
+                } else {
+                  processedParams[fieldIndex] = null;
+                  console.log(`[ENCRYPTION] Campo ${fieldToEncrypt} (índice ${fieldIndex}) forçado para NULL (tipo: ${typeof value}, valor: ${value})`);
                 }
               }
             });
           }
         }
       }
+    }
+
+    if (isInsert && tableName === 'users') {
+      console.log('[QUERY_WITH_ENCRYPTION] Parâmetros finais antes de enviar ao banco:', {
+        sql: sql.substring(0, 200),
+        params: processedParams.map((p, i) => ({
+          index: i,
+          value: p === null ? 'NULL' : (typeof p === 'string' ? (p.length > 50 ? p.substring(0, 50) + '...' : p) : p),
+          type: p === null ? 'null' : typeof p,
+          isNull: p === null,
+          isUndefined: p === undefined
+        }))
+      });
     }
 
     const result = await query(sql, processedParams);
