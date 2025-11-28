@@ -23,47 +23,28 @@ const ContactSkeleton = () => (
 export function ContactSection() {
   return (
     <section className="py-24 md:py-32 bg-sand-100 relative overflow-hidden">
-      <div className="custom-shape-divider-top absolute top-0 left-0 w-full overflow-hidden leading-none pointer-events-none" style={{ zIndex: 1 }}>
+      <div className="custom-shape-divider-top absolute top-0 left-0 w-full overflow-hidden leading-none pointer-events-none" style={{ 
+        zIndex: 1,
+        backgroundImage: `
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+        `,
+        backgroundSize: '40px 40px',
+        backgroundColor: '#0d0d0d'
+      }}>
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
-          className="relative block w-full"
-          style={{ width: 'calc(100% + 1.3px)', height: '100px', transform: 'scaleX(-1)' }}
+          className="relative block w-full h-[20px] md:h-[100px]"
+          style={{ width: 'calc(100% + 1.3px)', transform: 'scaleX(-1) scaleY(-1)' }}
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="shape-fill"
-            fill="#F5FBF7"
+            fill="#FDF8F2"
           />
         </svg>
-      </div>
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div
-          animate={{
-            scale: [1, 1.12, 1],
-            opacity: [0.08, 0.12, 0.08],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute -top-24 right-0 w-64 h-64 bg-primary-500/15 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1.1, 1, 1.1],
-            opacity: [0.06, 0.1, 0.06],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute bottom-[-96px] left-[-40px] w-72 h-72 bg-sage-500/15 rounded-full blur-3xl"
-        />
       </div>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
@@ -134,24 +115,6 @@ export function ContactSection() {
                 }}
                 className="group relative inline-flex items-center gap-3 px-8 py-4 bg-primary-500 text-sand-100 rounded-xl font-semibold text-sm uppercase tracking-[0.2em] shadow-lg shadow-primary-500/25 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
               >
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    x: ['-100%', '100%'],
-                  }}
-                  transition={{
-                    opacity: { 
-                      duration: 0.5, 
-                      ease: [0.25, 0.46, 0.45, 0.94] 
-                    },
-                    x: {
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }
-                  }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                />
                 <span 
                   className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5"
                 >

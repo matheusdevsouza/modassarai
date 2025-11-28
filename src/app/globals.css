@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 :root {
   --brand-forest: #0F4024;
   --brand-sage: #4F5955;
@@ -476,10 +486,15 @@ a {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
-  height: 100px;
+  height: 20px;
+}
+@media (min-width: 768px) {
+  .custom-shape-divider-bottom svg {
+    height: 100px;
+  }
 }
 .custom-shape-divider-bottom .shape-fill {
-  fill: #F5FBF7;
+  fill: #0d0d0d;
 }
 .custom-shape-divider-top {
   position: absolute;
@@ -493,8 +508,13 @@ a {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
-  height: 100px;
+  height: 20px;
+}
+@media (min-width: 768px) {
+  .custom-shape-divider-top svg {
+    height: 100px;
+  }
 }
 .custom-shape-divider-top .shape-fill {
-  fill: #F5FBF7;
+  fill: #0d0d0d;
 }

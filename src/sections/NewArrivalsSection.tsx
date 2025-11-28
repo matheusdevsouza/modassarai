@@ -87,32 +87,6 @@ export function NewArrivalsSection() {
       ref={sectionRef}
       className="relative py-16 sm:py-24 md:py-32 overflow-hidden bg-sand-100"
     >
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{
-            scale: [1, 1.15, 1],
-            opacity: [0.12, 0.18, 0.12],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute -top-32 -right-10 w-[420px] h-[420px] bg-primary-500/10 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.09, 0.15, 0.09],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute bottom-[-160px] left-[-40px] w-[520px] h-[520px] bg-sage-500/10 rounded-full blur-3xl"
-        />
-      </div>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -182,81 +156,89 @@ export function NewArrivalsSection() {
           animate={isInView ? 'visible' : 'visible'}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
         >
-          {products.map((product, index) => (
-            <motion.div
-              key={product.id}
-              variants={itemVariants}
-              whileHover={{ y: -12, scale: 1.02 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="group relative"
-            >
-              <Link href={`/produto/${product.slug}`} className="block">
-                <div className="relative h-full rounded-2xl overflow-hidden border border-cloud-200 group-hover:border-primary-500 group-hover:shadow-xl transition-all duration-500 shadow-sm">
-                  <div className="relative aspect-[3/4] overflow-hidden bg-sand-100">
-                    <Image
-                      src={product.primary_image || (product.images && product.images[0]?.url) || 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&q=80'}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      priority={index < 2}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary-900/75 via-primary-900/25 to-transparent transition-opacity duration-500" />
-                    <motion.button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        const productId = product.id?.toString()
-                        if (!productId) return
-                        
-                        if (isProductFavorite(productId)) {
-                          const favoriteId = getProductFavoriteId(productId)
-                          if (favoriteId) {
-                            removeFavorite(favoriteId)
+          {products.map((product, index) => {
+            const isFavorite = isProductFavorite(product.id?.toString() || '')
+            return (
+              <motion.div
+                key={product.id}
+                variants={itemVariants}
+                whileHover={{ y: -12, scale: 1.02 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="group relative"
+              >
+                <Link href={`/produto/${product.slug}`} className="block h-full">
+                  <div className="relative h-full bg-white rounded-2xl overflow-hidden shadow-md group-hover:shadow-2xl transition-all duration-500 border border-cloud-200/50 group-hover:border-primary-400/50">
+                    <div className="relative aspect-[3/4] overflow-hidden bg-sand-50">
+                      <motion.div
+                        className="absolute inset-0"
+                        whileHover={{ scale: 1.08 }}
+                        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      >
+                        <Image
+                          src={product.primary_image || (product.images && product.images[0]?.url) || 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&q=80'}
+                          alt={product.name}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          className="object-cover"
+                          priority={index < 2}
+                        />
+                      </motion.div>
+                      
+                      <motion.button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          const productId = product.id?.toString()
+                          if (!productId) return
+                          
+                          if (isProductFavorite(productId)) {
+                            const favoriteId = getProductFavoriteId(productId)
+                            if (favoriteId) {
+                              removeFavorite(favoriteId)
+                            }
+                          } else {
+                            addFavorite(product, undefined, undefined, product.primary_image || (product.images && product.images[0]?.url))
                           }
-                        } else {
-                          addFavorite(product, undefined, undefined, product.primary_image || (product.images && product.images[0]?.url))
-                        }
-                      }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className={`absolute top-4 right-4 p-2.5 rounded-full transition-all duration-300 shadow-lg z-10 ${
-                        isProductFavorite(product.id?.toString() || '') 
-                          ? 'bg-sage-50/95 backdrop-blur-md border border-red-200' 
-                          : 'bg-primary-500 border border-primary-500'
-                      }`}
-                    >
-                      <Heart 
-                        size={18} 
-                        className={isProductFavorite(product.id?.toString() || '') ? 'text-red-500' : 'text-white'} 
-                        weight={isProductFavorite(product.id?.toString() || '') ? 'fill' : 'regular'} 
-                      />
-                    </motion.button>
-                    <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 space-y-2 sm:space-y-3 z-10">
-                      <h3 className="font-semibold text-base sm:text-lg text-sand-100 group-hover:text-primary-500 transition-colors duration-300 line-clamp-2">
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className={`absolute top-3 right-3 p-2.5 rounded-full shadow-lg z-20 transition-all duration-300 ${
+                          isFavorite 
+                            ? 'bg-red-500 text-white' 
+                            : 'bg-white/95 backdrop-blur-sm text-sage-700 hover:bg-white'
+                        }`}
+                      >
+                        <Heart 
+                          size={18} 
+                          className={isFavorite ? 'text-white' : 'text-sage-700'} 
+                          weight={isFavorite ? 'fill' : 'regular'} 
+                        />
+                      </motion.button>
+                    </div>
+                    
+                    <div className="p-5 bg-white">
+                      <h3 className="font-semibold text-base text-sage-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300 min-h-[3rem]">
                         {product.name}
                       </h3>
-                      <div className="flex items-baseline gap-2">
-                        <p className="text-xl sm:text-2xl font-bold text-sand-100">
+                      <div className="flex items-center justify-between mb-4">
+                        <p className="text-2xl font-bold text-primary-600">
                           {formatPrice(product.price)}
                         </p>
                       </div>
                       <motion.div
-                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="pt-1"
+                        className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 group/btn shadow-sm hover:shadow-md"
                       >
-                        <div className="w-full bg-primary-500 hover:bg-primary-600 text-sand-100 font-semibold py-2.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg group/btn">
-                          <span>Ver detalhes</span>
-                          <ArrowRight size={18} weight="bold" className="group-hover/btn:translate-x-1 transition-transform duration-300" />
-                        </div>
+                        <span className="text-sm">Ver detalhes</span>
+                        <ArrowRight size={16} weight="bold" className="group-hover/btn:translate-x-1 transition-transform duration-300" />
                       </motion.div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                </Link>
+              </motion.div>
+            )
+          })}
         </motion.div>
         )}
         {hasProducts && (
@@ -267,42 +249,35 @@ export function NewArrivalsSection() {
             className="text-center mt-8 sm:mt-12 md:mt-16"
         >
           <Link href="/produtos?novidades=true">
-            <motion.button
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-                className="group relative inline-flex items-center gap-3 px-8 py-4 bg-primary-500 text-sand-100 rounded-full font-semibold text-sm uppercase tracking-[0.2em] shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/50 transition-all duration-300 overflow-hidden"
+            <button
+                className="group relative inline-flex items-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 bg-primary-500 text-sand-100 rounded-full font-semibold text-xs md:text-sm uppercase tracking-[0.15em] md:tracking-[0.2em] shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/50 transition-all duration-300 overflow-hidden"
             >
-              <motion.div
-                animate={{
-                  x: ['-100%', '100%'],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-              />
-              <span className="relative z-10">Ver Todas as Novidades</span>
+              <span className="relative z-10 whitespace-nowrap">Ver Todas as Novidades</span>
               <ArrowRight size={18} weight="thin" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-            </motion.button>
+            </button>
           </Link>
         </motion.div>
         )}
       </div>
-      <div className="custom-shape-divider-bottom absolute bottom-0 left-0 w-full overflow-hidden leading-none pointer-events-none">
+      <div className="custom-shape-divider-bottom absolute bottom-0 left-0 w-full overflow-hidden leading-none pointer-events-none" style={{ 
+        backgroundImage: `
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+        `,
+        backgroundSize: '40px 40px',
+        backgroundColor: '#0d0d0d'
+      }}>
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
-          className="relative block w-full"
-          style={{ width: 'calc(100% + 1.3px)', height: '100px', transform: 'scaleY(-1)' }}
+          className="relative block w-full h-[20px] md:h-[100px]"
+          style={{ width: 'calc(100% + 1.3px)' }}
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="shape-fill"
-            fill="#F5FBF7"
+            fill="#FDF8F2"
           />
         </svg>
       </div>

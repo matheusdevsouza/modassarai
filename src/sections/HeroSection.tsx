@@ -102,7 +102,6 @@ export function HeroSection() {
                   fill
                   sizes="100vw"
                   className="object-cover"
-                  style={{ filter: 'blur(2px)' }}
                   priority={index === 0}
                   quality={90}
                 />

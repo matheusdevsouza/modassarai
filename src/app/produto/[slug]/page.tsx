@@ -224,17 +224,19 @@ export default function ProdutoPage() {
         <motion.nav 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-sm text-sage-800 flex items-center gap-2 px-1"
+          className="text-xs sm:text-sm text-sage-800 flex items-center gap-1.5 sm:gap-2 px-1 overflow-x-auto scrollbar-hide"
         >
-          <Link href="/" className="hover:text-primary-400 transition-colors flex items-center gap-1">
-            <FontAwesomeIcon icon={faHome} className="w-4 h-4" /> Página inicial
+          <Link href="/" className="hover:text-primary-400 transition-colors flex items-center gap-1 flex-shrink-0">
+            <FontAwesomeIcon icon={faHome} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Página inicial</span>
           </Link>
-          <span className="text-sage-500">/</span>
-          <Link href="/produtos" className="hover:text-primary-400 transition-colors flex items-center gap-1">
-            <FontAwesomeIcon icon={faShirt} className="w-4 h-4" /> Todos os produtos
+          <span className="text-sage-500 flex-shrink-0">/</span>
+          <Link href="/produtos" className="hover:text-primary-400 transition-colors flex items-center gap-1 flex-shrink-0">
+            <FontAwesomeIcon icon={faShirt} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Todos os produtos</span>
           </Link>
-          <span className="text-sage-500">/</span>
-          <span className="text-sage-900 font-semibold truncate max-w-xs">{product?.name || 'Produto'}</span>
+          <span className="text-sage-500 flex-shrink-0">/</span>
+          <span className="text-sage-900 font-semibold truncate max-w-[200px] sm:max-w-xs">{product?.name || 'Produto'}</span>
         </motion.nav>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           <motion.div 

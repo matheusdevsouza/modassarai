@@ -222,7 +222,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 sm:mt-10 sm:pt-8 flex flex-col md:flex-row items-center justify-between gap-4 relative">
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-sage-400/30 to-transparent"></div>
+          <div className="hidden md:block absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-sage-400/30 to-transparent"></div>
           <div className="text-center md:text-left text-xs text-sage-600 space-y-1">
             <p>
               © {new Date().getFullYear()} Maria Pistache. Todos os direitos reservados.

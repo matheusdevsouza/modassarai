@@ -160,131 +160,14 @@ export function ElegantCategoriesSection() {
     return <CategoriesSkeleton />
   }
   return (
-      <section className="relative py-24 bg-gradient-to-b from-primary-50 via-primary-50/95 to-primary-50 overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
-        <motion.div
-          animate={{
-            scale: [1, 1.15, 1],
-            opacity: [0.08, 0.12, 0.08],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute -top-32 -right-10 w-[420px] h-[420px] bg-primary-500/10 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.06, 0.1, 0.06],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute bottom-[-160px] left-[-40px] w-[520px] h-[520px] bg-sage-500/10 rounded-full blur-3xl"
-        />
-      </div>
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 8 }}>
-        <motion.div
-          animate={{
-            y: [0, 12, -5, 0],
-            rotate: [0, -15, 8, 0],
-            opacity: [0.15, 0.22, 0.15],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 1,
-          }}
-          className="absolute"
-          style={{
-            top: '20%',
-            left: '-5%',
-            filter: 'blur(2px)',
-            zIndex: 8,
-          }}
-        >
-          <Image
-            src="/images/pistache.png"
-            alt="Pistache decorativo"
-            width={120}
-            height={120}
-            className="object-contain"
-            style={{ 
-              maxWidth: '140px', 
-              maxHeight: '140px',
-            }}
-          />
-        </motion.div>
-        <motion.div
-          animate={{
-            y: [0, -10, 8, 0],
-            rotate: [0, 18, -12, 0],
-            opacity: [0.16, 0.22, 0.16],
-          }}
-          transition={{
-            duration: 9,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 2,
-          }}
-          className="absolute"
-          style={{
-            top: '30%',
-            right: '-4%',
-            filter: 'blur(1.8px)',
-            zIndex: 8,
-          }}
-        >
-          <Image
-            src="/images/pistache.png"
-            alt="Pistache decorativo"
-            width={100}
-            height={100}
-            className="object-contain"
-            style={{ 
-              maxWidth: '120px', 
-              maxHeight: '120px',
-            }}
-          />
-        </motion.div>
-        <motion.div
-          animate={{
-            y: [0, 15, -8, 0],
-            rotate: [0, -20, 15, 0],
-            opacity: [0.15, 0.22, 0.15],
-          }}
-          transition={{
-            duration: 11,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.5,
-          }}
-          className="absolute"
-          style={{
-            bottom: '15%',
-            right: '5%',
-            filter: 'blur(2.2px)',
-            zIndex: 8,
-          }}
-        >
-          <Image
-            src="/images/pistache.png"
-            alt="Pistache decorativo"
-            width={130}
-            height={130}
-            className="object-contain"
-            style={{ 
-              maxWidth: '150px', 
-              maxHeight: '150px',
-            }}
-          />
-        </motion.div>
-      </div>
+      <section className="relative py-24 overflow-hidden" style={{ 
+        backgroundColor: '#0d0d0d',
+        backgroundImage: `
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+        `,
+        backgroundSize: '40px 40px'
+      }}>
       <div className="container mx-auto px-4 relative" style={{ zIndex: 10 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -293,114 +176,23 @@ export function ElegantCategoriesSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-8 sm:mb-12 md:mb-16 relative"
         >
-          <span className="relative z-20 inline-flex items-center gap-2 justify-center text-xs uppercase tracking-[0.25em] text-primary-600 mb-4 font-semibold px-4 py-1 rounded-full border border-primary-600">
-            <GridFour size={12} weight="fill" className="text-primary-600" />
+          <span className="relative z-20 inline-flex items-center gap-2 justify-center text-xs uppercase tracking-[0.25em] text-primary-400 mb-4 font-semibold px-4 py-1 rounded-full border border-primary-400/50 bg-primary-500/10">
+            <GridFour size={12} weight="fill" className="text-primary-400" />
             categorias em destaque
           </span>
-          <h2 className="relative z-20 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-sage-900 mb-4 flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
-            <motion.div
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, -8, 0],
-                opacity: [0.18, 0.25, 0.18],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="hidden sm:block"
-              style={{
-                filter: 'blur(1.5px)',
-                zIndex: 1,
-              }}
-            >
-              <Image
-                src="/images/pistache.png"
-                alt="Pistache decorativo"
-                width={120}
-                height={120}
-                className="object-contain"
-                style={{ 
-                  maxWidth: '140px', 
-                  maxHeight: '140px',
-                }}
-              />
-            </motion.div>
+          <h2 className="relative z-20 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-sand-100 mb-4 flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
             <div className="flex flex-col items-center">
               <span>Explore o universo </span>
-              <span className="bg-gradient-to-r from-primary-500 via-primary-700 to-primary-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary-400 via-primary-300 to-primary-400 bg-clip-text text-transparent">
                 Maria Pistache
               </span>
             </div>
-            <motion.div
-              animate={{
-                y: [0, 10, 0],
-                rotate: [0, 8, 0],
-                opacity: [0.18, 0.25, 0.18],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 0.5,
-              }}
-              className="hidden sm:block"
-              style={{
-                filter: 'blur(1.5px)',
-                zIndex: 1,
-              }}
-            >
-              <Image
-                src="/images/pistache.png"
-                alt="Pistache decorativo"
-                width={90}
-                height={90}
-                className="object-contain"
-                style={{ 
-                  maxWidth: '100px', 
-                  maxHeight: '100px',
-                }}
-              />
-            </motion.div>
           </h2>
-          <p className="relative z-20 text-sm sm:text-base md:text-lg lg:text-xl text-sage-700 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto">
+          <p className="relative z-20 text-sm sm:text-base md:text-lg lg:text-xl text-sand-200/80 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto">
             Encontre as peças perfeitas para o trabalho, fim de semana ou ocasiões especiais.
           </p>
         </motion.div>
         <div className="relative">
-          <motion.div
-            animate={{
-              y: [0, -12, 8, 0],
-              rotate: [0, -18, 12, 0],
-              opacity: [0.15, 0.22, 0.15],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: 1.5,
-            }}
-            className="hidden lg:block absolute"
-            style={{
-              top: '30%',
-              left: '-4%',
-              filter: 'blur(1.8px)',
-              zIndex: 8,
-            }}
-          >
-            <Image
-              src="/images/pistache.png"
-              alt="Pistache decorativo"
-              width={100}
-              height={100}
-              className="object-contain"
-              style={{ 
-                maxWidth: '120px', 
-                maxHeight: '120px',
-              }}
-            />
-          </motion.div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
             {categories.slice(0, 3).map((category, index) => (
               <CategoryCard

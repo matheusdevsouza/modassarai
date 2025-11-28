@@ -56,6 +56,24 @@ export function Header() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [userMenuOpen])
+
+  useEffect(() => {
+    const isMobile = window.innerWidth < 1024
+    if (isMobile && isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+    } else {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+    }
+  }, [isMenuOpen])
   const menuItems = [
     { label: 'Início', href: '/' },
     { label: 'Novidades', href: '/produtos?novidades=true' },
@@ -65,7 +83,7 @@ export function Header() {
   ]
   return (
     <header className="fixed top-0 w-full z-50">
-      <div className="bg-sand-100 shadow-sm border-b border-cloud-100 transition-all duration-300">
+      <div className="bg-sand-100 shadow-sm border-b border-cloud-100/30 transition-all duration-300">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="relative flex items-center justify-between h-20">
             <motion.a
@@ -129,7 +147,7 @@ export function Header() {
                 </div>
               </motion.form>
             </div>
-            <div className="flex items-center gap-3 relative">
+            <div className="flex items-center gap-2 sm:gap-3">
               <motion.button
                 whileHover={{ scale: 1.08, y: -2 }}
                 whileTap={{ scale: 0.95 }}
@@ -139,6 +157,7 @@ export function Header() {
               >
                 <Truck size={20} weight="regular" className="relative z-10" />
               </motion.button>
+              
               <AnimatePresence>
                 {favoritesState.itemCount > 0 && (
                   <motion.button
@@ -146,23 +165,24 @@ export function Header() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.2 }}
-                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setIsFavoritesSidebarOpen(true)}
-                    className="relative p-3 bg-transparent text-sage-600 hover:text-primary-600 rounded-2xl transition-all duration-300 group"
+                    className="relative p-2.5 sm:p-3 rounded-xl transition-all duration-300 group bg-white/50 hover:bg-white border border-cloud-200 hover:border-primary-300 shadow-sm hover:shadow-md"
                     title="Favoritos"
                   >
-                    <Heart size={22} weight="fill" className="relative z-10" />
+                    <Heart size={20} weight="fill" className="relative z-10 text-sage-700 group-hover:text-primary-600" />
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 bg-[var(--logo-gold,#D4A574)] text-[#0D0D0D] text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg border-2 border-[#0D0D0D] z-20"
+                      className="absolute -top-1 -right-1 bg-primary-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md border-2 border-white z-20"
                     >
                       {favoritesState.itemCount}
                     </motion.span>
                   </motion.button>
                 )}
               </AnimatePresence>
+              
               <motion.button
                 whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.95 }}
@@ -175,22 +195,22 @@ export function Header() {
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-md border-2 border-primary-600 z-20"
+                    className="absolute -top-1 -right-1 bg-primary-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md border-2 border-white z-20"
                   >
                     {cartState.itemCount}
                   </motion.span>
                 )}
               </motion.button>
-              <div className="relative ml-4">
+              
+              <div className="relative">
                 <motion.button
-                  whileHover={{ scale: 1.04, y: -1 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="relative px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 group overflow-hidden bg-primary-500 text-sand-100 shadow-[0_10px_25px_rgba(15,64,36,0.35)] hover:shadow-[0_14px_32px_rgba(15,64,36,0.45)]"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 group overflow-hidden bg-primary-500 text-white shadow-md hover:shadow-lg"
                   title="Minha Conta"
                   onClick={() => setUserMenuOpen((open) => !open)}
                   id="user-menu-trigger"
                 >
-                  <div className="absolute inset-0 bg-white/0 group-hover:bg-white/15 transition-all duration-300 rounded-xl blur-[1px]" />
                   <User size={18} weight="regular" className="relative z-10" />
                   <span className="relative z-10 font-medium text-sm hidden sm:inline">
                     {authenticated && user 
@@ -207,7 +227,6 @@ export function Header() {
                         })()
                       : 'Conta'}
                   </span>
-                  <div className="absolute inset-0 rounded-xl border border-white/10 group-hover:border-white/30 transition-all duration-300" />
                 </motion.button>
                 <AnimatePresence>
                   {userMenuOpen && (
@@ -330,14 +349,14 @@ export function Header() {
               </div>
               <motion.button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                whileHover={{ scale: 1.08, y: -2 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="lg:hidden p-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-2xl transition-all duration-300 overflow-hidden group relative shadow-md hover:shadow-lg"
+                className="lg:hidden p-2.5 sm:p-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 {isMenuOpen ? (
-                  <X size={22} weight="bold" className="relative z-10" />
+                  <X size={20} weight="bold" />
                 ) : (
-                  <List size={22} weight="regular" className="relative z-10" />
+                  <List size={20} weight="regular" />
                 )}
               </motion.button>
             </div>
@@ -417,122 +436,98 @@ export function Header() {
       </div>
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            className="fixed inset-0 z-[100] lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
+          <>
             <motion.div
-              className="absolute inset-0 bg-sage-900/80 backdrop-blur-sm"
+              className="fixed inset-0 z-[99] lg:hidden bg-black/40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               onClick={() => setIsMenuOpen(false)}
             />
             <motion.div
-              className="absolute inset-0 bg-sand-100 flex flex-col w-80 max-w-[85vw] shadow-2xl"
-              initial={{ x: '-100%' }}
+              className="fixed right-0 top-0 bottom-0 z-[100] lg:hidden w-full max-w-sm bg-sand-100 shadow-2xl"
+              initial={{ x: '100%' }}
               animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
+              exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             >
-              <div className="flex items-center justify-between p-6 border-b border-cloud-200 bg-primary-50">
-                <div className="relative w-12 h-12 sm:w-16 sm:h-16">
-                  <Image
-                    src="/images/logo.png"
-                    alt="Maria Pistache"
-                    fill
-                    sizes="(max-width: 640px) 48px, 64px"
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-                <motion.button
-                  onClick={() => setIsMenuOpen(false)}
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-2 rounded-full bg-white border border-cloud-200 text-sage-700 hover:text-sage-900 hover:bg-cloud-100 transition-colors shadow-sm"
-                >
-                  <X size={24} weight="bold" />
-                </motion.button>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto px-6 py-8">
-                <nav className="space-y-3">
-                  {menuItems.map((item, index) => (
-                    <motion.a
-                      key={item.href}
-                      href={item.href}
-                      initial={{ opacity: 0, x: -30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.08, type: 'spring', damping: 20 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="relative block px-6 py-4 text-white font-semibold text-lg uppercase tracking-wide rounded-xl group overflow-hidden bg-primary-500 hover:bg-primary-600 transition-colors duration-300 shadow-md hover:shadow-lg"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <span className="relative z-10 flex items-center justify-between">
-                        <motion.span
-                          className="flex-1 text-left"
-                          whileHover={{ x: 8 }}
-                          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                        >
-                          {item.label}
-                        </motion.span>
-                        <motion.div
-                          initial={{ opacity: 0, x: -10, scale: 0.8 }}
-                          whileHover={{ opacity: 1, x: 0, scale: 1 }}
-                          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                          className="text-white"
-                        >
-                          <FontAwesomeIcon icon={faChevronRight} size="sm" />
-                        </motion.div>
-                      </span>
-                    </motion.a>
-                  ))}
-                </nav>
-              </div>
-
-              {authenticated && user && (
-                <div className="border-t border-cloud-200 p-6 space-y-3 bg-primary-50">
-                  <div className="flex items-center gap-3 px-4 py-3 bg-white border border-cloud-200 rounded-xl shadow-sm">
-                    <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center">
-                      <UserCircle size={24} className="text-primary-600" weight="fill" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sage-900 font-semibold text-sm truncate">
-                        {(() => {
-                          const displayName = user.display_name?.trim();
-                          const userName = user.name?.trim();
-                          if (displayName && displayName !== '' && displayName !== '[Dados protegidos]') {
-                            return displayName;
-                          }
-                          if (userName && userName !== '' && userName !== 'Usuário' && userName !== '[Dados protegidos]') {
-                            return userName.split(' ')[0];
-                          }
-                          return 'Usuário';
-                        })()}
-                      </p>
-                      <p className="text-sage-700 text-xs truncate">{user.email}</p>
-                    </div>
+              <div className="h-full flex flex-col">
+                <div className="flex items-center justify-between p-6 border-b border-cloud-200/40">
+                  <div className="relative w-20 h-20">
+                    <Image
+                      src="/images/logo.png"
+                      alt="Maria Pistache"
+                      fill
+                      sizes="80px"
+                      className="object-contain"
+                      priority
+                    />
                   </div>
-                  <motion.button
-                    onClick={async () => {
-                      await logout()
-                      setIsMenuOpen(false)
-                    }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-red-50 border border-red-200 text-red-600 rounded-xl font-semibold hover:bg-red-100 transition-colors shadow-sm"
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-2 rounded-full bg-cloud-100 hover:bg-cloud-200 text-sage-700 hover:text-sage-900 transition-colors"
                   >
-                    <SignOut size={20} weight="bold" />
-                    <span>Sair</span>
-                  </motion.button>
+                    <X size={24} weight="bold" />
+                  </button>
                 </div>
-              )}
+                
+                <div className="flex-1 overflow-y-auto px-6 py-8">
+                  <nav className="space-y-3">
+                    {menuItems.map((item) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className="block px-6 py-4 text-sage-900 font-semibold text-lg uppercase tracking-wide rounded-xl bg-white border border-cloud-200/50 hover:bg-primary-50 hover:border-primary-200/50 hover:text-primary-700 transition-all duration-200"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <span className="flex items-center justify-between">
+                          <span>{item.label}</span>
+                          <FontAwesomeIcon icon={faChevronRight} size="sm" className="text-sage-400" />
+                        </span>
+                      </a>
+                    ))}
+                  </nav>
+                </div>
+
+                {authenticated && user && (
+                  <div className="px-6 pb-8 pt-4 border-t border-cloud-200/40 space-y-3">
+                    <div className="flex items-center gap-3 px-5 py-3 bg-white border border-cloud-200/50 rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-primary-500/10 flex items-center justify-center">
+                        <UserCircle size={24} className="text-primary-600" weight="fill" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sage-900 font-semibold text-sm truncate">
+                          {(() => {
+                            const displayName = user.display_name?.trim();
+                            const userName = user.name?.trim();
+                            if (displayName && displayName !== '' && displayName !== '[Dados protegidos]') {
+                              return displayName;
+                            }
+                            if (userName && userName !== '' && userName !== 'Usuário' && userName !== '[Dados protegidos]') {
+                              return userName.split(' ')[0];
+                            }
+                            return 'Usuário';
+                          })()}
+                        </p>
+                        <p className="text-sage-600 text-xs truncate">{user.email}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        await logout()
+                        setIsMenuOpen(false)
+                      }}
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-50 border border-red-200 text-red-700 rounded-xl font-semibold hover:bg-red-100 hover:border-red-300 transition-colors"
+                    >
+                      <SignOut size={18} weight="bold" />
+                      <span>Sair</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
       <SidebarCart open={isCartSidebarOpen} onClose={() => setIsCartSidebarOpen(false)} />

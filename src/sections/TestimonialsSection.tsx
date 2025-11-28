@@ -166,7 +166,14 @@ export function TestimonialsSection() {
   }
   if (!testimonials.length) {
     return (
-      <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-primary-50 via-primary-50/95 to-primary-50 overflow-hidden">
+      <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden" style={{ 
+        backgroundColor: '#0d0d0d',
+        backgroundImage: `
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+        `,
+        backgroundSize: '40px 40px'
+      }}>
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <motion.div
             animate={{
@@ -201,15 +208,15 @@ export function TestimonialsSection() {
             viewport={{ once: true }}
             className="text-center mb-8 sm:mb-12 md:mb-16"
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 text-sage-900">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 text-sand-100">
               <span>O que nossas </span>
-              <span className="text-primary-600">clientes contam</span>
+              <span className="text-primary-400">clientes contam</span>
             </h2>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-sage-700 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto px-4">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-sand-200/80 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto px-4">
               Assim que os primeiros depoimentos forem enviados, eles aparecerão aqui.
             </p>
           </motion.div>
-          <div className="text-center text-sage-600 px-4">
+          <div className="text-center text-sand-200/70 px-4">
             <p className="text-sm sm:text-base">Nenhum depoimento encontrado no momento.</p>
           </div>
         </div>
@@ -217,33 +224,14 @@ export function TestimonialsSection() {
     )
   }
   return (
-    <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-primary-50 via-primary-50/95 to-primary-50 overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div
-          animate={{
-            scale: [1, 1.15, 1],
-            opacity: [0.08, 0.12, 0.08],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute -top-32 -right-10 w-[420px] h-[420px] bg-primary-500/10 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.06, 0.1, 0.06],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute bottom-[-160px] left-[-40px] w-[520px] h-[520px] bg-sage-500/10 rounded-full blur-3xl"
-        />
-      </div>
+    <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden" style={{ 
+      backgroundColor: '#0d0d0d',
+      backgroundImage: `
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+      `,
+      backgroundSize: '40px 40px'
+    }}>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -257,9 +245,9 @@ export function TestimonialsSection() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 justify-center text-xs uppercase tracking-[0.25em] text-primary-600 mb-4 font-semibold px-4 py-1 rounded-full border border-primary-600"
+            className="inline-flex items-center gap-2 justify-center text-xs uppercase tracking-[0.25em] text-primary-400 mb-4 font-semibold px-4 py-1 rounded-full border border-primary-400/50 bg-primary-500/10"
           >
-            <ChatCircle size={12} weight="fill" className="text-primary-600" />
+            <ChatCircle size={12} weight="fill" className="text-primary-400" />
             depoimentos
           </motion.span>
           <motion.h2
@@ -267,11 +255,11 @@ export function TestimonialsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-sage-900"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-sand-100"
           >
             O que nossas{' '}
             <span className="relative inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-primary-500 via-primary-700 to-primary-500 bg-clip-text text-transparent">
+              <span className="relative z-10 bg-gradient-to-r from-primary-400 via-primary-300 to-primary-400 bg-clip-text text-transparent">
                 clientes contam
               </span>
             </span>
@@ -281,7 +269,7 @@ export function TestimonialsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             viewport={{ once: true }}
-            className="text-lg md:text-xl text-sage-700 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl text-sand-200/80 max-w-3xl mx-auto leading-relaxed"
           >
             Veja os depoimentos de quem já comprou conosco
           </motion.p>
@@ -290,7 +278,7 @@ export function TestimonialsSection() {
             whileInView={{ width: '120px' }}
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
-            className="mx-auto mt-8 h-px bg-gradient-to-r from-transparent via-primary-400/60 to-transparent"
+            className="mx-auto mt-8 h-px bg-gradient-to-r from-transparent via-primary-400/40 to-transparent"
           />
         </motion.div>
         <div className="relative">
@@ -318,10 +306,10 @@ export function TestimonialsSection() {
                     {page.map((testimonial) => (
                       <div
                         key={testimonial.id}
-                        className="bg-primary-50 rounded-2xl p-6 sm:p-8 border border-primary-100 w-full max-w-lg mx-auto shadow-xl shadow-primary-500/15 flex-shrink-0"
+                        className="bg-sage-900/50 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-sage-700/50 w-full max-w-lg mx-auto shadow-xl shadow-black/20 flex-shrink-0"
                       >
                         <div className="mb-6">
-                          <p className="text-sage-800 text-sm sm:text-base leading-relaxed">
+                          <p className="text-sand-100 text-sm sm:text-base leading-relaxed">
                             &quot;{testimonial.comment}&quot;
                           </p>
                         </div>
@@ -333,10 +321,10 @@ export function TestimonialsSection() {
                               </span>
                             </div>
                             <div>
-                              <h4 className="text-sage-900 font-semibold text-sm sm:text-base">
+                              <h4 className="text-sand-100 font-semibold text-sm sm:text-base">
                                 {testimonial.name}
                               </h4>
-                              <p className="text-sage-600 text-xs sm:text-sm">
+                              <p className="text-sand-200/70 text-xs sm:text-sm">
                                 {testimonial.location}
                               </p>
                             </div>
@@ -347,7 +335,7 @@ export function TestimonialsSection() {
                                 key={i}
                                 size={16}
                                 weight={i < testimonial.rating ? "fill" : "regular"}
-                                className={i < testimonial.rating ? "text-primary-500" : "text-cloud-400"}
+                                className={i < testimonial.rating ? "text-primary-400" : "text-sage-700"}
                               />
                             ))}
                           </div>
@@ -400,16 +388,6 @@ export function TestimonialsSection() {
                 }}
                 className="group relative inline-flex items-center gap-3 px-8 py-4 bg-primary-500 text-sand-100 rounded-xl font-semibold text-sm uppercase tracking-[0.2em] shadow-lg shadow-primary-500/25 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
               >
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  animate={{ x: ['-100%', '100%'] }}
-                  transition={{
-                    opacity: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-                    x: { duration: 2, repeat: Infinity, ease: 'linear' }
-                  }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-500"
-                />
                 <motion.span 
                   className="relative z-10"
                   initial={{ x: 0 }}
