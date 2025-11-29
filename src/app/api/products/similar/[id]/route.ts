@@ -28,7 +28,7 @@ export async function GET(
       data: productsWithSizes
     })
   } catch (error) {
-    console.error('Erro ao buscar produtos semelhantes:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

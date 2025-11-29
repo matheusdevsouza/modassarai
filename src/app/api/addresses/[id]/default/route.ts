@@ -38,7 +38,7 @@ export async function PUT(
     ]);
     return NextResponse.json({ message: "Endereço definido como padrão com sucesso" });
   } catch (error) {
-    console.error("Erro ao definir endereço padrão:", error);
+
     return NextResponse.json(
       { message: "Erro interno do servidor" },
       { status: 500 }

@@ -18,9 +18,9 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
     const productSizes = await getProductSizes(product.id);
     const reviews = await getProductReviews(product.id, 10);
     const colorVariations = await getProductColorVariations(product.id);
-    console.log('Color variations encontradas para produto', product.id, ':', colorVariations);
-    console.log('Tipo de colorVariations:', typeof colorVariations, Array.isArray(colorVariations));
-    console.log('Número de variações:', colorVariations?.length || 0);
+
+    );
+
     const sizes = productSizes.map((size: any) => ({
       size: size.size,
       stock: size.stock_quantity,
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
       colorVariations: colorVariations || [], 
     });
   } catch (error) {
-    console.error('Erro ao buscar produto por slug:', error);
+
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
   }
 }

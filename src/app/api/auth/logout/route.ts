@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     );
     return clearAuthCookies(response);
   } catch (error) {
-    console.error('Erro no logout:', error);
+
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

@@ -39,12 +39,7 @@ export async function POST(request: NextRequest) {
     const safeUser = processSafeUserData(user);
     
     if (process.env.NODE_ENV === 'development') {
-      console.log('📧 [VERIFY EMAIL] User data:', {
-        rawName: user.name,
-        safeName: safeUser.name,
-        displayName: safeUser.display_name,
-        email: safeUser.email
-      });
+
     }
     
     const tokenPayload = {
@@ -68,7 +63,7 @@ export async function POST(request: NextRequest) {
     );
     return setAuthCookie(response, authToken);
   } catch (error) {
-    console.error('Erro na verificação de e-mail:', error);
+
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

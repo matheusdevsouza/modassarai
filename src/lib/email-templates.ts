@@ -27,7 +27,7 @@ function getLogoUrl(): string {
 const LOGO_URL = getLogoUrl();
 
 if (process.env.NODE_ENV === 'development') {
-  console.log('📧 [EMAIL TEMPLATE] Logo URL:', LOGO_URL);
+
 }
 
 const PRIMARY_COLOR = '#0F4024'; 

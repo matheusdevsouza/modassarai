@@ -24,15 +24,21 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password } = body;
     const normalizedEmail = (email || '').trim().toLowerCase();
-    if (detectSQLInjection(normalizedEmail) || detectSQLInjection(password)) {
+    if (detectSQLInjection(normalizedEmail) || detectSQLInjection(password, true)) {
       return NextResponse.json(
-        { error: 'Acesso negado - tentativa de ataque detectada' },
+        { 
+          success: false,
+          message: 'Acesso negado - tentativa de ataque detectada' 
+        },
         { status: 403 }
       );
     }
-    if (detectXSS(normalizedEmail) || detectXSS(password)) {
+    if (detectXSS(normalizedEmail)) {
       return NextResponse.json(
-        { error: 'Acesso negado - tentativa de ataque XSS detectada' },
+        { 
+          success: false,
+          message: 'Acesso negado - tentativa de ataque XSS detectada' 
+        },
         { status: 403 }
       );
     }

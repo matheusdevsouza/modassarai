@@ -64,7 +64,6 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error('Erro ao servir arquivo:', error);
     return new NextResponse('Erro interno do servidor', { status: 500 });
   }
 }

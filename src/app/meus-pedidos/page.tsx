@@ -111,7 +111,7 @@ export default function MeusPedidosPage() {
       setOrders(data.orders || []);
     } catch (err) {
       setError('Erro ao carregar seus pedidos. Tente novamente.');
-      console.error('Erro ao buscar pedidos:', err);
+
     } finally {
       setLoadingOrders(false);
     }

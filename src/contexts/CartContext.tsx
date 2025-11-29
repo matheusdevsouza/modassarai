@@ -30,7 +30,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       const hasSizes = (product as any).sizes && Array.isArray((product as any).sizes) && (product as any).sizes.length > 0
       if (hasSizes) {
         if (!size || (typeof size === 'string' && (size.trim() === '' || size === 'Selecione'))) {
-          console.warn('Tentativa de adicionar produto com tamanhos sem selecionar tamanho')
+
           if (typeof window !== 'undefined') {
             alert('Por favor, selecione um tamanho antes de adicionar ao carrinho.')
           }
@@ -140,7 +140,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               dispatch({ type: 'LOAD_CART', payload: restoredItems })
             }
           } catch (error) {
-            console.error('Erro ao restaurar carrinho:', error)
+
             localStorage.removeItem('mariapistache_cart')
           }
         } else if (cartData.items && Array.isArray(cartData.items)) {
@@ -150,12 +150,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               dispatch({ type: 'LOAD_CART', payload: restoredItems })
             }
           } catch (error) {
-            console.error('Erro ao restaurar carrinho:', error)
+
             localStorage.removeItem('mariapistache_cart')
           }
         }
       } catch (error) {
-        console.error('Erro ao carregar carrinho:', error)
+
           localStorage.removeItem('mariapistache_cart')
         }
       }
@@ -165,7 +165,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const sanitizeCartForStorage = (cartItems: CartItem[]) => {
     return cartItems.map(item => {
       if (!item || !item.product) {
-        console.warn('Item inválido encontrado no carrinho:', item)
+
         return null
       }
       return {
@@ -182,7 +182,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 return new Date().toISOString()
               }
             } catch (error) {
-              console.warn('Erro ao processar createdAt:', error)
+
               return new Date().toISOString()
             }
           })(),
@@ -196,7 +196,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 return new Date().toISOString()
               }
             } catch (error) {
-              console.warn('Erro ao processar updatedAt:', error)
+
               return new Date().toISOString()
             }
           })()
@@ -207,7 +207,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const restoreCartFromStorage = (cartData: any[]): CartItem[] => {
     return cartData.map(item => {
       if (!item || !item.product) {
-        console.warn('Item inválido encontrado no localStorage:', item)
+
         return null
       }
       return {
@@ -219,7 +219,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               const date = new Date(item.product.createdAt)
               return isNaN(date.getTime()) ? new Date() : date
             } catch (error) {
-              console.warn('Erro ao restaurar createdAt:', error)
+
               return new Date()
             }
           })(),
@@ -228,7 +228,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               const date = new Date(item.product.updatedAt)
               return isNaN(date.getTime()) ? new Date() : date
             } catch (error) {
-              console.warn('Erro ao restaurar updatedAt:', error)
+
               return new Date()
             }
           })()
@@ -263,7 +263,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ actionType: 'cart_add' })
         }).catch(error => {
-          console.error('Erro ao registrar estatística de carrinho:', error)
+
         })
       }
     }

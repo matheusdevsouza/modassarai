@@ -11,7 +11,6 @@ export async function GET(request: NextRequest) {
       data: models
     })
   } catch (error) {
-    console.error('Erro ao buscar modelos:', error)
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

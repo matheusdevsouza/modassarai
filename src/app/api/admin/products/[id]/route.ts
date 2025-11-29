@@ -171,6 +171,10 @@ export async function DELETE(
       );
     }
     await database.query(
+      'DELETE FROM product_categories WHERE product_id = ?',
+      [productId]
+    );
+    await database.query(
       'DELETE FROM product_images WHERE product_id = ?',
       [productId]
     );

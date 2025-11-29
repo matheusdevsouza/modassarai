@@ -83,7 +83,7 @@ export default function AdminOrders() {
         setError(result.error || 'Erro ao carregar pedidos');
       }
     } catch (error) {
-      console.error('Erro ao carregar pedidos:', error);
+
       setError('Erro ao conectar com o servidor');
     } finally {
       setLoading(false);

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   try {
     const user = await authenticateUser(request);
     if (!user) {
-      console.error('[DASHBOARD] Usuário não autenticado');
+
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Autenticação necessária.' },
         { status: 401 }
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const isAdmin = await verifyAdminAccess(user, database.query);
     
     if (!isAdmin) {
-      console.error(`[DASHBOARD] Acesso negado - UserId: ${user.userId} não é admin no banco de dados`);
+
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Apenas administradores autorizados.' },
         { status: 403 }
@@ -125,13 +125,7 @@ export async function GET(request: NextRequest) {
     const currentRevenue = parseFloat(revenueStats[0]?.current) || 0;
     const previousRevenue = parseFloat(revenueStats[0]?.previous) || 0;
     const revenueChange = previousRevenue > 0 ? ((currentRevenue - previousRevenue) / previousRevenue) * 100 : (currentRevenue > 0 ? 100 : 0);
-    
-    console.log(`[DASHBOARD] Período: ${period}`);
-    console.log(`[DASHBOARD] Datas - StartDate: ${startDate.toISOString()}, PreviousStart: ${previousStartDate.toISOString()}, PreviousEnd: ${previousEndDate.toISOString()}`);
-    console.log(`[DASHBOARD] Produtos - Total: ${productsStats[0]?.total}, LowStock: ${productsStats[0]?.lowStockCount}`);
-    console.log(`[DASHBOARD] Pedidos - Total: ${ordersStats[0]?.total}, Pending: ${ordersStats[0]?.pending}`);
-    console.log(`[DASHBOARD] Usuários - Total: ${usersStats[0]?.total}, NewThisPeriod: ${usersStats[0]?.newThisPeriod}`);
-    console.log(`[DASHBOARD] Receita - Current: ${currentRevenue}, Previous: ${previousRevenue}, Change: ${revenueChange.toFixed(2)}%`);
+
     const processedRecentOrders = recentOrders.map((order: any) => ({
       id: order.id,
       orderNumber: order.order_number,
@@ -184,7 +178,7 @@ export async function GET(request: NextRequest) {
       data: dashboardData
     });
   } catch (error) {
-    console.error('Erro ao buscar dashboard:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }

@@ -74,7 +74,6 @@ export async function POST(request: NextRequest) {
       sandbox_init_point: response.sandbox_init_point
     })
   } catch (error) {
-    console.error('Erro ao criar checkout:', error)
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }

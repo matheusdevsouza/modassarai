@@ -176,18 +176,18 @@ class SecurityLogger {
   private logToConsole(event: SecurityEvent): void {
     const emoji = this.getLevelEmoji(event.level);
     const timestamp = event.timestamp.toISOString();
-    console.log(`${emoji} [${event.level}] ${event.type} - ${timestamp}`);
-    console.log(`  IP: ${event.ip}`);
-    if (event.userId) console.log(`  User ID: ${event.userId}`);
-    if (event.userEmail) console.log(`  User Email: ${event.userEmail}`);
-    if (event.url) console.log(`  URL: ${event.url}`);
-    if (event.method) console.log(`  Method: ${event.method}`);
+
+
+    if (event.userId) ;
+    if (event.userEmail) ;
+    if (event.url) ;
+    if (event.method) ;
     if (Object.keys(event.details).length > 0) {
-      console.log(`  Details:`, event.details);
+
     }
-    console.log(`  Event ID: ${event.id}`);
-    console.log(`  Correlation ID: ${event.metadata.correlationId}`);
-    console.log('---');
+
+
+
   }
   private getLevelEmoji(level: SecurityLevel): string {
     switch (level) {
@@ -232,8 +232,7 @@ class SecurityLogger {
       })),
       timestamp: new Date(),
     };
-    console.log('🚨 SECURITY ALERT 🚨');
-    console.log(JSON.stringify(alert, null, 2));
+    this.logs.push(alert as any);
   }
   private getClientIP(request: NextRequest): string {
     const forwarded = request.headers.get('x-forwarded-for');

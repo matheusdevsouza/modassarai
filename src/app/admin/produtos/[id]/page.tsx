@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { FaSpinner, FaSave, FaArrowLeft, FaCheckCircle, FaBox, FaDollarSign, FaWarehouse, FaToggleOn, FaToggleOff, FaFileAlt, FaImage, FaRuler } from 'react-icons/fa'
+import { FaSpinner, FaSave, FaArrowLeft, FaCheckCircle, FaBox, FaDollarSign, FaWarehouse, FaToggleOn, FaToggleOff, FaFileAlt, FaImage, FaRuler, FaTags, FaTimes, FaPlus } from 'react-icons/fa'
 import MediaManager from '@/components/admin/MediaManager'
 import ProductSizesManager from '@/components/admin/ProductSizesManager'
 
@@ -13,12 +13,12 @@ interface Product {
   price: number
   stock_quantity: number
   is_active: boolean
-  model_id?: number
 }
 
-interface Model {
+interface Category {
   id: number;
   name: string;
+  slug: string;
 }
 
 const containerVariants = {
@@ -45,20 +45,25 @@ export default function ProductDetailPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
-  const [models, setModels] = useState<Model[]>([])
+  const [allCategories, setAllCategories] = useState<Category[]>([])
+  const [productCategories, setProductCategories] = useState<Category[]>([])
+  const [addingCategory, setAddingCategory] = useState(false)
+  const [removingCategory, setRemovingCategory] = useState<number | null>(null)
 
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true)
-        const [productRes, modelsRes] = await Promise.all([
+        const [productRes, categoriesRes, productCategoriesRes] = await Promise.all([
           fetch(`/api/admin/products/${id}`),
-          fetch('/api/models')
+          fetch('/api/admin/categories'),
+          fetch(`/api/admin/products/${id}/categories`)
         ])
         if (!productRes.ok) throw new Error('Falha ao carregar produto')
         const productData = await productRes.json()
-        const modelsData = await modelsRes.json()
-        const data = productData.product
+        const categoriesData = await categoriesRes.json()
+        const productCategoriesData = await productCategoriesRes.json()
+        const data = productData.product || productData.data
         if (!data || !data.id) {
           throw new Error('Dados do produto inválidos')
         }
@@ -68,10 +73,16 @@ export default function ProductDetailPage() {
           description: data.description ?? '',
           price: Number(data.price ?? 0),
           stock_quantity: Number(data.stock_quantity ?? 0),
-          is_active: Boolean(data.is_active),
-          model_id: data.model_id ? Number(data.model_id) : undefined
+          is_active: Boolean(data.is_active)
         })
-        if (modelsData.success) setModels(modelsData.data || [])
+        if (categoriesData.success) {
+          const cats = categoriesData.data || []
+          setAllCategories(Array.isArray(cats) ? cats : [])
+        }
+        if (productCategoriesData.success) {
+          const prodCats = productCategoriesData.data || []
+          setProductCategories(Array.isArray(prodCats) ? prodCats : [])
+        }
       } catch (e: any) {
         setError(e.message || 'Erro inesperado')
       } finally {
@@ -94,8 +105,7 @@ export default function ProductDetailPage() {
           description: product.description,
           price: Number(product.price),
           stock_quantity: Number(product.stock_quantity),
-          is_active: Boolean(product.is_active),
-          model_id: product.model_id
+          is_active: Boolean(product.is_active)
         })
       })
       if (!res.ok) throw new Error('Falha ao salvar alterações')
@@ -105,6 +115,51 @@ export default function ProductDetailPage() {
       setError(e.message || 'Erro ao salvar')
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleAddCategory(categoryId: number) {
+    if (productCategories.some(c => c.id === categoryId)) return
+    setAddingCategory(true)
+    try {
+      const res = await fetch(`/api/admin/products/${id}/categories`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoryId })
+      })
+      const result = await res.json()
+      if (result.success) {
+        const category = allCategories.find(c => c.id === categoryId)
+        if (category) {
+          setProductCategories([...productCategories, category])
+        }
+      } else {
+        setError(result.error || 'Erro ao adicionar categoria')
+      }
+    } catch (e: any) {
+      setError(e.message || 'Erro ao adicionar categoria')
+    } finally {
+      setAddingCategory(false)
+    }
+  }
+
+  async function handleRemoveCategory(categoryId: number) {
+    if (removingCategory === categoryId) return
+    setRemovingCategory(categoryId)
+    try {
+      const res = await fetch(`/api/admin/products/${id}/categories?categoryId=${categoryId}`, {
+        method: 'DELETE'
+      })
+      const result = await res.json()
+      if (result.success) {
+        setProductCategories(productCategories.filter(c => c.id !== categoryId))
+      } else {
+        setError(result.error || 'Erro ao remover categoria')
+      }
+    } catch (e: any) {
+      setError(e.message || 'Erro ao remover categoria')
+    } finally {
+      setRemovingCategory(null)
     }
   }
 
@@ -252,20 +307,78 @@ export default function ProductDetailPage() {
                     placeholder="Digite o nome do produto"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-sage-700 mb-2">
-                    Modelo
+                <div className="lg:col-span-2">
+                  <label className="block text-sm font-medium text-sage-700 mb-2 flex items-center gap-2">
+                    <FaTags className="text-primary-500" size={14} />
+                    Categorias
                   </label>
+                  <div className="space-y-3">
+                    {productCategories.length > 0 && (
+                      <div className="flex flex-wrap gap-2 p-3 bg-primary-50 rounded-xl border border-primary-100">
+                        {productCategories.map((category) => (
+                          <span
+                            key={category.id}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white text-primary-700 border border-primary-200 text-sm font-medium group relative shadow-sm hover:shadow-md transition-all"
+                          >
+                            <FaTags size={12} className="text-primary-500" />
+                            <span>{category.name}</span>
+                            <button
+                              onClick={() => handleRemoveCategory(category.id)}
+                              disabled={removingCategory === category.id}
+                              className="ml-1 p-1 text-primary-600 hover:text-red-600 hover:bg-red-50 rounded transition-all opacity-0 group-hover:opacity-100 disabled:opacity-100"
+                              title="Remover categoria"
+                            >
+                              {removingCategory === category.id ? (
+                                <FaSpinner className="animate-spin" size={10} />
+                              ) : (
+                                <FaTimes size={10} />
+                              )}
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {productCategories.length === 0 && (
+                      <div className="p-4 bg-primary-50 rounded-xl border border-primary-100 text-center">
+                        <FaTags className="text-sage-400 mx-auto mb-2" size={20} />
+                        <span className="text-sage-500 text-sm italic block">Nenhuma categoria associada</span>
+                      </div>
+                    )}
+                    <div className="relative">
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <FaPlus className="text-sage-500" size={14} />
+                      </div>
                   <select
-                    value={product.model_id || ''}
-                    onChange={(e) => setProduct({ ...product, model_id: e.target.value ? Number(e.target.value) : undefined })}
-                    className="w-full bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 text-sage-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:bg-white transition-all duration-300 appearance-none cursor-pointer"
+                        value=""
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            handleAddCategory(Number(e.target.value))
+                            e.target.value = ''
+                          }
+                        }}
+                        disabled={addingCategory || allCategories.filter(cat => !productCategories.some(pc => pc.id === cat.id)).length === 0}
+                        className="w-full bg-primary-50 border border-primary-100 rounded-xl pl-10 pr-10 py-3 text-sage-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:bg-white transition-all duration-300 appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <option value="">Selecione um modelo</option>
-                    {models.map(model => (
-                      <option key={model.id} value={model.id}>{model.name}</option>
+                        <option value="">
+                          {allCategories.filter(cat => !productCategories.some(pc => pc.id === cat.id)).length === 0
+                            ? 'Todas as categorias já foram adicionadas'
+                            : '+ Adicionar categoria'}
+                        </option>
+                        {allCategories
+                          .filter(cat => !productCategories.some(pc => pc.id === cat.id))
+                          .map(category => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
                     ))}
                   </select>
+                      {addingCategory && (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                          <FaSpinner className="animate-spin text-primary-500" size={16} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-sage-700 mb-2">

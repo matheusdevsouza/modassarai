@@ -110,7 +110,7 @@ export async function POST(
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('❌ Erro ao revelar dados sensíveis:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }

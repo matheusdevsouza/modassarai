@@ -37,7 +37,6 @@ export function processSafeUserData(userData: any): SafeUserData {
     try {
       publicId = hashUserId(userData.id);
     } catch (error) {
-      console.warn('Falha ao gerar identificador seguro para usuário:', error instanceof Error ? error.message : String(error));
       publicId = cryptoFallbackId();
     }
   }

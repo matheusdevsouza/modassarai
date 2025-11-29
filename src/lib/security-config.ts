@@ -89,7 +89,7 @@ export function validateRuntimeSecurity() {
   const config = getSecurityConfig();
   const { errors } = validateSecurityConfig(config);
   if (errors.length > 0) {
-    console.error('❌ Erros de configuração de segurança:', errors);
+
     if (config.DEV.ENABLE_DATABASE) {
       throw new Error('Configuração de segurança inválida');
     }

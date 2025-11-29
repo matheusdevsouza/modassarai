@@ -117,20 +117,20 @@ export default function OrderDetailPage() {
         shipping_status: order.shipping_status,
         shipping_notes: order.shipping_notes
       };
-      console.log('📤 Enviando dados para atualização:', requestBody);
+
       const res = await fetch(`/api/admin/orders/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
       })
-      console.log('📥 Resposta da API:', { status: res.status, ok: res.ok });
+
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        console.error('❌ Erro da API:', errorData);
+
         throw new Error(errorData.error || `Erro ${res.status}: ${res.statusText}`);
       }
       const result = await res.json();
-      console.log('✅ Resposta de sucesso:', result);
+
       if (result.message && result.message.includes('e-mail')) {
         setSaved(true)
         setTimeout(() => setSaved(false), 5000) 
@@ -139,7 +139,7 @@ export default function OrderDetailPage() {
         setTimeout(() => setSaved(false), 2500)
       }
     } catch (e: any) {
-      console.error('❌ Erro ao salvar:', e);
+
       setError(e.message || 'Erro ao salvar')
     } finally {
       setSaving(false)
@@ -190,10 +190,10 @@ export default function OrderDetailPage() {
         setShowRevealModal(false)
         setAdminPassword('')
         setDataToReveal(null)
-        console.log(`✅ Dados ${dataType} revelados com sucesso`);
+
       }
     } catch (e: any) {
-      console.error('❌ Erro ao revelar dados:', e);
+
       setError(e.message || 'Erro ao revelar dados')
     } finally {
       setRevealing(false)

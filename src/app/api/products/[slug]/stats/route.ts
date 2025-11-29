@@ -40,7 +40,7 @@ export async function GET(
       data: stats
     })
   } catch (error) {
-    console.error('Erro ao buscar estatísticas do produto:', error)
+
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }
@@ -109,7 +109,7 @@ export async function POST(
       data: stats
     })
   } catch (error) {
-    console.error('Erro ao registrar estatística:', error)
+
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }

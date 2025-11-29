@@ -115,7 +115,7 @@ export default function ProdutoPage() {
           url: window.location.href,
         });
       } catch (error) {
-        console.log('Erro ao compartilhar:', error);
+
       }
     } else {
       setShowShareModal(true);
@@ -126,12 +126,12 @@ export default function ProdutoPage() {
       setLoading(true);
       const res = await fetch(`/api/products/${slug}`);
       const data = await res.json();
-      console.log('Dados do produto recebidos:', data);
-      console.log('Color variations no produto:', data.colorVariations);
-      console.log('Tipo de colorVariations:', typeof data.colorVariations, Array.isArray(data.colorVariations));
-      console.log('Número de variações recebidas:', data.colorVariations?.length || 0);
+
+
+      );
+
       if (data.colorVariations && data.colorVariations.length > 0) {
-        console.log('Primeira variação recebida:', data.colorVariations[0]);
+
       }
       setProduct(data);
       if (data && data.images && data.images.length > 0) {
@@ -166,11 +166,11 @@ export default function ProdutoPage() {
   
   useEffect(() => {
     if (product) {
-      console.log('Produto carregado:', product);
-      console.log('Color variations recebidas:', product?.colorVariations);
-      console.log('Número de variações:', product?.colorVariations?.length || 0);
+
+
+
       if (product?.colorVariations && product.colorVariations.length > 0) {
-        console.log('Primeira variação:', product.colorVariations[0]);
+
       }
     }
   }, [product]);

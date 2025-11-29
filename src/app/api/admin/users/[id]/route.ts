@@ -58,7 +58,7 @@ export async function GET(
       user: userData
     });
   } catch (error) {
-    console.error('Erro ao buscar usuário:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }
@@ -104,7 +104,7 @@ export async function PUT(
       message: 'Usuário atualizado com sucesso'
     });
   } catch (error) {
-    console.error('Erro ao atualizar usuário:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }

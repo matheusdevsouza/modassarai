@@ -52,7 +52,7 @@ export async function GET(
       }
     })
   } catch (error) {
-    console.error('Erro ao buscar mídia do produto:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'
@@ -118,8 +118,8 @@ export async function POST(
       const file = files[i]
       const isValidContent = await validateFileContent(file);
       if (!isValidContent) {
-         console.error(`🚨 [SECURITY] Arquivo rejeitado por conteúdo inválido (Magic Bytes): ${file.name}`);
-         continue;
+        console.warn(`Conteúdo do arquivo inválido: ${file.name}`);
+        continue;
       }
       if (type === 'image' && !file.type.startsWith('image/')) {
         continue
@@ -192,7 +192,7 @@ export async function POST(
           type: type
         })
       } catch (fileError) {
-        console.error(`Erro ao processar arquivo ${file.name}:`, fileError)
+
         continue
       }
     }
@@ -208,7 +208,7 @@ export async function POST(
       data: uploadResults
     })
   } catch (error) {
-    console.error('Erro ao fazer upload de mídia:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'
@@ -270,7 +270,7 @@ export async function PATCH(
       message: 'Mídia atualizada com sucesso'
     })
   } catch (error) {
-    console.error('Erro ao atualizar mídia:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'
@@ -326,12 +326,12 @@ export async function DELETE(
                 const pathname = url.pathname.startsWith('/') ? url.pathname.slice(1) : url.pathname
                 await deleteFile(pathname)
               } catch (urlError) {
-                console.warn('Erro ao extrair pathname da URL do blob:', urlError)
+
               }
             }
           }
         } catch (fileError) {
-          console.warn('Erro ao remover arquivo do storage:', fileError)
+
         }
       }
     } else if (type === 'video') {
@@ -353,12 +353,12 @@ export async function DELETE(
                 const pathname = url.pathname.startsWith('/') ? url.pathname.slice(1) : url.pathname
                 await deleteFile(pathname)
               } catch (urlError) {
-                console.warn('Erro ao extrair pathname da URL do blob:', urlError)
+
               }
             }
           }
         } catch (fileError) {
-          console.warn('Erro ao remover arquivo do storage:', fileError)
+
         }
       }
     }
@@ -367,7 +367,7 @@ export async function DELETE(
       message: 'Mídia removida com sucesso'
     })
   } catch (error) {
-    console.error('Erro ao remover mídia:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

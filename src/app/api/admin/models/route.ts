@@ -31,33 +31,33 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
     let query = `
       SELECT 
-        m.*,
+        c.*,
         COUNT(p.id) as product_count
-      FROM models m
-      LEFT JOIN products p ON m.id = p.model_id AND p.is_active = TRUE
+      FROM categories c
+      LEFT JOIN products p ON c.id = p.category_id AND p.is_active = TRUE
     `;
     const conditions = [];
     const params = [];
     if (search) {
-      conditions.push(`(m.name LIKE ? OR m.description LIKE ?)`);
+      conditions.push(`(c.name LIKE ? OR c.description LIKE ?)`);
       params.push(`%${search}%`, `%${search}%`);
     }
     if (status !== 'all') {
-      conditions.push(`m.is_active = ?`);
+      conditions.push(`c.is_active = ?`);
       params.push(status === 'active' ? true : false);
     }
     if (conditions.length > 0) {
       query += ' WHERE ' + conditions.join(' AND ');
     }
-    query += ' GROUP BY m.id';
+    query += ' GROUP BY c.id';
     const validSortColumns = ['name', 'created_at', 'updated_at', 'sort_order'];
     const validSortOrders = ['asc', 'desc'];
     if (validSortColumns.includes(sortBy) && validSortOrders.includes(sortOrder)) {
-      query += ` ORDER BY m.${sortBy} ${sortOrder.toUpperCase()}`;
+      query += ` ORDER BY c.${sortBy} ${sortOrder.toUpperCase()}`;
     }
     query += ` LIMIT ${limit} OFFSET ${skip}`;
-    const models = await database.query(query, params);
-    let countQuery = `SELECT COUNT(DISTINCT m.id) as total FROM models m`;
+    const categories = await database.query(query, params);
+    let countQuery = `SELECT COUNT(DISTINCT c.id) as total FROM categories c`;
     if (conditions.length > 0) {
       countQuery += ' WHERE ' + conditions.join(' AND ');
     }
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        models,
+        models: categories,
         pagination: {
           page,
           pages,
@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Erro ao buscar modelos:', error);
+    console.error('Erro ao buscar categorias:', error);
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     if (!body.name) {
       return NextResponse.json({
         success: false,
-        error: 'Nome do modelo é obrigatório'
+        error: 'Nome da categoria é obrigatório'
       }, { status: 400 });
     }
     let baseSlug = body.slug || body.name.toLowerCase()
@@ -117,16 +117,16 @@ export async function POST(request: NextRequest) {
     let slug = baseSlug;
     let counter = 1;
     while (true) {
-      const existingModel = await database.query(
-        'SELECT id FROM models WHERE slug = ?',
+      const existingCategory = await database.query(
+        'SELECT id FROM categories WHERE slug = ?',
         [slug]
       );
-      if (existingModel.length === 0) break;
+      if (existingCategory.length === 0) break;
       slug = `${baseSlug}-${counter}`;
       counter++;
     }
     const insertQuery = `
-      INSERT INTO models (
+      INSERT INTO categories (
         name, slug, description, image_url, sort_order, is_active, created_at, updated_at
       ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
     `;
@@ -138,17 +138,17 @@ export async function POST(request: NextRequest) {
       body.sort_order || 0,
       body.is_active !== undefined ? (body.is_active ? true : false) : true
     ]);
-    const newModel = await database.query(
-      'SELECT * FROM models WHERE id = ?',
+    const newCategory = await database.query(
+      'SELECT * FROM categories WHERE id = ?',
       [result.insertId]
     );
     return NextResponse.json({
       success: true,
-      message: 'Modelo criado com sucesso',
-      data: newModel[0]
+      message: 'Categoria criada com sucesso',
+      data: newCategory[0]
     });
   } catch (error) {
-    console.error('Erro ao criar modelo:', error);
+    console.error('Erro ao criar categoria:', error);
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

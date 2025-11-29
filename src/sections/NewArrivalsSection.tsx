@@ -116,9 +116,18 @@ export function NewArrivalsSection() {
               </span>
               <motion.div
                 initial={{ width: 0 }}
-                animate={isInView ? { width: '100%' } : {}}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="absolute bottom-2 left-0 h-3 bg-[var(--logo-gold,#D4A574)]/20 -z-0"
+                animate={isInView ? { 
+                  width: ['0%', '100%', '100%', '0%', '0%']
+                } : { width: 0 }}
+                transition={{ 
+                  duration: 12,
+                  delay: 0.8,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  ease: "easeInOut",
+                  times: [0, 0.08, 0.5, 0.58, 1]
+                }}
+                className="absolute bottom-2 left-0 h-3 bg-primary-400/20 -z-0"
                 style={{ transform: 'skewX(-12deg)' }}
               />
             </span>

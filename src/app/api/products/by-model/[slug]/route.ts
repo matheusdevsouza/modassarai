@@ -9,9 +9,9 @@ export async function GET(
 ) {
   try {
     const { slug } = params
-    console.log('Buscando produtos para modelo:', slug)
+
     const products = await getProductsByModel(slug)
-    console.log('Produtos encontrados:', products.length)
+
     const productsWithSizes = []
     for (const product of products) {
       const productSizes = await getProductSizes(product.id)
@@ -29,7 +29,7 @@ export async function GET(
       data: productsWithSizes
     })
   } catch (error) {
-    console.error('Erro ao buscar produtos por modelo:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

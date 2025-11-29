@@ -63,7 +63,6 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Erro no debug de admin:', error);
     return NextResponse.json(
       { 
         success: false, 

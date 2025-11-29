@@ -68,7 +68,7 @@ export default function CreateModelModal({ isOpen, onClose, onSuccess }: CreateM
         alert(result.error || 'Erro ao criar modelo');
       }
     } catch (error) {
-      console.error('Erro ao criar modelo:', error);
+
       alert('Erro ao conectar com o servidor');
     } finally {
       setSaving(false);

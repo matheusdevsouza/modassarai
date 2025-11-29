@@ -7,21 +7,28 @@ import Image from 'next/image'
 import { ArrowRight } from 'phosphor-react'
 
 const CategoriesSkeleton = () => (
-  <section className="py-24 bg-sand-100">
-    <div className="container mx-auto px-4">
+  <section className="relative py-24 overflow-hidden" style={{ 
+    backgroundColor: '#0d0d0d',
+    backgroundImage: `
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+    `,
+    backgroundSize: '40px 40px'
+  }}>
+    <div className="container mx-auto px-4 relative" style={{ zIndex: 10 }}>
       <div className="text-center mb-8 sm:mb-12 md:mb-16 space-y-6">
-        <div className="h-5 w-56 bg-black/20 rounded-full mx-auto animate-pulse" />
-        <div className="h-12 md:h-16 w-full max-w-3xl bg-black/30 rounded-lg mx-auto animate-pulse" />
-        <div className="h-6 w-full max-w-2xl bg-black/20 rounded-lg mx-auto animate-pulse" />
+        <div className="h-5 w-56 bg-white/10 rounded-full mx-auto animate-pulse" />
+        <div className="h-12 md:h-16 w-full max-w-3xl bg-white/10 rounded-lg mx-auto animate-pulse" />
+        <div className="h-6 w-full max-w-2xl bg-white/5 rounded-lg mx-auto animate-pulse" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="relative h-[400px] md:h-[450px] rounded-2xl overflow-hidden border border-black/10">
-            <div className="absolute inset-0 animate-pulse" style={{ background: 'linear-gradient(to bottom right, #FDF8F2, #F5F0E8, #FDF8F2)' }} />
+          <div key={i} className="relative h-[400px] md:h-[450px] rounded-2xl overflow-hidden border border-white/10">
+            <div className="absolute inset-0 animate-pulse bg-white/5" />
             <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
-              <div className="h-8 w-3/4 bg-black/50 rounded mb-2 animate-pulse" />
-              <div className="h-5 w-1/2 bg-black/40 rounded mb-4 animate-pulse" />
-              <div className="h-10 w-32 bg-black/60 rounded-lg animate-pulse" />
+              <div className="h-8 w-3/4 bg-white/10 rounded mb-2 animate-pulse" />
+              <div className="h-5 w-1/2 bg-white/5 rounded mb-4 animate-pulse" />
+              <div className="h-10 w-32 bg-white/10 rounded-lg animate-pulse" />
             </div>
           </div>
         ))}
@@ -183,8 +190,27 @@ export function ElegantCategoriesSection() {
           <h2 className="relative z-20 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-sand-100 mb-4 flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
             <div className="flex flex-col items-center">
               <span>Explore o universo </span>
-              <span className="bg-gradient-to-r from-primary-400 via-primary-300 to-primary-400 bg-clip-text text-transparent">
+              <span className="relative inline-block">
+                <span className="relative z-10 bg-gradient-to-r from-primary-400 via-primary-300 to-primary-400 bg-clip-text text-transparent">
                 Maria Pistache
+                </span>
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ 
+                    width: ['0%', '100%', '100%', '0%', '0%']
+                  }}
+                  viewport={{ once: false }}
+                  transition={{ 
+                    duration: 12,
+                    delay: 0.8,
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    ease: "easeInOut",
+                    times: [0, 0.08, 0.5, 0.58, 1]
+                  }}
+                  className="absolute bottom-2 left-0 h-3 bg-primary-400/20 -z-0"
+                  style={{ transform: 'skewX(-12deg)' }}
+                />
               </span>
             </div>
           </h2>

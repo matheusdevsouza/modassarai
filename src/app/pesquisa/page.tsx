@@ -118,7 +118,7 @@ function SearchContent() {
             setProductSizes([])
           }
         } catch (error) {
-          console.error('Erro ao buscar tamanhos:', error)
+
           setProductSizes([])
         } finally {
           setLoadingSizes(false)
@@ -143,7 +143,7 @@ function SearchContent() {
             setProducts([])
           }
         } catch (error) {
-          console.error('Erro na busca:', error)
+
           setProducts([])
         } finally {
           setLoading(false)

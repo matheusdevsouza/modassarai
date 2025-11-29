@@ -32,7 +32,7 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
         }))
       }
     } catch (error) {
-      console.error('Erro ao carregar tamanhos:', error)
+
     } finally {
       setLoadingSizes(prev => ({ ...prev, [productId]: false }))
     }

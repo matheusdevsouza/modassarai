@@ -76,7 +76,7 @@ export async function GET(
     };
     return NextResponse.json({ order: processedOrder });
   } catch (error) {
-    console.error('Erro ao buscar pedido:', error);
+
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }
@@ -173,9 +173,9 @@ export async function PUT(
           shippingCompany: order.shipping_company || "Transportadora",
           estimatedDelivery: estimatedDelivery.toLocaleDateString("pt-BR")
         });
-        console.log(`Email de envio enviado para ${order.customer_email}`);
+
       } catch (emailError) {
-        console.error("Erro ao enviar email de envio:", emailError);
+
       }
     }
     return NextResponse.json({
@@ -184,7 +184,7 @@ export async function PUT(
       order: orderWithItems
     });
   } catch (error) {
-    console.error('Erro ao atualizar pedido:', error);
+
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }

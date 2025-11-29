@@ -238,7 +238,6 @@ export default function CheckoutPage() {
         }, 3000)
       }
     } catch (error) {
-      console.error('Erro ao finalizar pedido:', error)
       showErrorMessages([`Erro ao finalizar pedido: ${(error as Error).message}`])
     } finally {
       setIsLoading(false)

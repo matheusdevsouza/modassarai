@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = email.trim().toLowerCase()
     const user = await getUserByEmail(normalizedEmail)
     await deleteExpiredPasswordResetTokens()
+    
     if (user) {
       const token = crypto.randomBytes(32).toString('hex')
       await createPasswordResetToken(user.id, token)

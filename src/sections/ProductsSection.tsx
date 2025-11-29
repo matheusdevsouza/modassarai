@@ -34,7 +34,7 @@ export function ProductsSection() {
           setProducts(productsData.data)
         }
       } catch (error) {
-        console.error('Erro ao carregar dados:', error)
+
       } finally {
         setLoading(false)
       }

@@ -114,7 +114,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
                 dispatch({ type: 'LOAD_FAVORITES', payload: restoredItems })
               }
             } catch (error) {
-              console.error('Erro ao restaurar favoritos:', error)
+
               localStorage.removeItem('mariapistache_favorites')
             }
           } else if (favoritesData.items && Array.isArray(favoritesData.items)) {
@@ -124,12 +124,12 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
                 dispatch({ type: 'LOAD_FAVORITES', payload: restoredItems })
               }
             } catch (error) {
-              console.error('Erro ao restaurar favoritos:', error)
+
               localStorage.removeItem('mariapistache_favorites')
             }
           }
         } catch (error) {
-          console.error('Erro ao carregar favoritos:', error)
+
           localStorage.removeItem('mariapistache_favorites')
         }
       }
@@ -140,7 +140,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const sanitizeFavoritesForStorage = (favoriteItems: FavoriteItem[]) => {
     return favoriteItems.map(item => {
       if (!item || !item.product) {
-        console.warn('Item inválido encontrado nos favoritos:', item)
+
         return null
       }
       return {
@@ -157,7 +157,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
                 return new Date().toISOString()
               }
             } catch (error) {
-              console.warn('Erro ao processar createdAt:', error)
+
               return new Date().toISOString()
             }
           })(),
@@ -171,7 +171,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
                 return new Date().toISOString()
               }
             } catch (error) {
-              console.warn('Erro ao processar updatedAt:', error)
+
               return new Date().toISOString()
             }
           })()
@@ -184,7 +184,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const restoreFavoritesFromStorage = (favoritesData: any[]): FavoriteItem[] => {
     return favoritesData.map(item => {
       if (!item || !item.product) {
-        console.warn('Item inválido encontrado no localStorage:', item)
+
         return null
       }
       return {
@@ -196,7 +196,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
               const date = new Date(item.product.createdAt)
               return isNaN(date.getTime()) ? new Date() : date
             } catch (error) {
-              console.warn('Erro ao restaurar createdAt:', error)
+
               return new Date()
             }
           })(),
@@ -205,7 +205,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
               const date = new Date(item.product.updatedAt)
               return isNaN(date.getTime()) ? new Date() : date
             } catch (error) {
-              console.warn('Erro ao restaurar updatedAt:', error)
+
               return new Date()
             }
           })()
@@ -215,7 +215,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
             const date = new Date(item.addedAt)
             return isNaN(date.getTime()) ? new Date() : date
           } catch (error) {
-            console.warn('Erro ao restaurar addedAt:', error)
+
             return new Date()
           }
         })()
@@ -239,7 +239,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     const hasSizes = (product as any).sizes && Array.isArray((product as any).sizes) && (product as any).sizes.length > 0
     if (hasSizes) {
       if (!size || (typeof size === 'string' && (size.trim() === '' || size === 'Selecione'))) {
-        console.warn('Tentativa de adicionar produto com tamanhos aos favoritos sem selecionar tamanho')
+
         return 
       }
     }
@@ -247,7 +247,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     const hasColors = (product as any).colorVariations && Array.isArray((product as any).colorVariations) && (product as any).colorVariations.length > 0
     if (hasColors) {
       if (!color || (typeof color === 'string' && color.trim() === '')) {
-        console.warn('Tentativa de adicionar produto com variações de cor aos favoritos sem selecionar cor')
+
         return 
       }
     }
@@ -261,7 +261,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ actionType: 'favorite' })
       }).catch(error => {
-        console.error('Erro ao registrar estatística de favorito:', error)
+
       })
     }
   }

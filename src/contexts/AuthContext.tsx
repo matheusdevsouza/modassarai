@@ -76,23 +76,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
+        credentials: 'include', 
       });
+      
       const data = await response.json();
+      
       if (data.success) {
         setUser(data.user);
         setAuthenticated(true);
         setEmailVerified(Boolean(data.user?.email_verified_at) || Boolean(data.user?.emailVerified));
         return { success: true, message: data.message, user: data.user };
       } else {
+        const errorMessage = data.message || data.error || 'Erro ao fazer login. Tente novamente.';
         return { 
           success: false, 
-          message: data.message,
+          message: errorMessage,
           emailNotVerified: data.emailNotVerified 
         };
       }
     } catch (error) {
       console.error('Erro no login:', error);
-      return { success: false, message: 'Erro interno do servidor' };
+      return { success: false, message: 'Erro interno do servidor. Verifique sua conexão e tente novamente.' };
     }
   };
   const register = async (userData: RegisterData) => {
@@ -117,14 +121,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-      });
       setUser(null);
       setAuthenticated(false);
       setEmailVerified(false);
+      
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include', 
+      });
+      
+      setTimeout(() => {
+        checkAuth();
+      }, 100);
     } catch (error) {
       console.error('Erro no logout:', error);
+      setUser(null);
+      setAuthenticated(false);
+      setEmailVerified(false);
     }
   };
   const verifyEmail = async (token: string) => {

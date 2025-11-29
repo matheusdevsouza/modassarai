@@ -84,7 +84,7 @@ export default function EditModelPage() {
         if (modelsJson.success) setAllModels(modelsJson.data || []);
       }
     } catch (error) {
-      console.error('Erro ao carregar modelo:', error);
+
       setError('Erro ao conectar com o servidor');
     } finally {
       setLoading(false);
@@ -134,7 +134,7 @@ export default function EditModelPage() {
         alert(result.error || 'Erro ao atualizar modelo');
       }
     } catch (error) {
-      console.error('Erro ao atualizar modelo:', error);
+
       alert('Erro ao conectar com o servidor');
     } finally {
       setSaving(false);

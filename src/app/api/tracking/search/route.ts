@@ -40,7 +40,6 @@ export async function GET(request: NextRequest) {
       data: trackingData
     });
   } catch (error) {
-    console.error('Erro ao buscar rastreio:', error);
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

@@ -37,7 +37,6 @@ export async function GET(
       }))
     });
   } catch (error) {
-    console.error('Erro ao buscar imagens da variação:', error);
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
   }
 }

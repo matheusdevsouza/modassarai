@@ -133,8 +133,6 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json({ success: true, timestamp: new Date().toISOString() });
   } catch (error) {
-    console.error('=== ERRO NO WEBHOOK MERCADO PAGO ===');
-    console.error('Erro:', error);
     return NextResponse.json(
       { error: 'Erro interno do servidor', timestamp: new Date().toISOString() }, 
       { status: 500 }

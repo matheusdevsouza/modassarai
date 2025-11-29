@@ -96,12 +96,7 @@ export default function MediaManager({ productId, onMediaUpdate }: MediaManagerP
       setUploading(true);
       setUploadProgress(0);
       setError(null);
-      console.log('🔍 Debug upload:', {
-        uploadType,
-        fileCount: files.length,
-        firstFile: files[0]?.name,
-        firstFileType: files[0]?.type
-      });
+
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
@@ -198,7 +193,7 @@ export default function MediaManager({ productId, onMediaUpdate }: MediaManagerP
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
             onError={(e) => {
               if (!e.currentTarget.dataset.errorLogged) {
-                console.warn('Imagem não pôde ser carregada:', item.url);
+
                 e.currentTarget.dataset.errorLogged = 'true';
               }
               e.currentTarget.style.display = 'none';
@@ -409,7 +404,7 @@ export default function MediaManager({ productId, onMediaUpdate }: MediaManagerP
                 value="image"
                 checked={uploadType === 'image'}
                 onChange={(e) => {
-                  console.log('🔄 Mudando para aba:', e.target.value);
+
                   setUploadType(e.target.value as 'image');
                 }}
                 className="sr-only"
@@ -428,7 +423,7 @@ export default function MediaManager({ productId, onMediaUpdate }: MediaManagerP
                 value="video"
                 checked={uploadType === 'video'}
                 onChange={(e) => {
-                  console.log('🔄 Mudando para aba:', e.target.value);
+
                   setUploadType(e.target.value as 'video');
                 }}
                 className="sr-only"

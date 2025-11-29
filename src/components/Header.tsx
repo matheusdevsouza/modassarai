@@ -116,8 +116,8 @@ export function Header() {
                 onBlur={() => setIsSearchFocused(false)}
               >
                 <div
-                  className={`relative flex items-center bg-primary-50 border border-primary-100 rounded-full px-4 py-2.5 transition-all duration-300 ${
-                    isSearchFocused ? 'ring-2 ring-sand-100 shadow-md shadow-primary-100' : ''
+                  className={`relative flex items-center bg-white border-2 border-primary-500 rounded-full px-4 py-2.5 transition-all duration-300 shadow-sm ${
+                    isSearchFocused ? 'ring-2 ring-primary-300 shadow-md shadow-primary-200 border-primary-500' : ''
                   }`}
                 >
                   <MagnifyingGlass 
@@ -131,7 +131,7 @@ export function Header() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
-                    className="flex-1 bg-transparent text-sage-900 placeholder-sage-400 focus:outline-none text-sm w-full"
+                    className="flex-1 bg-transparent text-sage-900 placeholder-sage-600 focus:outline-none text-sm w-full"
                   />
                   {searchQuery && (
                     <motion.button
@@ -294,7 +294,15 @@ export function Header() {
                           <div className="border-t border-cloud-100 my-2 mx-2"></div>
                           <div className="pt-2 px-2 pb-2">
                             <button
-                              onClick={async () => { await logout(); setUserMenuOpen(false); }}
+                              onClick={async () => { 
+                                await logout(); 
+                                setUserMenuOpen(false);
+                                if (pathname.startsWith('/admin')) {
+                                  router.push('/');
+                                } else {
+                                  router.refresh();
+                                }
+                              }}
                               className="group w-full flex items-center gap-3 px-5 py-3 text-sage-700 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg"
                             >
                               <SignOut size={18} className="text-sage-600 group-hover:text-red-600 transition-colors" weight="regular" />
@@ -365,8 +373,8 @@ export function Header() {
           <div className="lg:hidden pb-4">
             <form onSubmit={handleSearch} className="relative">
               <div
-                className={`relative flex items-center bg-primary-50 border border-primary-100 rounded-full px-4 py-3 transition-all duration-300 ${
-                  isSearchFocused ? 'ring-2 ring-sand-100' : ''
+                className={`relative flex items-center bg-white border-2 border-primary-500 rounded-full px-4 py-3 transition-all duration-300 shadow-sm ${
+                  isSearchFocused ? 'ring-2 ring-primary-300 shadow-md shadow-primary-200 border-primary-500' : ''
                 }`}
               >
                 <MagnifyingGlass 
@@ -382,7 +390,7 @@ export function Header() {
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() => setIsSearchFocused(false)}
-                  className="flex-1 bg-transparent text-sage-900 placeholder-sage-400 focus:outline-none text-sm"
+                  className="flex-1 bg-transparent text-sage-900 placeholder-sage-600 focus:outline-none text-sm"
                   />
                 {searchQuery && (
                   <motion.button
@@ -517,6 +525,11 @@ export function Header() {
                       onClick={async () => {
                         await logout()
                         setIsMenuOpen(false)
+                        if (pathname.startsWith('/admin')) {
+                          router.push('/');
+                        } else {
+                          router.refresh();
+                        }
                       }}
                       className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-50 border border-red-200 text-red-700 rounded-xl font-semibold hover:bg-red-100 hover:border-red-300 transition-colors"
                     >

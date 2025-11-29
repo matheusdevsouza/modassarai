@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       total: products.length
     })
   } catch (error) {
-    console.error('Erro na busca de produtos:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

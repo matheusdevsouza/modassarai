@@ -661,7 +661,7 @@ export function FeaturedCollectionsSection() {
           setProducts(data.data)
         }
       } catch (error) {
-        console.error('Erro ao carregar ofertas:', error)
+
       } finally {
         setLoading(false)
       }
@@ -702,7 +702,7 @@ export function FeaturedCollectionsSection() {
           setTestimonials(data.data)
         }
       } catch (error) {
-        console.error('Erro ao buscar depoimentos:', error)
+
       } finally {
         setLoadingTestimonials(false)
       }

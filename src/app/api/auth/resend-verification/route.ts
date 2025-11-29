@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       message: 'E-mail de verificação reenviado com sucesso!'
     });
   } catch (error) {
-    console.error('Erro ao reenviar verificação:', error);
+
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

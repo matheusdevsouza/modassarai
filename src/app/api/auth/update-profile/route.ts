@@ -74,7 +74,7 @@ export async function PATCH(request: NextRequest) {
     const updatedUser = await database.getUserById(userId);
     return NextResponse.json({ success: true, user: updatedUser ? processSafeUserData(updatedUser) : null });
   } catch (error) {
-    console.error("Erro ao atualizar perfil:", error);
+
     return NextResponse.json({ success: false, message: "Erro interno do servidor" }, { status: 500 });
   }
 }

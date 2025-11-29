@@ -71,7 +71,6 @@ export async function POST(request: NextRequest) {
         [name, email, phone || null, subject, message]
       );
     } catch (dbError) {
-      console.error('Erro ao salvar mensagem no banco:', dbError);
     }
     try {
     const transporter = createTransporter();
@@ -91,7 +90,6 @@ export async function POST(request: NextRequest) {
       };
       await transporter.sendMail(mailOptions);
     } catch (emailError) {
-      console.error('Erro ao enviar e-mail:', emailError);
     }
     return NextResponse.json(
       { 
@@ -101,7 +99,6 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error('Erro no formulário de contato:', error);
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }

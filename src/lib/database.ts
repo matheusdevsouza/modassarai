@@ -29,6 +29,7 @@ interface DBConfig {
 }
 interface ProductFilters {
   category_id?: number
+  category_slug?: string
   subcategory_id?: number
   subcategory_slug?: string
   color?: string
@@ -262,18 +263,39 @@ export async function transaction(queries: Array<{ sql: string; params: any[] }>
 
 export async function getProducts(filters: ProductFilters = {}): Promise<any[]> {
   let sql = `
-    SELECT p.*, c.name as category_name, 
-           s.name as subcategory_name, pi.image_url as primary_image
+    SELECT DISTINCT ON (p.id) 
+           p.*, 
+           COALESCE(
+             (SELECT name FROM categories WHERE id = (
+               SELECT category_id FROM product_categories WHERE product_id = p.id LIMIT 1
+             )),
+             (SELECT name FROM categories WHERE id = p.category_id),
+             NULL
+           ) as category_name, 
+           s.name as subcategory_name, 
+           (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as primary_image
     FROM products p
-    LEFT JOIN categories c ON p.category_id = c.id
     LEFT JOIN subcategories s ON p.subcategory_id = s.id
-    LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
-    WHERE p.is_active = TRUE
   `
   const params: any[] = []
-  if (filters.category_id) {
-    sql += ' AND p.category_id = ?'
+  
+  if (filters.category_slug) {
+    sql += ` WHERE p.is_active = TRUE 
+             AND EXISTS (
+               SELECT 1 FROM product_categories pc
+               INNER JOIN categories c ON pc.category_id = c.id
+               WHERE pc.product_id = p.id AND c.slug = ? AND c.is_active = TRUE
+             )`
+    params.push(filters.category_slug)
+  } else if (filters.category_id) {
+    sql += ` WHERE p.is_active = TRUE 
+             AND EXISTS (
+               SELECT 1 FROM product_categories 
+               WHERE product_id = p.id AND category_id = ?
+             )`
     params.push(filters.category_id)
+  } else {
+    sql += ` WHERE p.is_active = TRUE`
   }
   if (filters.subcategory_id) {
     sql += ' AND p.subcategory_id = ?'
@@ -302,6 +324,7 @@ export async function getProducts(filters: ProductFilters = {}): Promise<any[]> 
     sql += ' AND (p.name LIKE ? OR p.description LIKE ? OR p.color LIKE ?)'
     params.push(`%${filters.search}%`, `%${filters.search}%`, `%${filters.search}%`)
   }
+  
   sql += ' ORDER BY p.id ASC'
   if (filters.limit) {
     sql += ' LIMIT ?'
@@ -814,8 +837,13 @@ export async function updateUserPassword(userId: number, hashedPassword: string)
   return await query(sql, [hashedPassword, userId]);
 }
 export async function deleteExpiredPasswordResetTokens(): Promise<any> {
-  const sql = `DELETE FROM password_reset_tokens WHERE expires_at < NOW()`;
-  return await query(sql);
+  try {
+    const sql = `DELETE FROM password_reset_tokens WHERE expires_at < NOW()`;
+    return await query(sql);
+  } catch (error) {
+    console.error('Erro ao deletar tokens expirados:', error);
+    return null;
+  }
 }
 export async function isEmailAlreadyRegistered(email: string): Promise<boolean> {
   const sql = `SELECT COUNT(*) as count FROM users WHERE email = ?`;

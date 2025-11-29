@@ -10,19 +10,19 @@ function generateLegacyKey(): Buffer {
 }
 export function encryptValue(value: string | null | undefined): string | null {
   if (value === null || value === undefined) {
-    console.log('[ENCRYPT_VALUE] Valor é null/undefined, retornando null');
+
     return null;
   }
   if (typeof value === 'string' && value.trim() === '') {
-    console.log('[ENCRYPT_VALUE] Valor é string vazia, retornando null');
+
     return null;
   }
   try {
     const encrypted = encrypt(String(value));
-    console.log('[ENCRYPT_VALUE] Valor criptografado com sucesso');
+
     return encrypted;
   } catch (error) {
-    console.error('[ENCRYPT_VALUE] Erro ao criptografar valor:', error);
+
     return null;
   }
 }
@@ -38,14 +38,13 @@ export function decryptValue(encryptedValue: string | null): string | null {
     try {
       return decrypt(encryptedValue);
     } catch (error) {
-      console.error('Erro ao descriptografar valor (GCM):', error);
       return encryptedValue;
     }
   }
   if (parts.length === 2) {
     try {
       if (!LEGACY_SECRET_KEY) {
-        console.warn('Tentativa de descriptografar dados legados sem ENCRYPTION_SECRET_KEY');
+
         return encryptedValue;
       }
       const iv = Buffer.from(parts[0], 'hex');
@@ -55,7 +54,6 @@ export function decryptValue(encryptedValue: string | null): string | null {
       decrypted += decipher.final('utf8');
       return decrypted;
     } catch (error) {
-      console.error('Erro ao descriptografar valor (Legacy):', error);
       return encryptedValue; 
     }
   }
@@ -113,7 +111,7 @@ export async function findUserByEmail(email: string, queryFunction: Function): P
     }
     return null;
   } catch (error) {
-    console.error('Erro ao buscar usuário por email:', error);
+
     return null;
   }
 }
@@ -128,7 +126,7 @@ export async function migrateExistingData(tableName: string, queryFunction: Func
   try {
     const fieldsToEncrypt = ENCRYPTION_FIELDS[tableName as keyof typeof ENCRYPTION_FIELDS];
     if (!fieldsToEncrypt) {
-      console.log(`Tabela ${tableName} não tem campos para criptografar`);
+
       return;
     }
     const records = await queryFunction(`SELECT * FROM ${tableName}`);
@@ -153,11 +151,11 @@ export async function migrateExistingData(tableName: string, queryFunction: Func
           `UPDATE ${tableName} SET ${setClause} WHERE id = ?`,
           [...values, record.id]
         );
-        console.log(`✅ Migrado registro ${record.id} da tabela ${tableName}`);
+
       }
     }
-    console.log(`🎉 Migração da tabela ${tableName} concluída!`);
+
   } catch (error) {
-    console.error(`❌ Erro ao migrar tabela ${tableName}:`, error);
+    console.error('Erro ao migrar dados para criptografia:', error);
   }
 }

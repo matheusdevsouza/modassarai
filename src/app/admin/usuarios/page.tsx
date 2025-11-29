@@ -70,7 +70,7 @@ export default function AdminUsers() {
       setTotalUsers(data.data.pagination.total)
     } catch (e: any) {
       setError(e.message || 'Erro inesperado')
-      console.error('Erro ao buscar usuários:', e)
+
     } finally {
       setLoading(false)
     }
@@ -125,7 +125,7 @@ export default function AdminUsers() {
         }
         fetchUsers()
       } catch (error) {
-        console.error('Erro ao excluir usuário:', error)
+
         alert('Erro ao excluir usuário')
       }
     }

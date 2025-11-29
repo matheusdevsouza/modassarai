@@ -35,7 +35,6 @@ export async function uploadFile(
       uploadedAt: new Date(),
     };
   } catch (error) {
-    console.error('Erro ao fazer upload para Vercel Blob:', error);
     throw new Error('Falha ao fazer upload do arquivo');
   }
 }
@@ -45,7 +44,6 @@ export async function deleteFile(pathname: string): Promise<boolean> {
     await del(pathname);
     return true;
   } catch (error) {
-    console.error('Erro ao deletar arquivo do Vercel Blob:', error);
     return false;
   }
 }
@@ -64,7 +62,6 @@ export async function listFiles(prefix: string): Promise<string[]> {
     const { blobs } = await list({ prefix });
     return blobs.map((blob: { pathname: string }) => blob.pathname);
   } catch (error) {
-    console.error('Erro ao listar arquivos do Vercel Blob:', error);
     return [];
   }
 }

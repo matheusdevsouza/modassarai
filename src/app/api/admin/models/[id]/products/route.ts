@@ -24,11 +24,11 @@ export async function GET(
         { status: 403 }
       );
     }
-    const modelId = parseInt(params.id);
-    if (isNaN(modelId)) {
+    const categoryId = parseInt(params.id);
+    if (isNaN(categoryId)) {
       return NextResponse.json({
         success: false,
-        error: 'ID do modelo inválido'
+        error: 'ID da categoria inválido'
       }, { status: 400 });
     }
     const productsQuery = `
@@ -44,16 +44,16 @@ export async function GET(
       FROM products p
       LEFT JOIN brands b ON p.brand_id = b.id
       LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
-      WHERE p.model_id = ? AND p.is_active = TRUE
+      WHERE p.category_id = ? AND p.is_active = TRUE
       ORDER BY p.name ASC
     `;
-    const products = await database.query(productsQuery, [modelId]);
+    const products = await database.query(productsQuery, [categoryId]);
     return NextResponse.json({
       success: true,
       data: products
     });
   } catch (error) {
-    console.error('Erro ao buscar produtos do modelo:', error);
+    console.error('Erro ao buscar produtos da categoria:', error);
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'
@@ -80,11 +80,11 @@ export async function POST(
         { status: 403 }
       );
     }
-    const modelId = parseInt(params.id);
-    if (isNaN(modelId)) {
+    const categoryId = parseInt(params.id);
+    if (isNaN(categoryId)) {
       return NextResponse.json({
         success: false,
-        error: 'ID do modelo inválido'
+        error: 'ID da categoria inválido'
       }, { status: 400 });
     }
     const body = await request.json();
@@ -95,14 +95,14 @@ export async function POST(
         error: 'Lista de produtos é obrigatória'
       }, { status: 400 });
     }
-    const modelExists = await database.query(
-      'SELECT id FROM models WHERE id = ?',
-      [modelId]
+    const categoryExists = await database.query(
+      'SELECT id FROM categories WHERE id = ?',
+      [categoryId]
     );
-    if (modelExists.length === 0) {
+    if (categoryExists.length === 0) {
       return NextResponse.json({
         success: false,
-        error: 'Modelo não encontrado'
+        error: 'Categoria não encontrada'
       }, { status: 404 });
     }
     const placeholders = productIds.map(() => '?').join(',');
@@ -117,15 +117,15 @@ export async function POST(
       }, { status: 400 });
     }
     await database.query(
-      `UPDATE products SET model_id = ?, updated_at = NOW() WHERE id IN (${placeholders})`,
-      [modelId, ...productIds]
+      `UPDATE products SET category_id = ?, updated_at = NOW() WHERE id IN (${placeholders})`,
+      [categoryId, ...productIds]
     );
     return NextResponse.json({
       success: true,
-      message: `${productIds.length} produto(s) adicionado(s) ao modelo com sucesso`
+      message: `${productIds.length} produto(s) adicionado(s) à categoria com sucesso`
     });
   } catch (error) {
-    console.error('Erro ao adicionar produtos ao modelo:', error);
+    console.error('Erro ao adicionar produtos à categoria:', error);
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'
@@ -152,11 +152,11 @@ export async function DELETE(
         { status: 403 }
       );
     }
-    const modelId = parseInt(params.id);
-    if (isNaN(modelId)) {
+    const categoryId = parseInt(params.id);
+    if (isNaN(categoryId)) {
       return NextResponse.json({
         success: false,
-        error: 'ID do modelo inválido'
+        error: 'ID da categoria inválido'
       }, { status: 400 });
     }
     const body = await request.json();
@@ -169,15 +169,15 @@ export async function DELETE(
     }
     const placeholders = productIds.map(() => '?').join(',');
     await database.query(
-      `UPDATE products SET model_id = NULL, updated_at = NOW() WHERE id IN (${placeholders}) AND model_id = ?`,
-      [...productIds, modelId]
+      `UPDATE products SET category_id = NULL, updated_at = NOW() WHERE id IN (${placeholders}) AND category_id = ?`,
+      [...productIds, categoryId]
     );
     return NextResponse.json({
       success: true,
-      message: `${productIds.length} produto(s) removido(s) do modelo com sucesso`
+      message: `${productIds.length} produto(s) removido(s) da categoria com sucesso`
     });
   } catch (error) {
-    console.error('Erro ao remover produtos do modelo:', error);
+    console.error('Erro ao remover produtos da categoria:', error);
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

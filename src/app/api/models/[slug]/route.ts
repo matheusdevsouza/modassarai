@@ -21,7 +21,6 @@ export async function GET(
       data: model
     })
   } catch (error) {
-    console.error('Erro ao buscar modelo:', error)
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

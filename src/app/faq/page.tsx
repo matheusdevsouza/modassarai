@@ -162,7 +162,7 @@ export default function FAQ() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Fale Conosco
+              Entrar em Contato
             </motion.a>
           </div>
         </motion.div>

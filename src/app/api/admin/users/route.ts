@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Erro ao buscar usuários:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       { status: 501 }
     );
   } catch (error) {
-    console.error('Erro ao criar usuário:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }

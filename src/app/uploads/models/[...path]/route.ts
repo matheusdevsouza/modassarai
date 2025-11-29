@@ -9,13 +9,8 @@ export async function GET(
   try {
     const fileName = params.path.join('/');
     const filePath = join(process.cwd(), 'public', 'uploads', 'models', fileName);
-    console.log('🔍 [MODEL IMAGE] Tentando servir arquivo:', {
-      fileName,
-      filePath,
-      exists: existsSync(filePath)
     });
     if (!existsSync(filePath)) {
-      console.error('❌ [MODEL IMAGE] Arquivo não encontrado:', filePath);
       return new NextResponse('Arquivo não encontrado', { status: 404 });
     }
     const fileBuffer = await readFile(filePath);
@@ -42,11 +37,6 @@ export async function GET(
         mimeType = 'image/svg+xml';
         break;
     }
-    console.log('✅ [MODEL IMAGE] Arquivo servido com sucesso:', {
-      fileName,
-      size: fileBuffer.length,
-      mimeType
-    });
     const bytes = new Uint8Array(fileBuffer);
     return new NextResponse(bytes, {
       status: 200,
@@ -60,8 +50,6 @@ export async function GET(
       },
     });
   } catch (error: any) {
-    console.error('❌ [MODEL IMAGE] Erro ao servir arquivo:', error);
-    console.error('❌ [MODEL IMAGE] Stack trace:', error?.stack);
     return new NextResponse('Erro interno do servidor', { status: 500 });
   }
 }

@@ -44,7 +44,7 @@ export default function VerificarAcessoPage() {
           });
         }
       } catch (error) {
-        console.error('Erro ao verificar status:', error);
+
         setStatus({
           tokenIsAdmin: false,
           dbIsAdmin: false,

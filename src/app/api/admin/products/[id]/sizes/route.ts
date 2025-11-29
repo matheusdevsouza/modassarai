@@ -57,7 +57,7 @@ export async function GET(
       }
     });
   } catch (error) {
-    console.error('Erro ao buscar tamanhos do produto:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }
@@ -124,7 +124,7 @@ export async function POST(
       }
     });
   } catch (error) {
-    console.error('Erro ao adicionar tamanho:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }
@@ -209,7 +209,7 @@ export async function PUT(
           { status: 409 }
         );
       }
-      console.error('Erro ao atualizar tamanho:', e);
+
       throw e;
     }
     return NextResponse.json({
@@ -222,7 +222,7 @@ export async function PUT(
       }
     });
   } catch (error) {
-    console.error('Erro ao atualizar estoque do tamanho:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }
@@ -281,7 +281,7 @@ export async function DELETE(
       }
     });
   } catch (error) {
-    console.error('Erro ao remover tamanho:', error);
+
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }

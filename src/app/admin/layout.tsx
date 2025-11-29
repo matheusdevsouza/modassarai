@@ -33,6 +33,7 @@ export default function AdminLayout({
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [isAdminUser, setIsAdminUser] = useState(false);
+  const [contentMargin, setContentMargin] = useState(256);
 
   useEffect(() => {
     if (!loading && !authenticated) {
@@ -67,6 +68,19 @@ export default function AdminLayout({
     checkAdminStatus();
   }, [loading, authenticated, user, router]);
 
+  useEffect(() => {
+    const updateMargin = () => {
+      if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+        setContentMargin(sidebarExpanded ? 256 : 80);
+      } else {
+        setContentMargin(0);
+      }
+    };
+    updateMargin();
+    window.addEventListener('resize', updateMargin);
+    return () => window.removeEventListener('resize', updateMargin);
+  }, [sidebarExpanded]);
+
   if (loading || checkingAdmin) {
     return (
       <div className="min-h-screen bg-primary-50 flex items-center justify-center">
@@ -99,7 +113,7 @@ export default function AdminLayout({
       title: 'Gestão',
       items: [
         { href: '/admin/produtos', icon: FaBox, label: 'Produtos' },
-        { href: '/admin/modelos', icon: FaLayerGroup, label: 'Modelos' },
+        { href: '/admin/categorias', icon: FaLayerGroup, label: 'Categorias' },
       ]
     },
     {
@@ -124,7 +138,7 @@ export default function AdminLayout({
     closed: { opacity: 0, visibility: 'hidden' as const }
   };
   return (
-    <div className="min-h-screen bg-primary-50 flex">
+    <div className="min-h-screen bg-primary-50">
       <AnimatePresence>
         {sidebarOpen && (
           <motion.div
@@ -139,7 +153,7 @@ export default function AdminLayout({
         )}
       </AnimatePresence>
       <motion.div 
-        className={`hidden lg:flex lg:flex-col bg-primary-50 border-r border-primary-100 shadow-lg transition-all duration-300 ${
+        className={`hidden lg:flex lg:flex-col fixed left-0 top-0 h-screen bg-primary-50 border-r border-primary-100 shadow-lg transition-all duration-300 z-30 ${
           sidebarExpanded ? 'w-64 xl:w-72' : 'w-20'
         }`}
         initial={false}
@@ -147,20 +161,19 @@ export default function AdminLayout({
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
         <div className={`flex items-center h-16 bg-primary-50 border-b border-primary-100 relative ${sidebarExpanded ? 'justify-center px-4 lg:px-6' : 'justify-center px-2'}`}>
-          {sidebarExpanded ? (
-            <>
               <div className="flex items-center justify-center">
-                <div className="relative w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0">
+            <div className={`relative flex-shrink-0 ${sidebarExpanded ? 'w-10 h-10 lg:w-12 lg:h-12' : 'w-10 h-10'}`}>
                   <Image
                     src="/images/logo.png"
                     alt="Maria Pistache"
                     fill
-                    sizes="(max-width: 1024px) 40px, 48px"
+                sizes={sidebarExpanded ? "(max-width: 1024px) 40px, 48px" : "40px"}
                     className="object-contain"
                     priority
                   />
                 </div>
               </div>
+          {sidebarExpanded && (
               <button
                 onClick={() => setSidebarExpanded(!sidebarExpanded)}
                 className="absolute right-4 p-2 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 flex-shrink-0"
@@ -168,30 +181,9 @@ export default function AdminLayout({
               >
                 <FaArrowLeft size={16} />
               </button>
-            </>
-          ) : (
-            <>
-              <div className="relative w-10 h-10 flex-shrink-0 mx-auto">
-                <Image
-                  src="/images/logo.png"
-                  alt="Maria Pistache"
-                  fill
-                  sizes="40px"
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <button
-                onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                className="p-2 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 flex-shrink-0 mt-2"
-                title="Expandir sidebar"
-              >
-                <FaArrowRight size={16} />
-              </button>
-            </>
           )}
         </div>
-        <nav className={`flex-1 py-4 space-y-4 overflow-y-auto transition-all duration-300 ${sidebarExpanded ? 'px-4' : 'px-2'}`}>
+        <nav className={`flex-1 py-4 space-y-4 overflow-y-auto overflow-x-hidden transition-all duration-300 ${sidebarExpanded ? 'px-4' : 'px-2'}`}>
           {menuCategories.map((category, categoryIndex) => (
             <div key={category.title} className="space-y-2">
               {sidebarExpanded && (
@@ -238,6 +230,17 @@ export default function AdminLayout({
             </div>
           ))}
         </nav>
+        {!sidebarExpanded && (
+          <div className="px-2 py-2 border-t border-primary-100">
+            <button
+              onClick={() => setSidebarExpanded(!sidebarExpanded)}
+              className="w-full p-2 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 flex items-center justify-center"
+              title="Expandir sidebar"
+            >
+              <FaArrowRight size={16} />
+            </button>
+          </div>
+        )}
         <div className={`py-4 border-t border-primary-100 transition-all duration-300 ${sidebarExpanded ? 'px-4' : 'px-2'}`}>
           {sidebarExpanded && (
             <motion.div
@@ -374,12 +377,17 @@ export default function AdminLayout({
           </div>
         </div>
       </motion.div>
-      <div className="flex-1 flex flex-col">
+      <div 
+        className="flex-1 flex flex-col transition-all duration-300"
+        style={{ 
+          marginLeft: `${contentMargin}px`
+        }}
+      >
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-white border-b border-primary-100 h-16 flex items-center justify-between px-6 shadow-sm"
+          className="bg-white border-b border-primary-100 h-16 flex items-center justify-between px-6 shadow-sm sticky top-0 z-20"
         >
           <div className="flex items-center gap-4">
             <button
@@ -430,7 +438,7 @@ export default function AdminLayout({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex-1 p-4 lg:p-6 bg-primary-50 overflow-auto max-w-full"
+          className="flex-1 p-4 lg:p-6 bg-primary-50 overflow-auto max-w-full min-h-[calc(100vh-4rem)]"
         >
           <div className="max-w-full overflow-hidden">
             {children}

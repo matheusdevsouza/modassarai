@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Erro ao buscar produtos disponíveis:', error);
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

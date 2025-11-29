@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     `, [userPayload.userId]);
     return NextResponse.json(addresses);
   } catch (error) {
-    console.error("Erro ao buscar endereços:", error);
+
     return NextResponse.json(
       { message: "Erro interno do servidor" },
       { status: 500 }
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     const newAddress = await database.query(`SELECT * FROM addresses WHERE id = LAST_INSERT_ID()`);
     return NextResponse.json(newAddress[0], { status: 201 });
   } catch (error) {
-    console.error("Erro ao criar endereço:", error);
+
     return NextResponse.json(
       { message: "Erro interno do servidor" },
       { status: 500 }

@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const filters = {
       category_id: searchParams.get('category_id') ? parseInt(searchParams.get('category_id')!) : undefined,
+      category_slug: searchParams.get('categoria') || undefined,
       subcategory_id: searchParams.get('subcategory_id') ? parseInt(searchParams.get('subcategory_id')!) : undefined,
       subcategory_slug: searchParams.get('subcategory_slug') || undefined,
       color: searchParams.get('color') || undefined,

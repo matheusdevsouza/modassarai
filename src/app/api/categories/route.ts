@@ -17,7 +17,7 @@ export async function GET() {
       data: mappedCategories || []
     })
   } catch (error) {
-    console.error('Erro ao buscar categorias:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor',

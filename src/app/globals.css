@@ -213,7 +213,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *:not(.spinner-gold):not(.spinner-gold-reverse):not(.spinner-gold-slow):not(.category-card-container):not(.category-card-image-wrapper):not(.category-card-overlay):not(.category-card-title):not(.category-card-description):not(.category-card-button):not(.category-card-arrow):not(.category-card-link) {
+  *:not(.spinner-gold):not(.spinner-gold-reverse):not(.spinner-gold-slow):not(.category-card-container):not(.category-card-image-wrapper):not(.category-card-overlay):not(.category-card-title):not(.category-card-description):not(.category-card-button):not(.category-card-arrow):not(.category-card-link):not(.animate-spin) {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -464,6 +464,9 @@ a {
   to {
     transform: rotate(360deg);
   }
+}
+.animate-spin {
+  animation: spin 1s linear infinite !important;
 }
 .spinner-gold {
   animation: spin 1s linear infinite !important;

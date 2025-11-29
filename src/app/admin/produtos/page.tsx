@@ -20,7 +20,8 @@ import {
   FaBars,
   FaTimes,
   FaChevronDown,
-  FaChevronUp
+  FaChevronUp,
+  FaCheck
 } from 'react-icons/fa';
 import Link from 'next/link'
 import CreateProductModal from '@/components/admin/CreateProductModal'
@@ -51,6 +52,15 @@ interface Model {
   image_url?: string;
   is_active?: boolean;
 }
+interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  image_url?: string;
+  is_active: boolean;
+  is_associated?: boolean;
+}
 const getProductImage = (product: Product): string | null => {
   if (product.primary_image) {
     return product.primary_image;
@@ -79,6 +89,13 @@ export default function ProdutosPage() {
   const [isTablet, setIsTablet] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
+  const [productCategories, setProductCategories] = useState<Record<number, Category[]>>({});
+  const [showCategoriesModal, setShowCategoriesModal] = useState<number | null>(null);
+  const [availableCategories, setAvailableCategories] = useState<Category[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [categorySearchTerm, setCategorySearchTerm] = useState('');
+  const [addingCategories, setAddingCategories] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState<Record<number, boolean>>({});
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
@@ -103,7 +120,7 @@ export default function ProdutosPage() {
         setProducts([]);
       }
     } catch (error) {
-      console.error('Erro ao buscar produtos:', error);
+
       setError('Erro ao conectar com o servidor');
       setProducts([]);
     } finally {
@@ -118,7 +135,7 @@ export default function ProdutosPage() {
         setModels(result.data || []);
       }
     } catch (error) {
-      console.error('Erro ao buscar modelos:', error);
+
     }
   }, []);
   useEffect(() => {
@@ -144,6 +161,149 @@ export default function ProdutosPage() {
     fetchProducts();
     fetchModels();
   }, [fetchProducts, fetchModels]);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      products.forEach(product => {
+        if (!productCategories[product.id] && !loadingCategories[product.id]) {
+          fetchProductCategories(product.id);
+        }
+      });
+    }
+  }, [products]);
+
+  const fetchProductCategories = async (productId: number) => {
+    try {
+      setLoadingCategories(prev => ({ ...prev, [productId]: true }));
+      const response = await fetch(`/api/admin/products/${productId}/categories`);
+      const result = await response.json();
+      if (result.success) {
+        setProductCategories(prev => ({
+          ...prev,
+          [productId]: result.data || []
+        }));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar categorias do produto:', error);
+    } finally {
+      setLoadingCategories(prev => ({ ...prev, [productId]: false }));
+    }
+  };
+
+  const fetchAvailableCategories = async (productId: number) => {
+    try {
+      const params = new URLSearchParams({
+        search: categorySearchTerm
+      });
+      const response = await fetch(`/api/admin/products/${productId}/available-categories?${params}`);
+      const result = await response.json();
+      if (result.success) {
+        const categories = result.data?.categories || result.data || [];
+        setAvailableCategories(categories);
+        const associatedIds = categories
+          .filter((cat: Category) => cat.is_associated)
+          .map((cat: Category) => cat.id);
+        setSelectedCategories(associatedIds);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar categorias disponíveis:', error);
+    }
+  };
+
+  const handleAddCategories = async (productId: number) => {
+    setAddingCategories(true);
+    try {
+      const categoriesToAdd: number[] = [];
+      const categoriesToRemove: number[] = [];
+      
+      availableCategories.forEach(category => {
+        const isSelected = selectedCategories.includes(category.id);
+        if (category.is_associated && !isSelected) {
+          categoriesToRemove.push(category.id);
+        } else if (!category.is_associated && isSelected) {
+          categoriesToAdd.push(category.id);
+        }
+      });
+
+      for (const categoryId of categoriesToAdd) {
+        const response = await fetch(`/api/admin/products/${productId}/categories`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ categoryId })
+        });
+        const result = await response.json();
+        if (!result.success) {
+          console.error('Erro ao adicionar categoria:', result.error);
+        }
+      }
+
+      for (const categoryId of categoriesToRemove) {
+        const response = await fetch(`/api/admin/products/${productId}/categories?categoryId=${categoryId}`, {
+          method: 'DELETE'
+        });
+        const result = await response.json();
+        if (!result.success) {
+          console.error('Erro ao remover categoria:', result.error);
+        }
+      }
+
+      const addedCount = categoriesToAdd.length;
+      const removedCount = categoriesToRemove.length;
+      
+      if (addedCount === 0 && removedCount === 0) {
+        setAddingCategories(false);
+        return;
+      }
+      
+      let message = '';
+      if (addedCount > 0 && removedCount > 0) {
+        message = `${addedCount} categoria(s) adicionada(s) e ${removedCount} categoria(s) removida(s) com sucesso!`;
+      } else if (addedCount > 0) {
+        message = `${addedCount} categoria(s) adicionada(s) com sucesso!`;
+      } else if (removedCount > 0) {
+        message = `${removedCount} categoria(s) removida(s) com sucesso!`;
+      }
+      
+      if (message) {
+        alert(message);
+      }
+      
+      await fetchProductCategories(productId);
+      
+      await fetchAvailableCategories(productId);
+      
+      setSelectedCategories([]);
+      setShowCategoriesModal(null);
+      setCategorySearchTerm('');
+    } catch (error) {
+      console.error('Erro ao atualizar categorias:', error);
+      alert('Erro ao conectar com o servidor');
+    } finally {
+      setAddingCategories(false);
+    }
+  };
+
+  const handleRemoveCategory = async (productId: number, categoryId: number, categoryName: string) => {
+    if (!confirm(`Tem certeza que deseja remover a categoria "${categoryName}" deste produto?`)) {
+      return;
+    }
+    try {
+      const response = await fetch(`/api/admin/products/${productId}/categories?categoryId=${categoryId}`, {
+        method: 'DELETE'
+      });
+      const result = await response.json();
+      if (result.success) {
+        fetchProductCategories(productId);
+      } else {
+        alert(result.error || 'Erro ao remover categoria');
+      }
+    } catch (error) {
+      console.error('Erro ao remover categoria:', error);
+      alert('Erro ao conectar com o servidor');
+    }
+  };
   const handleSort = (field: string) => {
     if (sortBy === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -170,7 +330,7 @@ export default function ProdutosPage() {
         alert('Erro ao remover produto: ' + result.error);
       }
     } catch (error) {
-      console.error('Erro ao remover produto:', error);
+
       alert('Erro ao conectar com o servidor');
     }
   };
@@ -480,6 +640,12 @@ export default function ProdutosPage() {
                       {getSortIcon('status')}
                     </button>
                   </th>
+                  <th className="px-2 lg:px-4 py-3 text-left hidden md:table-cell">
+                    <div className="flex items-center gap-1 text-sage-700 font-semibold text-xs lg:text-sm">
+                      <FaTags size={14} />
+                      Categorias
+                    </div>
+                  </th>
                   <th className="px-2 lg:px-4 py-3 text-center text-xs lg:text-sm text-sage-700">Ações</th>
                 </tr>
               </thead>
@@ -544,6 +710,57 @@ export default function ProdutosPage() {
                         {product.is_active ? 'Ativo' : 'Inativo'}
                       </span>
                     </td>
+                    <td className="px-2 lg:px-4 py-3 hidden md:table-cell">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {loadingCategories[product.id] ? (
+                          <FaSpinner className="animate-spin text-primary-500" size={14} />
+                        ) : productCategories[product.id] && productCategories[product.id].length > 0 ? (
+                          <>
+                            {productCategories[product.id].map((category) => (
+                              <span
+                                key={category.id}
+                                className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded-lg text-xs font-medium border border-primary-200 group"
+                              >
+                                <span>{category.name}</span>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveCategory(product.id, category.id, category.name);
+                                  }}
+                                  className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-700 transition-opacity"
+                                  title="Remover categoria"
+                                >
+                                  <FaTimes size={10} />
+                                </button>
+                              </span>
+                            ))}
+                            <button
+                              onClick={() => {
+                                setShowCategoriesModal(product.id);
+                                setCategorySearchTerm('');
+                                fetchAvailableCategories(product.id);
+                              }}
+                              className="inline-flex items-center gap-1 px-2 py-1 bg-primary-500 hover:bg-primary-600 text-white rounded-lg text-xs font-medium transition-colors"
+                              title="Adicionar categoria"
+                            >
+                              <FaPlus size={10} />
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setShowCategoriesModal(product.id);
+                              setCategorySearchTerm('');
+                              fetchAvailableCategories(product.id);
+                            }}
+                            className="inline-flex items-center gap-1 px-2 py-1 bg-primary-500 hover:bg-primary-600 text-white rounded-lg text-xs font-medium transition-colors"
+                            title="Adicionar categoria"
+                          >
+                            <FaPlus size={10} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-2 lg:px-4 py-3">
                       <div className="flex items-center justify-center gap-1">
                         <Link href={`/admin/produtos/${product.id}`} className="p-1 text-primary-600 hover:text-primary-700 hover:bg-primary-100 rounded-lg transition-all duration-300">
@@ -563,7 +780,7 @@ export default function ProdutosPage() {
                   </motion.tr>
                 )) : (
                   <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center">
+                    <td colSpan={6} className="px-6 py-12 text-center">
                       <div className="text-sage-500">
                         <FaBox className="mx-auto mb-4 text-sage-400" size={48} />
                         <h3 className="text-lg font-medium text-sage-700 mb-2">Nenhum produto encontrado</h3>
@@ -696,6 +913,148 @@ export default function ProdutosPage() {
           setShowCreateModal(false);
         }}
       />
+      {showCategoriesModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white rounded-2xl border border-primary-100 w-full max-w-5xl max-h-[85vh] overflow-hidden shadow-2xl"
+          >
+            <div className="p-6 border-b border-primary-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center">
+                    <FaTags className="text-primary-600" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-sage-900">Gerenciar Categorias do Produto</h3>
+                    <p className="text-sm text-sage-600">Selecione ou desmarque as categorias que deseja associar</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowCategoriesModal(null);
+                    setSelectedCategories([]);
+                    setCategorySearchTerm('');
+                  }}
+                  className="p-2 text-sage-400 hover:text-sage-600 hover:bg-primary-50 rounded-lg transition-colors"
+                >
+                  <FaTimes size={20} />
+                </button>
+              </div>
+              <div className="mt-4">
+                <div className="relative">
+                  <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-sage-500" size={16} />
+                  <input
+                    type="text"
+                    placeholder="Buscar categorias por nome..."
+                    value={categorySearchTerm}
+                    onChange={(e) => {
+                      setCategorySearchTerm(e.target.value);
+                      setTimeout(() => fetchAvailableCategories(showCategoriesModal), 300);
+                    }}
+                    className="w-full pl-12 pr-4 py-3 bg-primary-50 border border-primary-100 rounded-xl text-sage-900 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[50vh]">
+              {availableCategories.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {availableCategories.map((category) => (
+                    <motion.div
+                      key={category.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`bg-white border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 ${
+                        selectedCategories.includes(category.id)
+                          ? category.is_associated
+                            ? 'border-primary-500 bg-primary-50 shadow-md'
+                            : 'border-primary-500 bg-primary-50 shadow-md'
+                          : 'border-primary-100 hover:border-primary-300 hover:shadow-sm'
+                      }`}
+                      onClick={() => {
+                        setSelectedCategories(prev => 
+                          prev.includes(category.id)
+                            ? prev.filter(id => id !== category.id)
+                            : [...prev, category.id]
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                          <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
+                            selectedCategories.includes(category.id)
+                              ? category.is_associated
+                                ? 'border-primary-500 bg-primary-500'
+                                : 'border-primary-500 bg-primary-500'
+                              : 'border-sage-300 bg-white'
+                          }`}>
+                            {selectedCategories.includes(category.id) && (
+                              <FaCheck className="text-white text-xs" />
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="text-sage-900 font-semibold text-sm truncate">{category.name}</p>
+                            {category.is_associated && (
+                              <span className="flex-shrink-0 text-xs bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full border border-primary-200">
+                                Associada
+                              </span>
+                            )}
+                          </div>
+                          {category.description && (
+                            <p className="text-sage-600 text-xs truncate">{category.description}</p>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FaTags className="text-sage-400 text-3xl" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-sage-900 mb-2">Nenhuma categoria disponível</h3>
+                  <p className="text-sage-600 text-sm">Todas as categorias já estão associadas ou tente ajustar sua busca</p>
+                </div>
+              )}
+            </div>
+            <div className="p-6 border-t border-primary-100 bg-primary-50">
+              <div className="flex items-center justify-between">
+                <p className="text-sage-700 font-medium text-sm">
+                  {selectedCategories.length} categoria(s) selecionada(s)
+                </p>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => {
+                      setShowCategoriesModal(null);
+                      setSelectedCategories([]);
+                      setCategorySearchTerm('');
+                    }}
+                    className="px-6 py-3 bg-white border border-primary-200 text-sage-700 rounded-xl hover:bg-primary-50 hover:border-primary-300 transition-all duration-200 font-medium"
+                  >
+                    Cancelar
+                  </button>
+                  <motion.button
+                    onClick={() => handleAddCategories(showCategoriesModal)}
+                    disabled={addingCategories}
+                    whileHover={{ scale: !addingCategories ? 1.02 : 1 }}
+                    whileTap={{ scale: !addingCategories ? 0.98 : 1 }}
+                    className="px-6 py-3 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-semibold shadow-lg shadow-primary-100/50"
+                  >
+                    {addingCategories && <FaSpinner className="animate-spin" size={16} />}
+                    <span>Salvar ({selectedCategories.length})</span>
+                  </motion.button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

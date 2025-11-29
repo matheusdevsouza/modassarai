@@ -8,26 +8,19 @@ export async function GET(request: NextRequest) {
   try {
     const user = await authenticateUser(request);
     if (!user) {
-      console.error('[PRODUTOS] ❌ Usuário não autenticado');
+
       return NextResponse.json(
         { success: false, error: 'Acesso negado. Autenticação necessária.' },
         { status: 401 }
       );
     }
-    
-    console.log(`[PRODUTOS] 🔍 Verificando acesso admin para userId: ${user.userId}, email: ${user.email}`);
+
     const isAdmin = await verifyAdminAccess(user, database.query);
     
     if (!isAdmin) {
       const dbCheck = await database.query('SELECT id, is_admin, email FROM users WHERE id = ?', [user.userId]);
-      console.error(`[PRODUTOS] ❌ Acesso negado - UserId: ${user.userId}`);
-      console.error(`[PRODUTOS] 🔍 Debug - DB result:`, dbCheck?.[0] ? {
-        id: dbCheck[0].id,
-        is_admin: dbCheck[0].is_admin,
-        is_admin_type: typeof dbCheck[0].is_admin,
-        email: dbCheck[0].email
-      } : 'Usuário não encontrado');
-      
+
+
       return NextResponse.json(
         { 
           success: false, 
@@ -45,8 +38,7 @@ export async function GET(request: NextRequest) {
         { status: 403 }
       );
     }
-    
-    console.log(`[PRODUTOS] ✅ Acesso permitido para admin userId: ${user.userId}`);
+
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -69,18 +61,31 @@ export async function GET(request: NextRequest) {
       LEFT JOIN models m ON p.model_id = m.id
       LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
     `;
-    const conditions = [];
+    const conditions: string[] = [];
+    const params: any[] = [];
+    
     if (search) {
-      conditions.push(`(p.name LIKE '%${search}%' OR p.description LIKE '%${search}%')`);
+      conditions.push(`(p.name LIKE ? OR p.description LIKE ?)`);
+      const searchTerm = `%${search}%`;
+      params.push(searchTerm, searchTerm);
     }
     if (category !== 'all') {
-      conditions.push(`p.category_id = ${parseInt(category)}`);
+      const categoryId = parseInt(category);
+      if (!isNaN(categoryId)) {
+        conditions.push(`p.category_id = ?`);
+        params.push(categoryId);
+      }
     }
     if (model !== 'all') {
-      conditions.push(`p.model_id = ${parseInt(model)}`);
+      const modelId = parseInt(model);
+      if (!isNaN(modelId)) {
+        conditions.push(`p.model_id = ?`);
+        params.push(modelId);
+      }
     }
     if (status !== 'all') {
-      conditions.push(`p.is_active = ${status === 'active' ? 'TRUE' : 'FALSE'}`);
+      conditions.push(`p.is_active = ?`);
+      params.push(status === 'active' ? true : false);
     }
     if (newProducts === 'true') {
       conditions.push(`p.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)`);
@@ -88,15 +93,22 @@ export async function GET(request: NextRequest) {
     if (conditions.length > 0) {
       query += ' WHERE ' + conditions.join(' AND ');
     }
-    if (sortBy === 'name') query += ` ORDER BY p.name ${sortOrder}`;
-    else if (sortBy === 'price') query += ` ORDER BY p.price ${sortOrder}`;
-    else if (sortBy === 'stock') query += ` ORDER BY p.stock_quantity ${sortOrder}`;
-    else if (sortBy === 'category') query += ` ORDER BY c.name ${sortOrder}`;
-    else if (sortBy === 'model') query += ` ORDER BY m.name ${sortOrder}`;
-    else if (sortBy === 'status') query += ` ORDER BY p.is_active ${sortOrder}`;
-    else query += ` ORDER BY p.created_at ${sortOrder}`;
-    query += ` LIMIT ${limit} OFFSET ${skip}`;
-    const products = await database.query(query);
+    
+    const validSortColumns = ['name', 'price', 'stock_quantity', 'created_at'];
+    const validSortOrders = ['ASC', 'DESC'];
+    const safeSortBy = validSortColumns.includes(sortBy) ? sortBy : 'created_at';
+    const safeSortOrder = validSortOrders.includes(sortOrder.toUpperCase()) ? sortOrder.toUpperCase() : 'DESC';
+    
+    if (safeSortBy === 'name') query += ` ORDER BY p.name ${safeSortOrder}`;
+    else if (safeSortBy === 'price') query += ` ORDER BY p.price ${safeSortOrder}`;
+    else if (safeSortBy === 'stock_quantity') query += ` ORDER BY p.stock_quantity ${safeSortOrder}`;
+    else query += ` ORDER BY p.created_at ${safeSortOrder}`;
+    
+    query += ` LIMIT ? OFFSET ?`;
+    params.push(limit, skip);
+    
+    const products = await database.query(query, params);
+    
     let countQuery = `
       SELECT COUNT(DISTINCT p.id) as total
       FROM products p
@@ -104,10 +116,36 @@ export async function GET(request: NextRequest) {
       LEFT JOIN models m ON p.model_id = m.id
       LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
     `;
+    const countParams: any[] = [];
     if (conditions.length > 0) {
-      countQuery += ' WHERE ' + conditions.join(' AND ');
+      const countConditions = conditions.filter((cond, idx) => {
+        if (cond.includes('DATE_SUB')) return true; 
+        return true;
+      });
+      if (countConditions.length > 0) {
+        countQuery += ' WHERE ' + countConditions.join(' AND ');
+        if (search) {
+          const searchTerm = `%${search}%`;
+          countParams.push(searchTerm, searchTerm);
+        }
+        if (category !== 'all') {
+          const categoryId = parseInt(category);
+          if (!isNaN(categoryId)) {
+            countParams.push(categoryId);
+          }
+        }
+        if (model !== 'all') {
+          const modelId = parseInt(model);
+          if (!isNaN(modelId)) {
+            countParams.push(modelId);
+          }
+        }
+        if (status !== 'all') {
+          countParams.push(status === 'active' ? true : false);
+        }
+      }
     }
-    const countResult = await database.query(countQuery);
+    const countResult = await database.query(countQuery, countParams);
     const total = countResult[0]?.total || 0;
     return NextResponse.json({
       success: true,
@@ -122,7 +160,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Erro ao buscar produtos:', error)
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor',
@@ -258,7 +296,7 @@ export async function POST(request: NextRequest) {
       product: { id: productId, slug }
     });
   } catch (error) {
-    console.error('Erro ao criar produto:', error);
+
     return NextResponse.json({
       success: false,
       error: 'Erro interno do servidor'

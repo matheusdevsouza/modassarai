@@ -12,7 +12,6 @@ function legacyDecrypt(text: string): string {
     decrypted += decipher.final('utf8');
     return decrypted;
   } catch (error) {
-    console.error('Erro ao descriptografar (Legacy):', error);
     return '';
   }
 }
@@ -26,7 +25,6 @@ export function decrypt(text: string): string {
     try {
       return secureDecrypt(text);
     } catch (error) {
-      console.warn('Falha ao descriptografar GCM, tentando método legado:', error);
     }
   }
   return legacyDecrypt(text);
@@ -119,7 +117,6 @@ export function formatAddress(addressString: string): {
       shipping_cost: address.shipping_cost || 0
     };
   } catch (error) {
-    console.error('Erro ao formatar endereço:', error);
     return null;
   }
 }
@@ -159,7 +156,6 @@ export function decryptOrderData(orderData: any): any {
       try {
         decrypted[field] = decrypt(decrypted[field]);
       } catch (error) {
-        console.warn(`Failed to decrypt order field ${field}:`, error);
       }
     }
   }

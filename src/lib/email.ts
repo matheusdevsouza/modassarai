@@ -77,7 +77,7 @@ const saveEmailToFile = async (mailOptions: any) => {
     fs.writeFileSync(filepath, emailContent);
     return true;
   } catch (error) {
-    console.error('Erro ao salvar email:', error);
+
     return false;
   }
 };

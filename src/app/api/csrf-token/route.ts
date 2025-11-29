@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error('Erro ao gerar token CSRF:', error);
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }

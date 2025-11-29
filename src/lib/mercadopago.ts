@@ -52,7 +52,7 @@ export async function createOrderAndRedirect(checkoutData: CheckoutData) {
     }
     return result;
   } catch (error) {
-    console.error('Erro no checkout:', error);
+
     throw error;
   }
 }
@@ -64,7 +64,7 @@ export async function checkOrderStatus(orderId: number) {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erro ao verificar status:', error);
+
     throw error;
   }
 }
@@ -76,7 +76,7 @@ export async function getOrderById(orderId: number) {
     }
     return await response.json();
   } catch (error) {
-    console.error('Erro ao buscar pedido:', error);
+
     throw error;
   }
 }

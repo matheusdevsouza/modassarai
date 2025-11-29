@@ -65,7 +65,7 @@ export default function ModelDetailsPage() {
         setError(result.error || 'Erro ao carregar modelo');
       }
     } catch (error) {
-      console.error('Erro ao carregar modelo:', error);
+
       setError('Erro ao conectar com o servidor');
     }
   }, [modelId]);
@@ -76,10 +76,10 @@ export default function ModelDetailsPage() {
       if (result.success) {
         setProducts(result.data);
       } else {
-        console.error('Erro ao carregar produtos do modelo:', result.error);
+
       }
     } catch (error) {
-      console.error('Erro ao carregar produtos do modelo:', error);
+
     } finally {
       setLoading(false);
     }
@@ -105,10 +105,10 @@ export default function ModelDetailsPage() {
       if (result.success) {
         setAvailableProducts(result.data.products);
       } else {
-        console.error('Erro ao carregar produtos disponíveis:', result.error);
+
       }
     } catch (error) {
-      console.error('Erro ao carregar produtos disponíveis:', error);
+
     }
   };
   const handleAddProducts = async () => {
@@ -135,7 +135,7 @@ export default function ModelDetailsPage() {
         alert(result.error || 'Erro ao adicionar produtos');
       }
     } catch (error) {
-      console.error('Erro ao adicionar produtos:', error);
+
       alert('Erro ao conectar com o servidor');
     } finally {
       setAddingProducts(false);
@@ -164,7 +164,7 @@ export default function ModelDetailsPage() {
         alert(result.error || 'Erro ao remover produto');
       }
     } catch (error) {
-      console.error('Erro ao remover produto:', error);
+
       alert('Erro ao conectar com o servidor');
     }
   };
@@ -185,7 +185,7 @@ export default function ModelDetailsPage() {
         alert(result.error || 'Erro ao excluir modelo');
       }
     } catch (error) {
-      console.error('Erro ao excluir modelo:', error);
+
       alert('Erro ao conectar com o servidor');
     }
   };

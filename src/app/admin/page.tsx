@@ -75,7 +75,7 @@ export default function AdminDashboard() {
         setError(result.error || 'Erro ao carregar estatísticas');
       }
     } catch (error) {
-      console.error('Erro ao buscar estatísticas:', error);
+
       setError('Erro ao conectar com o servidor');
     } finally {
       setLoading(false);

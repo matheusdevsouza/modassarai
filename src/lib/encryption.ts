@@ -8,7 +8,7 @@ const HASH_ALGORITHM = 'sha512';
 export const ENCRYPTION_ENABLED = !!ENCRYPTION_KEY && ENCRYPTION_KEY.length >= 32;
 function checkEncryptionAvailable() {
   if (!ENCRYPTION_ENABLED) {
-    console.warn('⚠️ Criptografia desabilitada - configure ENCRYPTION_KEY para habilitar');
+
     return false;
   }
   return true;
@@ -40,7 +40,7 @@ export function encrypt(text: string): string {
     const authTag = cipher.getAuthTag();
     return `${salt.toString('hex')}:${iv.toString('hex')}:${authTag.toString('hex')}:${encrypted}`;
   } catch (error) {
-    console.error('Encryption error:', error);
+
     throw new Error('Failed to encrypt data');
   }
 }
@@ -71,7 +71,7 @@ export function decrypt(encryptedText: string): string {
     decrypted += decipher.final('utf8');
     return decrypted;
   } catch (error) {
-    console.error('Decryption error:', error);
+
     return encryptedText;
   }
 }
@@ -90,7 +90,7 @@ export function hashUserId(userId: number): string {
       .digest('hex');
     return hash.substring(0, 16);
   } catch (error) {
-    console.error('User ID hashing error:', error);
+
     throw new Error('Failed to hash user ID');
   }
 }
@@ -99,7 +99,7 @@ export function verifyUserIdHash(hash: string, userId: number): boolean {
     const generatedHash = hashUserId(userId);
     return generatedHash === hash;
   } catch (error) {
-    console.error('User ID verification error:', error);
+
     return false;
   }
 }
@@ -140,9 +140,8 @@ export function decryptPersonalData(data: any): any {
         if (isEncrypted) {
           decrypted[field] = decrypt(value);
         }
-        } catch (error) {
-          console.warn(`Failed to decrypt field ${field}:`, error instanceof Error ? error.message : String(error));
-        }
+      } catch (error) {
+      }
     }
   }
   return decrypted;
@@ -158,14 +157,12 @@ export function searchUserByEmail(users: any[], email: string): any | null {
         try {
           userEmail = decrypt(userEmail);
         } catch (error) {
-          console.warn('Erro ao descriptografar email para busca:', error instanceof Error ? error.message : String(error));
         }
       }
       if (userEmail && userEmail.toLowerCase() === email.toLowerCase()) {
         return decryptPersonalData(user);
       }
     } catch (error) {
-      console.warn('Erro ao processar usuário na busca por email:', error instanceof Error ? error.message : String(error));
       continue;
     }
   }
@@ -189,7 +186,6 @@ export function decryptForAdmin(data: any): any {
           decrypted[field] = decrypt(value);
         }
       } catch (error) {
-        console.warn(`Erro ao descriptografar ${field} para admin:`, error instanceof Error ? error.message : String(error));
       }
     }
   }
@@ -199,7 +195,7 @@ export function decryptUsersForAdmin(users: any[]): any[] {
   if (!Array.isArray(users)) {
     return users;
   }
-  console.log(`🔓 Descriptografando ${users.length} usuários para visualização do admin...`);
+
   return users.map((user, index) => {
     try {
       const decryptedUser = { ...user };
@@ -215,14 +211,14 @@ export function decryptUsersForAdmin(users: any[]): any[] {
           const isEncrypted = value.includes(':') && value.split(':').length === 4;
           if (isEncrypted) {
             const decrypted = decrypt(value);
-            console.log(`   ✅ ${fieldName}: descriptografado com sucesso`);
+
             return decrypted;
           } else {
-            console.log(`   ℹ️ ${fieldName}: já em texto plano`);
+
             return value;
           }
         } catch (error) {
-          console.warn(`   ⚠️ ${fieldName}: falha na descriptografia, mantendo valor original`);
+
           return value;
         }
       };
@@ -235,7 +231,7 @@ export function decryptUsersForAdmin(users: any[]): any[] {
       decryptedUser._decrypted_at = new Date().toISOString();
       return decryptedUser;
     } catch (error) {
-      console.error(`❌ Erro ao descriptografar usuário ${index + 1}:`, error);
+
       return {
         ...user,
         _decryption_status: 'error',
@@ -249,7 +245,7 @@ export function decryptSingleUserForAdmin(user: any): any {
   if (!user || typeof user !== 'object') {
     return user;
   }
-  console.log(`🔓 Descriptografando usuário ${user.id || 'desconhecido'} para admin...`);
+
   try {
     const decryptedUser = { ...user };
     const adminFields = [
@@ -266,14 +262,14 @@ export function decryptSingleUserForAdmin(user: any): any {
           if (isEncrypted) {
             decryptedUser[field] = decrypt(value);
             decryptedCount++;
-            console.log(`   ✅ ${field}: descriptografado`);
+
           } else {
             plaintextCount++;
-            console.log(`   ℹ️ ${field}: texto plano`);
+
           }
         } catch (error) {
           errorCount++;
-          console.warn(`   ⚠️ ${field}: erro na descriptografia`);
+
         }
       }
     });
@@ -287,10 +283,10 @@ export function decryptSingleUserForAdmin(user: any): any {
         total_processed: decryptedCount + plaintextCount + errorCount
       }
     };
-    console.log(`   📊 Estatísticas: ${decryptedCount} descriptografados, ${plaintextCount} texto plano, ${errorCount} erros`);
+
     return decryptedUser;
   } catch (error) {
-    console.error('❌ Erro crítico na descriptografia do usuário:', error);
+
     return {
       ...user,
       _admin_decryption: {
@@ -312,7 +308,7 @@ export function verifyPassword(password: string, hashedPassword: string): boolea
     const verifyHash = crypto.pbkdf2Sync(password, salt, HASH_ITERATIONS, 64, HASH_ALGORITHM);
     return hash === verifyHash.toString('hex');
   } catch (error) {
-    console.error('Password verification error:', error);
+
     return false;
   }
 }
@@ -355,7 +351,7 @@ export function decryptOrderData(orderData: any): any {
       try {
         decrypted[field] = decrypt(decrypted[field]);
       } catch (error) {
-        console.warn(`Failed to decrypt order field ${field}:`, error);
+
       }
     }
   }
@@ -394,7 +390,7 @@ export function encryptCheckoutData(checkoutData: any): any {
     }
     return encryptedData;
   } catch (error) {
-    console.error('Error encrypting checkout data:', error);
+
     return checkoutData;
   }
 }
@@ -422,13 +418,13 @@ export function decryptCheckoutData(encryptedData: any): any {
           }
           decryptedData.shipping_address = JSON.stringify(addressObj);
         } catch {
-          console.warn('Could not decrypt shipping address, returning original data');
+
         }
       }
     }
     return decryptedData;
   } catch (error) {
-    console.error('Error decrypting checkout data:', error);
+
     return encryptedData;
   }
 }

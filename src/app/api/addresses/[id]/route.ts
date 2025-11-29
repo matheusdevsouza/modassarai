@@ -38,7 +38,7 @@ export async function PUT(
     const updatedAddress = await database.query(`SELECT * FROM addresses WHERE id = ?`, [addressId]);
     return NextResponse.json(updatedAddress[0]);
   } catch (error) {
-    console.error("Erro ao atualizar endereço:", error);
+
     return NextResponse.json(
       { message: "Erro interno do servidor" },
       { status: 500 }
@@ -72,7 +72,7 @@ export async function DELETE(
     }
     return NextResponse.json({ message: "Endereço excluído com sucesso" });
   } catch (error) {
-    console.error("Erro ao excluir endereço:", error);
+
     return NextResponse.json(
       { message: "Erro interno do servidor" },
       { status: 500 }

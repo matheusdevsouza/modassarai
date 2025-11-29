@@ -233,7 +233,7 @@ function detectSuspiciousPatterns(request: NextRequest): boolean {
 function setSecurityHeaders(response: NextResponse): NextResponse {
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com",
+    "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
     "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
     "img-src 'self' data: https: blob:",
@@ -243,7 +243,8 @@ function setSecurityHeaders(response: NextResponse): NextResponse {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "upgrade-insecure-requests"
+    "upgrade-insecure-requests",
+    "block-all-mixed-content"
   ].join('; ');
 
   response.headers.set('X-Content-Type-Options', 'nosniff');
@@ -252,6 +253,7 @@ function setSecurityHeaders(response: NextResponse): NextResponse {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()');
   response.headers.set('Content-Security-Policy', csp);
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   response.headers.set('X-Audit-ID', `audit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   response.headers.set('X-Security-Level', 'HIGH');
   response.headers.set('X-Protection-Status', 'ACTIVE');

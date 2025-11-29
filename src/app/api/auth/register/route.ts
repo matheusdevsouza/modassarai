@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
         verificationToken,
       });
     } catch (emailError) {
-      console.error('Erro ao enviar email de verificação:', emailError);
+
     }
     const safeUser = processSafeUserData(createdUser);
     return NextResponse.json({
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Erro no registro:', error);
+
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

@@ -116,14 +116,6 @@ export function checkRateLimit(
   if (info.count > config.maxAttempts) {
     info.blocked = true;
     info.blockExpiry = now + config.blockDuration;
-    if (request) {
-      console.warn(`Rate limit exceeded for ${type}:`, {
-        identifier,
-        ip: getClientIP(request),
-        userAgent: getUserAgent(request),
-        timestamp: new Date().toISOString(),
-      });
-    }
     return {
       allowed: false,
       remaining: 0,

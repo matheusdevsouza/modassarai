@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
       data: formattedTestimonials
     })
   } catch (error) {
-    console.error('Erro ao buscar depoimentos:', error)
     return NextResponse.json(
       { success: false, error: 'Erro interno do servidor' },
       { status: 500 }

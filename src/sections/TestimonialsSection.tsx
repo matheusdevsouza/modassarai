@@ -17,34 +17,41 @@ interface Testimonial {
   updated_at: string
 }
 const TestimonialsSkeleton = () => (
-  <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-sand-100 overflow-hidden">
-    <div className="container mx-auto px-4 sm:px-6">
+  <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden" style={{ 
+    backgroundColor: '#0d0d0d',
+    backgroundImage: `
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
+    `,
+    backgroundSize: '40px 40px'
+  }}>
+    <div className="container mx-auto px-4 sm:px-6 relative" style={{ zIndex: 10 }}>
       <div className="text-center mb-8 sm:mb-12 md:mb-16 space-y-6">
-        <div className="h-5 w-40 bg-black/20 rounded-full mx-auto animate-pulse" />
-        <div className="h-12 md:h-16 w-full max-w-3xl bg-black/30 rounded-lg mx-auto animate-pulse" />
-        <div className="h-6 w-full max-w-2xl bg-black/20 rounded-lg mx-auto animate-pulse" />
-        <div className="h-px w-32 bg-black/10 mx-auto" />
+        <div className="h-5 w-40 bg-white/10 rounded-full mx-auto animate-pulse" />
+        <div className="h-12 md:h-16 w-full max-w-3xl bg-white/10 rounded-lg mx-auto animate-pulse" />
+        <div className="h-6 w-full max-w-2xl bg-white/5 rounded-lg mx-auto animate-pulse" />
+        <div className="h-px w-32 bg-white/10 mx-auto" />
       </div>
       <div className="relative">
         <div className="overflow-hidden">
           <div className="flex gap-6 pb-8 justify-center">
-            <div className="rounded-2xl p-6 sm:p-8 border border-black/10 w-full max-w-lg mx-auto" style={{ backgroundColor: '#FDF8F2' }}>
+            <div className="rounded-2xl p-6 sm:p-8 border border-white/10 w-full max-w-lg mx-auto bg-white/5">
               <div className="mb-6 space-y-3">
-                <div className="h-4 bg-black/30 rounded-md animate-pulse" />
-                <div className="h-4 bg-black/30 rounded-md w-4/5 animate-pulse" />
-                <div className="h-4 bg-black/30 rounded-md w-3/5 animate-pulse" />
+                <div className="h-4 bg-white/10 rounded-md animate-pulse" />
+                <div className="h-4 bg-white/10 rounded-md w-4/5 animate-pulse" />
+                <div className="h-4 bg-white/10 rounded-md w-3/5 animate-pulse" />
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-black/40 animate-pulse" />
+                  <div className="w-12 h-12 rounded-full bg-white/10 animate-pulse" />
                   <div>
-                    <div className="h-4 w-24 bg-black/40 rounded-md mb-1 animate-pulse" />
-                    <div className="h-3 w-20 bg-black/30 rounded-md animate-pulse" />
+                    <div className="h-4 w-24 bg-white/10 rounded-md mb-1 animate-pulse" />
+                    <div className="h-3 w-20 bg-white/5 rounded-md animate-pulse" />
                   </div>
                 </div>
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <div key={i} className="w-4 h-4 bg-black/30 rounded-sm animate-pulse" />
+                    <div key={i} className="w-4 h-4 bg-white/10 rounded-sm animate-pulse" />
                   ))}
                 </div>
               </div>
@@ -53,7 +60,7 @@ const TestimonialsSkeleton = () => (
         </div>
         <div className="flex justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-1 sm:h-1.5 rounded-full bg-black/20 w-1.5 sm:w-2 animate-pulse" />
+            <div key={i} className="h-1 sm:h-1.5 rounded-full bg-white/10 w-1.5 sm:w-2 animate-pulse" />
           ))}
         </div>
       </div>
@@ -262,6 +269,23 @@ export function TestimonialsSection() {
               <span className="relative z-10 bg-gradient-to-r from-primary-400 via-primary-300 to-primary-400 bg-clip-text text-transparent">
                 clientes contam
               </span>
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ 
+                  width: ['0%', '100%', '100%', '0%', '0%']
+                }}
+                viewport={{ once: false }}
+                transition={{ 
+                  duration: 12,
+                  delay: 0.8,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  ease: "easeInOut",
+                  times: [0, 0.08, 0.5, 0.58, 1]
+                }}
+                className="absolute bottom-2 left-0 h-3 bg-primary-400/20 -z-0"
+                style={{ transform: 'skewX(-12deg)' }}
+              />
             </span>
           </motion.h2>
           <motion.p

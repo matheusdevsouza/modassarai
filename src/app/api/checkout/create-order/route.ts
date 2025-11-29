@@ -191,7 +191,6 @@ export async function POST(request: NextRequest) {
         await database.query('UPDATE products SET stock_quantity = ? WHERE id = ?', [totalStock, pid]);
       }
     } catch (invErr) {
-      console.error('Erro ao reservar/baixar estoque no pending:', invErr);
     }
     try {
       const preferenceData = {
@@ -230,7 +229,6 @@ export async function POST(request: NextRequest) {
         total: total
       });
     } catch (mpError) {
-      console.error('Erro ao criar preferência do Mercado Pago:', mpError);
       await database.query(
         'UPDATE orders SET status = ?, payment_status = ? WHERE id = ?',
         ['cancelled', 'failed', orderId]
@@ -241,7 +239,6 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error) {
-    console.error('Erro ao criar pedido:', error);
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }

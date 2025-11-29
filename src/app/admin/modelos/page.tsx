@@ -88,7 +88,7 @@ export default function AdminModels() {
         setError(result.error || 'Erro ao carregar modelos');
       }
     } catch (error) {
-      console.error('Erro ao carregar modelos:', error);
+
       setError('Erro ao conectar com o servidor');
     } finally {
       setLoading(false);
@@ -135,7 +135,7 @@ export default function AdminModels() {
         alert(result.error || 'Erro ao excluir modelo');
       }
     } catch (error) {
-      console.error('Erro ao excluir modelo:', error);
+
       alert('Erro ao conectar com o servidor');
     }
   };
@@ -157,7 +157,7 @@ export default function AdminModels() {
         alert(result.error || 'Erro ao alterar status do modelo');
       }
     } catch (error) {
-      console.error('Erro ao alterar status:', error);
+
       alert('Erro ao conectar com o servidor');
     }
   };

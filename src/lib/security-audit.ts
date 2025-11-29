@@ -203,7 +203,7 @@ export async function checkTestDataInProduction(): Promise<SecurityAuditResult> 
   }
 }
 export async function runSecurityAudit(): Promise<SecurityReport> {
-  console.log('🔍 Iniciando auditoria de segurança...');
+
   const tests = [
     testEncryption(),
     checkUnencryptedSensitiveData(),
@@ -231,7 +231,7 @@ export async function runSecurityAudit(): Promise<SecurityReport> {
     tests: results,
     timestamp: new Date().toISOString()
   };
-  console.log(`✅ Auditoria concluída: ${overallStatus} (Score: ${score}%)`);
+  `);
   return report;
 }
 function encrypt(text: string): string {

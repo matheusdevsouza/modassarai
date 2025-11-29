@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     await markPasswordResetTokenAsUsed(token)
     return NextResponse.json({ success: true, message: 'Senha redefinida com sucesso' })
   } catch (error) {
-    console.error('Erro em reset-password:', error)
+
     return NextResponse.json({ success: false, message: 'Erro interno do servidor' }, { status: 500 })
   }
 }

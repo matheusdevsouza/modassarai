@@ -56,7 +56,7 @@ export async function GET(
       user: safeUser
     });
   } catch (error) {
-    console.error('Erro ao buscar usuário por UUID:', error);
+
     return NextResponse.json(
       { 
         success: false, 

@@ -9,23 +9,29 @@ function ProdutosContent() {
   const [produtos, setProdutos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [modelos, setModelos] = useState<any[]>([]);
-  const [modeloSelecionado, setModeloSelecionado] = useState<string | null>(null);
+  const [categorias, setCategorias] = useState<any[]>([]);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState<string | null>(null);
   const [precoMin, setPrecoMin] = useState(0);
   const [precoMax, setPrecoMax] = useState(2000);
   const [filtros, setFiltros] = useState<{ preco: number[]; order: string }>({ preco: [0, 2000], order: '' });
   const [precoEmEdicao, setPrecoEmEdicao] = useState<number | null>(null);
+  
   useEffect(() => {
     const search = searchParams.get('search');
+    const categoria = searchParams.get('categoria');
     if (search) {
       setSearchQuery(search);
     }
+    if (categoria) {
+      setCategoriaSelecionada(categoria);
+    }
   }, [searchParams]);
+  
   useEffect(() => {
     async function fetchFiltros() {
-      const resModelos = await fetch('/api/models');
-      const dataModelos = await resModelos.json();
-      setModelos(dataModelos.data || []);
+      const resCategorias = await fetch('/api/categories');
+      const dataCategorias = await resCategorias.json();
+      setCategorias(dataCategorias.data || []);
       const resProdutos = await fetch('/api/products');
       const dataProdutos = await resProdutos.json();
       const precos = (dataProdutos.data || []).map((p: any) => p.price);
@@ -39,32 +45,42 @@ function ProdutosContent() {
     }
     fetchFiltros();
   }, []);
+  
   useEffect(() => {
     async function fetchProdutos() {
       setLoading(true);
-      if (modeloSelecionado) {
-        const res = await fetch(`/api/products/by-model/${modeloSelecionado}`);
-        const data = await res.json();
-        setProdutos(data.data || []);
-        setLoading(false);
-        return;
-      }
+      setProdutos([]);
       const params = new URLSearchParams();
       if (searchQuery) {
         params.append('search', searchQuery);
+      }
+      if (categoriaSelecionada) {
+        params.append('categoria', categoriaSelecionada);
       }
       if (filtros.preco) {
         params.append('min_price', String(filtros.preco[0]));
         params.append('max_price', String(filtros.preco[1]));
       }
       if (filtros.order) params.append('order', filtros.order);
-      const res = await fetch(`/api/products?${params.toString()}`);
-      const data = await res.json();
-      setProdutos(data.data || []);
-      setLoading(false);
+      try {
+        const res = await fetch(`/api/products?${params.toString()}`);
+        const data = await res.json();
+        const uniqueProducts = (data.data || []).reduce((acc: any[], product: any) => {
+          if (!acc.find(p => p.id === product.id)) {
+            acc.push(product);
+          }
+          return acc;
+        }, []);
+        setProdutos(uniqueProducts);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        setProdutos([]);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchProdutos();
-  }, [filtros, modeloSelecionado, searchQuery]);
+  }, [filtros, categoriaSelecionada, searchQuery]);
   function handlePrecoChange(e: any) {
     const value = Number(e.target.value);
     setPrecoEmEdicao(value);
@@ -80,8 +96,13 @@ function ProdutosContent() {
   function handleOrderChange(e: any) {
     setFiltros(f => ({ ...f, order: e.target.value }));
   }
-  function handleModeloClick(slug: string) {
-    setModeloSelecionado(prev => prev === slug ? null : slug);
+  function handleCategoriaClick(slug: string) {
+    const newCategoria = categoriaSelecionada === slug ? null : slug;
+    setCategoriaSelecionada(newCategoria);
+    const newUrl = newCategoria 
+      ? `/produtos?categoria=${newCategoria}`
+      : '/produtos';
+    window.history.pushState({}, '', newUrl);
   }
   return (
     <section className="min-h-screen bg-sand-100 pt-48 pb-12">
@@ -99,12 +120,19 @@ function ProdutosContent() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-3xl md:text-4xl font-extrabold text-sage-900 mb-2 text-center">
-              {searchQuery ? `Resultados para "${searchQuery}"` : 'Todos os Produtos'}
+              {searchQuery 
+                ? `Resultados para "${searchQuery}"` 
+                : categoriaSelecionada
+                  ? categorias.find(c => c.slug === categoriaSelecionada)?.name || 'Produtos'
+                  : 'Todos os Produtos'
+              }
             </h1>
             <p className="text-sage-800 text-lg mb-8 text-center">
               {searchQuery 
                 ? `${produtos.length} produto(s) encontrado(s)` 
-                : 'Encontre o modelo perfeito para você'
+                : categoriaSelecionada
+                  ? `${produtos.length} produto(s) nesta categoria`
+                  : 'Encontre o produto perfeito para você'
               }
             </p>
             {searchQuery && (
@@ -152,22 +180,22 @@ function ProdutosContent() {
               <aside className="w-full bg-primary-50 border border-cloud-100 rounded-2xl p-6 mb-4 md:mb-0 shadow-sm md:sticky md:top-8">
                 <h2 className="text-lg font-bold text-sage-900 mb-4">Filtrar</h2>
                 <div className="mb-6">
-                  <label className="block text-sage-900 font-semibold mb-2">Modelos</label>
+                  <label className="block text-sage-900 font-semibold mb-2">Categorias</label>
                   <div className="flex flex-wrap gap-2">
-                    {modelos.map((modelo: any) => (
+                    {categorias.map((categoria: any) => (
                       <button
-                        key={modelo.slug}
-                        onClick={() => handleModeloClick(modelo.slug)}
+                        key={categoria.slug}
+                        onClick={() => handleCategoriaClick(categoria.slug)}
                         className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-sm
-                          ${modeloSelecionado === modelo.slug 
+                          ${categoriaSelecionada === categoria.slug 
                             ? 'bg-primary-500 text-white border-primary-600 shadow-sm' 
                             : 'bg-white border-cloud-200 text-sage-800 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-600'
                           }`}
                       >
-                        {modelo.image_url && (
-                          <Image src={modelo.image_url} alt={modelo.name} width={24} height={24} className="rounded-full object-cover" />
+                        {categoria.image_url && (
+                          <Image src={categoria.image_url} alt={categoria.name} width={24} height={24} className="rounded-full object-cover" />
                         )}
-                        {modelo.name}
+                        {categoria.name}
                       </button>
                     ))}
                   </div>

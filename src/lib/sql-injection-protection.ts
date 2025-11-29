@@ -29,7 +29,9 @@ const SQL_INJECTION_PATTERNS = [
   /(LENGTH\s*\()/gi,
   /(CONCAT\s*\()/gi,
   /(\$where|\$ne|\$gt|\$lt|\$regex|\$exists|\$in|\$nin|\$or|\$and)/gi,
-  /(\*|\(|\)|\\|\/|\+|<|>|;|,|"|'|=)/g
+  /(;\s*(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION))/gi,
+  /(OR\s+1\s*=\s*1|AND\s+1\s*=\s*1)/gi,
+  /('(\s*OR\s*|\s*AND\s*|\s*UNION\s*))/gi,
 ];
 const XSS_PATTERNS = [
   /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
@@ -77,8 +79,37 @@ const XSS_PATTERNS = [
   /<audio[^>]*src\s*=\s*x[^>]*onerror/gi,
   /<details[^>]*open[^>]*ontoggle/gi
 ];
-export function detectSQLInjection(input: string): boolean {
+export function detectSQLInjection(input: string, isPassword: boolean = false): boolean {
   if (!input || typeof input !== 'string') return false;
+  if (isPassword) {
+    const passwordSafePatterns = [
+      /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT|TRUNCATE)\b)/gi,
+      /(;\s*(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION))/gi,
+      /(OR\s+['"]?\d*['"]?\s*=\s*['"]?\d*['"]?)/gi,
+      /(AND\s+['"]?\d*['"]?\s*=\s*['"]?\d*['"]?)/gi,
+      /(UNION\s+SELECT)/gi,
+      /(DROP\s+TABLE)/gi,
+      /(DELETE\s+FROM)/gi,
+      /(INSERT\s+INTO)/gi,
+      /(UPDATE\s+SET)/gi,
+      /(ALTER\s+TABLE)/gi,
+      /(CREATE\s+TABLE)/gi,
+      /(EXEC\s*\()/gi,
+      /(\/\*.*?\*\/)/gi,
+      /(--.*$)/gm,
+      /(#.*$)/gm,
+      /(SLEEP\s*\()/gi,
+      /(WAITFOR\s+DELAY)/gi,
+      /(BENCHMARK\s*\()/gi,
+      /(INFORMATION_SCHEMA)/gi,
+      /(mysql\.user)/gi,
+      /(sys\.databases)/gi,
+      /(OR\s+1\s*=\s*1|AND\s+1\s*=\s*1)/gi,
+      /('(\s*OR\s*|\s*AND\s*|\s*UNION\s*))/gi,
+    ];
+    return passwordSafePatterns.some(pattern => pattern.test(input));
+  }
+  
   return SQL_INJECTION_PATTERNS.some(pattern => pattern.test(input));
 }
 export function detectXSS(input: string): boolean {

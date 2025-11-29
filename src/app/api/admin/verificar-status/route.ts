@@ -35,7 +35,6 @@ export async function GET(request: NextRequest) {
       name: user.name
     });
   } catch (error) {
-    console.error('Erro ao verificar status de admin:', error);
     return NextResponse.json(
       { 
         success: false, 

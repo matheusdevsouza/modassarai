@@ -8,7 +8,7 @@ export async function GET() {
     const colors = await getProductColors();
     return NextResponse.json({ success: true, data: colors });
   } catch (error) {
-    console.error('Erro ao buscar cores:', error);
+
     return NextResponse.json({ success: false, error: 'Erro interno do servidor' }, { status: 500 });
   }
 }
