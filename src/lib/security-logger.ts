@@ -176,18 +176,18 @@ class SecurityLogger {
   private logToConsole(event: SecurityEvent): void {
     const emoji = this.getLevelEmoji(event.level);
     const timestamp = event.timestamp.toISOString();
-
-
-    if (event.userId) ;
-    if (event.userEmail) ;
-    if (event.url) ;
-    if (event.method) ;
-    if (Object.keys(event.details).length > 0) {
-
-    }
-
-
-
+    
+    const logParts = [
+      `${emoji} [${timestamp}]`,
+      `${event.type}`,
+      event.userId ? `User: ${event.userId}` : '',
+      event.userEmail ? `Email: ${event.userEmail}` : '',
+      event.url ? `URL: ${event.url}` : '',
+      event.method ? `Method: ${event.method}` : '',
+      Object.keys(event.details).length > 0 ? `Details: ${JSON.stringify(event.details)}` : ''
+    ].filter(Boolean);
+    
+    console.log(logParts.join(' | '));
   }
   private getLevelEmoji(level: SecurityLevel): string {
     switch (level) {

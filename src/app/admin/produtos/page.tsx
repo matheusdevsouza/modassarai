@@ -170,7 +170,7 @@ export default function ProdutosPage() {
         }
       });
     }
-  }, [products]);
+  }, [products, productCategories, loadingCategories]);
 
   const fetchProductCategories = async (productId: number) => {
     try {

@@ -231,7 +231,6 @@ export async function runSecurityAudit(): Promise<SecurityReport> {
     tests: results,
     timestamp: new Date().toISOString()
   };
-  `);
   return report;
 }
 function encrypt(text: string): string {

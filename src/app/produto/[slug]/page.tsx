@@ -127,9 +127,6 @@ export default function ProdutoPage() {
       const res = await fetch(`/api/products/${slug}`);
       const data = await res.json();
 
-
-      );
-
       if (data.colorVariations && data.colorVariations.length > 0) {
 
       }

@@ -9,7 +9,6 @@ export async function GET(
   try {
     const fileName = params.path.join('/');
     const filePath = join(process.cwd(), 'public', 'uploads', 'models', fileName);
-    });
     if (!existsSync(filePath)) {
       return new NextResponse('Arquivo não encontrado', { status: 404 });
     }

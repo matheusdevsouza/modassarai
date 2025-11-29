@@ -19,8 +19,6 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
     const reviews = await getProductReviews(product.id, 10);
     const colorVariations = await getProductColorVariations(product.id);
 
-    );
-
     const sizes = productSizes.map((size: any) => ({
       size: size.size,
       stock: size.stock_quantity,
