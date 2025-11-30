@@ -20,7 +20,9 @@ import {
   Funnel,
   MagnifyingGlass,
   X,
-  ArrowRight
+  ArrowRight,
+  User,
+  Hash
 } from 'phosphor-react';
 interface OrderItem {
   id: number;
@@ -265,19 +267,19 @@ export default function MeusPedidosPage() {
   };
   if (loading) {
     return (
-      <section className="min-h-screen bg-dark-950" style={{ marginTop: '10.5rem', paddingTop: '2rem', paddingBottom: '4rem' }}>
+      <section className="min-h-screen bg-sand-100" style={{ marginTop: '10.5rem', paddingTop: '2rem', paddingBottom: '4rem' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="animate-pulse">
-              <div className="h-8 bg-dark-800 rounded-lg mb-8 w-64"></div>
+              <div className="h-8 bg-white rounded-lg mb-8 w-64"></div>
               <div className="space-y-4">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="bg-dark-900 rounded-xl p-6">
-                    <div className="h-6 bg-dark-800 rounded mb-4 w-48"></div>
+                  <div key={i} className="bg-white rounded-xl p-6 border border-cloud-100">
+                    <div className="h-6 bg-cloud-100 rounded mb-4 w-48"></div>
                     <div className="space-y-3">
-                      <div className="h-4 bg-dark-800 rounded w-32"></div>
-                      <div className="h-4 bg-dark-800 rounded w-24"></div>
-                      <div className="h-4 bg-dark-800 rounded w-40"></div>
+                      <div className="h-4 bg-cloud-100 rounded w-32"></div>
+                      <div className="h-4 bg-cloud-100 rounded w-24"></div>
+                      <div className="h-4 bg-cloud-100 rounded w-40"></div>
                     </div>
                   </div>
                 ))}
@@ -292,7 +294,7 @@ export default function MeusPedidosPage() {
     return null;
   }
   return (
-    <section className="min-h-screen bg-dark-950" style={{ marginTop: '10.5rem', paddingTop: '2rem', paddingBottom: '4rem' }}>
+    <section className="min-h-screen bg-sand-100" style={{ marginTop: '10.5rem', paddingTop: '2rem', paddingBottom: '4rem' }}>
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div 
@@ -303,21 +305,21 @@ export default function MeusPedidosPage() {
           >
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
               <div className="flex-1">
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
-                  <Receipt className="text-primary-400" size={32} weight="fill" />
+                <h1 className="text-3xl md:text-4xl font-bold text-primary-600 mb-2 flex items-center gap-3">
+                  <Receipt className="text-primary-500" size={32} weight="fill" />
                   Meus Pedidos
                 </h1>
-                <p className="text-gray-400 text-base">
+                <p className="text-sage-600 text-base">
                   Acompanhe todos os seus pedidos e seu histórico de compras
                 </p>
               </div>
               <div className="text-right md:text-left flex flex-col items-end md:items-start gap-3">
-                <p className="text-sm text-gray-400 whitespace-nowrap">
-                  Mostrando <span className="text-white font-semibold">{getFilteredCount()}</span> de <span className="text-white font-semibold">{getTotalCount()}</span> pedido{getTotalCount() !== 1 ? 's' : ''}
+                <p className="text-sm text-sage-600 whitespace-nowrap">
+                  Mostrando <span className="text-primary-600 font-semibold">{getFilteredCount()}</span> de <span className="text-primary-600 font-semibold">{getTotalCount()}</span> pedido{getTotalCount() !== 1 ? 's' : ''}
                 </p>
                 <button
                   onClick={() => setFilters(prev => ({ ...prev, showFilters: !prev.showFilters }))}
-                  className="flex items-center gap-2 px-4 py-2 bg-dark-800 hover:bg-dark-700 text-white rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors shadow-sm"
                 >
                   <Funnel size={18} />
                   Filtros Avançados
@@ -333,33 +335,33 @@ export default function MeusPedidosPage() {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             {(filters.status !== 'all' || filters.period !== 'all' || filters.search) && (
-              <div className="mb-4 p-3 bg-primary-500/10 border border-primary-500/20 rounded-lg">
+              <div className="mb-4 p-3 bg-primary-50 border border-primary-200 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Funnel size={16} className="text-primary-400" />
-                    <span className="text-sm text-primary-400 font-medium">Filtros ativos:</span>
+                    <Funnel size={16} className="text-primary-600" />
+                    <span className="text-sm text-primary-600 font-medium">Filtros ativos:</span>
                   </div>
                   <button
                     onClick={clearFilters}
-                    className="text-xs text-primary-400 hover:text-primary-300 transition-colors"
+                    className="text-xs text-primary-600 hover:text-primary-700 transition-colors"
                   >
                     Limpar todos
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {filters.status !== 'all' && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-500/20 text-primary-300 text-xs rounded">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded">
                       Status: {statusConfig[filters.status as keyof typeof statusConfig]?.label || filters.status}
                       <button
                         onClick={() => setFilters(prev => ({ ...prev, status: 'all' }))}
-                        className="hover:text-white"
+                        className="hover:text-primary-900"
                       >
                         <X size={12} />
                       </button>
                     </span>
                   )}
                   {filters.period !== 'all' && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-500/20 text-primary-300 text-xs rounded">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded">
                       Período: {
                         filters.period === 'last7days' ? 'Últimos 7 dias' :
                         filters.period === 'last30days' ? 'Últimos 30 dias' :
@@ -368,18 +370,18 @@ export default function MeusPedidosPage() {
                       }
                       <button
                         onClick={() => setFilters(prev => ({ ...prev, period: 'all' }))}
-                        className="hover:text-white"
+                        className="hover:text-primary-900"
                       >
                         <X size={12} />
                       </button>
                     </span>
                   )}
                   {filters.search && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-500/20 text-primary-300 text-xs rounded">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded">
                       Busca: &quot;{filters.search}&quot;
                       <button
                         onClick={() => setFilters(prev => ({ ...prev, search: '' }))}
-                        className="hover:text-white"
+                        className="hover:text-primary-900"
                       >
                         <X size={12} />
                       </button>
@@ -391,19 +393,19 @@ export default function MeusPedidosPage() {
             <div className="relative mb-4">
               <MagnifyingGlass 
                 size={20} 
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-sage-500"
               />
               <input
                 type="text"
                 placeholder="Buscar por número do pedido, produto ou nome..."
                 value={filters.search}
                 onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                className="w-full bg-dark-800/50 border border-dark-700 rounded-lg px-12 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:bg-dark-800 transition-all duration-300"
+                className="w-full bg-white border border-cloud-200 rounded-lg px-12 py-3 text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-300"
               />
               {filters.search && (
                 <button
                   onClick={() => setFilters(prev => ({ ...prev, search: '' }))}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sage-500 hover:text-sage-700 transition-colors"
                 >
                   <X size={16} />
                 </button>
@@ -413,7 +415,7 @@ export default function MeusPedidosPage() {
               {(filters.status !== 'all' || filters.period !== 'all' || filters.search) && (
                 <button
                   onClick={clearFilters}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors border border-red-200"
                 >
                   <X size={16} />
                   Limpar Filtros
@@ -421,16 +423,16 @@ export default function MeusPedidosPage() {
               )}
             </div>
             {filters.showFilters && (
-              <div className="bg-dark-800/50 rounded-lg p-4 border border-dark-700">
+              <div className="bg-white rounded-lg p-4 border border-cloud-100 shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-white mb-2">
+                    <label className="block text-sm font-medium text-sage-900 mb-2">
                       Status do Pedido
                     </label>
                     <select
                       value={filters.status}
                       onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                      className="w-full bg-dark-900 border border-dark-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500"
+                      className="w-full bg-white border border-cloud-200 rounded-lg px-3 py-2 text-sage-900 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                     >
                       <option value="all">Todos os status</option>
                       <option value="pending">Pendente</option>
@@ -443,13 +445,13 @@ export default function MeusPedidosPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-white mb-2">
+                    <label className="block text-sm font-medium text-sage-900 mb-2">
                       Período
                     </label>
                     <select
                       value={filters.period}
                       onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value }))}
-                      className="w-full bg-dark-900 border border-dark-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-primary-500"
+                      className="w-full bg-white border border-cloud-200 rounded-lg px-3 py-2 text-sage-900 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
                     >
                       <option value="all">Todos os períodos</option>
                       <option value="last7days">Últimos 7 dias</option>
@@ -466,21 +468,21 @@ export default function MeusPedidosPage() {
           {loadingOrders && (
             <div className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-dark-900 rounded-xl p-6 animate-pulse">
-                  <div className="h-6 bg-dark-800 rounded mb-4 w-48"></div>
+                <div key={i} className="bg-white rounded-xl p-6 animate-pulse border border-cloud-100">
+                  <div className="h-6 bg-cloud-100 rounded mb-4 w-48"></div>
                   <div className="space-y-3">
-                    <div className="h-4 bg-dark-800 rounded w-32"></div>
-                    <div className="h-4 bg-dark-800 rounded w-24"></div>
-                    <div className="h-4 bg-dark-800 rounded w-40"></div>
+                    <div className="h-4 bg-cloud-100 rounded w-32"></div>
+                    <div className="h-4 bg-cloud-100 rounded w-24"></div>
+                    <div className="h-4 bg-cloud-100 rounded w-40"></div>
                   </div>
                 </div>
               ))}
             </div>
           )}
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 text-center">
+            <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
               <XCircle className="text-red-500 mx-auto mb-3" size={32} />
-              <p className="text-red-400">{error}</p>
+              <p className="text-red-600">{error}</p>
               <button 
                 onClick={fetchOrders}
                 className="mt-3 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
@@ -492,35 +494,35 @@ export default function MeusPedidosPage() {
           {!loadingOrders && !error && (
             <>
               {filteredOrders.length === 0 ? (
-                <div className="bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl p-8 text-center">
+                <div className="bg-white border border-cloud-100 rounded-xl p-8 text-center shadow-sm">
                   {orders.length === 0 ? (
                     <>
-                      <Package className="text-gray-500 mx-auto mb-4" size={48} />
-                      <h3 className="text-xl font-semibold text-white mb-2">
+                      <Package className="text-sage-400 mx-auto mb-4" size={48} />
+                      <h3 className="text-xl font-semibold text-sage-900 mb-2">
                         Nenhum pedido encontrado
                       </h3>
-                      <p className="text-gray-400 mb-6">
+                      <p className="text-sage-600 mb-6">
                         Você ainda não fez nenhum pedido. Que tal começar a comprar?
                       </p>
                       <a 
                         href="/produtos"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-gradient-to-r hover:from-[var(--logo-gold,#D4A574)] hover:via-[var(--logo-gold-light,#E6B896)] hover:to-[var(--logo-gold,#D4A574)] text-white rounded-lg transition-all"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all shadow-sm"
                       >
                         Ver Produtos
                       </a>
                     </>
                   ) : (
                     <>
-                      <MagnifyingGlass className="text-gray-500 mx-auto mb-4" size={48} />
-                      <h3 className="text-xl font-semibold text-white mb-2">
+                      <MagnifyingGlass className="text-sage-400 mx-auto mb-4" size={48} />
+                      <h3 className="text-xl font-semibold text-sage-900 mb-2">
                         Nenhum pedido encontrado
                       </h3>
-                      <p className="text-gray-400 mb-6">
+                      <p className="text-sage-600 mb-6">
                         Nenhum pedido corresponde aos filtros aplicados. Tente ajustar os critérios de busca.
                       </p>
                       <button 
                         onClick={clearFilters}
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-gradient-to-r hover:from-[var(--logo-gold,#D4A574)] hover:via-[var(--logo-gold-light,#E6B896)] hover:to-[var(--logo-gold,#D4A574)] text-white rounded-lg transition-all"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all shadow-sm"
                       >
                         Limpar Filtros
                       </button>
@@ -542,7 +544,7 @@ export default function MeusPedidosPage() {
                     return (
                       <motion.div 
                         key={order.id} 
-                        className="bg-dark-900 rounded-xl border border-dark-800 overflow-hidden"
+                        className="bg-white rounded-xl border border-cloud-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ 
@@ -550,17 +552,17 @@ export default function MeusPedidosPage() {
                           delay: index * 0.1,
                           ease: "easeOut"
                         }}
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.99 }}
+                        whileHover={{ scale: 1.005 }}
+                        whileTap={{ scale: 0.995 }}
                       >
                         <div 
-                          className="p-4 sm:p-6 cursor-pointer hover:bg-dark-800/50 transition-colors"
+                          className="p-4 sm:p-6 cursor-pointer hover:bg-sage-50 transition-colors"
                           onClick={() => toggleOrderExpansion(order.id)}
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
                               {order.items && order.items.length > 0 && (
-                                <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-dark-800 flex-shrink-0">
+                                <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-cloud-100 flex-shrink-0 border border-cloud-200">
                                   <Image 
                                     src={order.items[0].product_image} 
                                     alt={order.items[0].product_name}
@@ -572,7 +574,7 @@ export default function MeusPedidosPage() {
                                     }}
                                   />
                                   {order.items.length > 1 && (
-                                    <div className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold">
+                                    <div className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold shadow-sm">
                                       +{order.items.length - 1}
                                     </div>
                                   )}
@@ -584,7 +586,7 @@ export default function MeusPedidosPage() {
                                     <StatusIcon className={`${status.color} sm:w-[18px] sm:h-[18px]`} size={16} />
                                   </div>
                                   <div className="min-w-0 flex-1">
-                                    <h3 className="text-base sm:text-lg font-semibold text-white truncate">
+                                    <h3 className="text-base sm:text-lg font-semibold text-sage-900 truncate">
                                       Pedido #{order.order_number}
                                     </h3>
                                     <p className={`text-xs sm:text-sm font-medium ${status.color}`}>
@@ -592,30 +594,30 @@ export default function MeusPedidosPage() {
                                     </p>
                                   </div>
                                 </div>
-                                <div className="text-xs sm:text-sm text-gray-400">
+                                <div className="text-xs sm:text-sm text-sage-600">
                                   {order.items && order.items.length > 0 ? (
                                     <div>
-                                      <p className="text-white font-medium truncate">
+                                      <p className="text-sage-900 font-medium truncate">
                                         {order.items[0].product_name}
                                       </p>
                                       {order.items.length > 1 && (
-                                        <p className="text-gray-500 text-xs">
+                                        <p className="text-sage-500 text-xs">
                                           +{order.items.length - 1} produto{order.items.length > 2 ? 's' : ''} mais
                                         </p>
                                       )}
                                     </div>
                                   ) : (
-                                    <p className="text-gray-500">Produtos não disponíveis</p>
+                                    <p className="text-sage-500">Produtos não disponíveis</p>
                                   )}
                                 </div>
                               </div>
                             </div>
                             <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                               <div className="text-right">
-                                <p className="text-lg sm:text-xl font-bold text-white">
+                                <p className="text-lg sm:text-xl font-bold text-primary-600">
                                   {formatCurrency(order.total_amount)}
                                 </p>
-                                <p className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">
+                                <p className="text-xs sm:text-sm text-sage-500 whitespace-nowrap">
                                   {formatDate(order.created_at)}
                                 </p>
                               </div>
@@ -624,7 +626,7 @@ export default function MeusPedidosPage() {
                                 transition={{ duration: 0.3, ease: "easeInOut" }}
                                 className="flex-shrink-0"
                               >
-                                <CaretDown size={18} className="text-gray-400 sm:w-5 sm:h-5" />
+                                <CaretDown size={18} className="text-sage-500 sm:w-5 sm:h-5" />
                               </motion.div>
                             </div>
                           </div>
@@ -640,18 +642,18 @@ export default function MeusPedidosPage() {
                                 ease: "easeInOut",
                                 opacity: { duration: 0.3 }
                               }}
-                              className="border-t border-dark-800 bg-dark-800/30 overflow-hidden"
+                              className="border-t border-cloud-100 bg-sage-50 overflow-hidden"
                             >
                               <div className="p-6 space-y-6">
                                 <div>
-                                  <h4 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                                  <h4 className="text-sm font-semibold text-sage-900 mb-4 flex items-center gap-2">
                                     <Package size={16} />
                                     Produtos do Pedido
                                   </h4>
                                   <div className="space-y-3">
                                     {order.items && order.items.map((item) => (
-                                      <div key={item.id} className="flex items-center gap-3 p-3 bg-dark-900 rounded-lg">
-                                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-dark-800 flex-shrink-0">
+                                      <div key={item.id} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-cloud-100">
+                                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-cloud-100 flex-shrink-0 border border-cloud-200">
                                           <Image 
                                             src={item.product_image} 
                                             alt={item.product_name}
@@ -664,12 +666,12 @@ export default function MeusPedidosPage() {
                                           />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                          <h5 className="text-white font-medium truncate text-sm sm:text-base">{item.product_name}</h5>
-                                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-400 mt-1">
+                                          <h5 className="text-sage-900 font-medium truncate text-sm sm:text-base">{item.product_name}</h5>
+                                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-sage-600 mt-1">
                                             {item.size && <span>Tamanho: {item.size}</span>}
                                             {item.color && (
                                               <span className="flex items-center gap-1">
-                                                {item.size && <span className="text-gray-600">•</span>}
+                                                {item.size && <span className="text-sage-400">•</span>}
                                                 Cor: {item.color}
                                               </span>
                                             )}
@@ -677,8 +679,8 @@ export default function MeusPedidosPage() {
                                           </div>
                                         </div>
                                         <div className="text-right flex-shrink-0">
-                                          <p className="text-white font-semibold text-sm sm:text-base">{formatCurrency(item.unit_price)}</p>
-                                          <p className="text-xs sm:text-sm text-gray-400">cada</p>
+                                          <p className="text-primary-600 font-semibold text-sm sm:text-base">{formatCurrency(item.unit_price)}</p>
+                                          <p className="text-xs sm:text-sm text-sage-500">cada</p>
                                         </div>
                                       </div>
                                     ))}
@@ -686,7 +688,7 @@ export default function MeusPedidosPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <div className="space-y-2">
-                                    <div className="flex items-center gap-2 text-sm text-gray-400">
+                                    <div className="flex items-center gap-2 text-sm text-sage-600">
                                       <CreditCard size={16} />
                                       <span>Pagamento:</span>
                                       <span className={`font-medium ${paymentStatus.color}`}>
@@ -694,59 +696,68 @@ export default function MeusPedidosPage() {
                                       </span>
                                     </div>
                                     {order.payment_method && (
-                                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                                      <div className="flex items-center gap-2 text-sm text-sage-600">
                                         <span>Método:</span>
-                                        <span className="text-white">{getPaymentMethodLabel(order.payment_method)}</span>
+                                        <span className="text-sage-900">{getPaymentMethodLabel(order.payment_method)}</span>
                                       </div>
                                     )}
                                   </div>
                                   <div className="space-y-2">
                                     {order.shipped_at && (
-                                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                                      <div className="flex items-center gap-2 text-sm text-sage-600">
                                         <Truck size={16} />
                                         <span>Enviado em:</span>
-                                        <span className="text-white">{formatDate(order.shipped_at)}</span>
+                                        <span className="text-sage-900">{formatDate(order.shipped_at)}</span>
                                       </div>
                                     )}
                                     {order.delivered_at && (
-                                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                                      <div className="flex items-center gap-2 text-sm text-sage-600">
                                         <CheckCircle size={16} />
                                         <span>Entregue em:</span>
-                                        <span className="text-white">{formatDate(order.delivered_at)}</span>
+                                        <span className="text-sage-900">{formatDate(order.delivered_at)}</span>
                                       </div>
                                     )}
                                   </div>
                                 </div>
                                 {(order.tracking_code || order.tracking_url) && (
-                                  <div className="bg-dark-900 rounded-lg p-3 sm:p-4 border border-dark-800">
+                                  <div className="bg-white rounded-lg p-3 sm:p-4 border border-cloud-100">
                                     <div className="flex flex-col sm:flex-row sm:items-start gap-3">
-                                      <div className="text-xs sm:text-sm text-gray-300 flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 mb-2">
-                                          <Truck size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
-                                          <span className="font-medium text-white">Rastreamento</span>
+                                      <div className="text-xs sm:text-sm text-sage-700 flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 mb-3">
+                                          <Truck size={16} className="flex-shrink-0 text-sage-600" weight="bold" />
+                                          <span className="font-bold text-sage-900">Rastreamento</span>
                                         </div>
                                         {order.tracking_code && (
-                                          <div className="mb-1">
-                                            <span className="text-gray-400">Código:</span>
-                                            <span className="text-white ml-1 break-all">{order.tracking_code}</span>
+                                          <div className="mb-2 flex items-start gap-2">
+                                            <Hash size={16} className="flex-shrink-0 mt-0.5 text-sage-600" />
+                                            <div className="flex-1 min-w-0">
+                                              <span className="text-sage-600 font-semibold">Código: </span>
+                                              <span className="text-sage-900 break-all">{order.tracking_code}</span>
+                                            </div>
                                           </div>
                                         )}
                                         {order.shipping_company && (
-                                          <div className="mb-1 text-gray-400">
-                                            <span className="text-gray-400">Transportadora:</span>
-                                            <span className="text-white ml-1 truncate block">{order.shipping_company}</span>
+                                          <div className="mb-2 flex items-start gap-2">
+                                            <Package size={16} className="flex-shrink-0 mt-0.5 text-sage-600" />
+                                            <div className="flex-1 min-w-0">
+                                              <span className="text-sage-600 font-semibold">Transportadora: </span>
+                                              <span className="text-sage-900">{order.shipping_company}</span>
+                                            </div>
                                           </div>
                                         )}
                                         {order.shipping_status && (
-                                          <div className="mb-1 text-gray-400">
-                                            <span className="text-gray-400">Status do envio:</span>
-                                            <span className="text-white ml-1 truncate block">{order.shipping_status}</span>
+                                          <div className="mb-2 flex items-start gap-2">
+                                            <Truck size={16} className="flex-shrink-0 mt-0.5 text-sage-600" />
+                                            <div className="flex-1 min-w-0">
+                                              <span className="text-sage-600 font-semibold">Status do envio: </span>
+                                              <span className="text-sage-900">{order.shipping_status}</span>
+                                            </div>
                                           </div>
                                         )}
                                         {order.shipping_notes && (
-                                          <div className="mb-1 text-gray-400">
-                                            <span className="text-gray-400">Observações:</span>
-                                            <span className="text-white ml-1 break-words block">{order.shipping_notes}</span>
+                                          <div className="mb-1 text-sage-600">
+                                            <span className="text-sage-600">Observações:</span>
+                                            <span className="text-sage-900 ml-1 break-words block">{order.shipping_notes}</span>
                                           </div>
                                         )}
                                       </div>
@@ -754,7 +765,7 @@ export default function MeusPedidosPage() {
                                         {order.tracking_code && (
                                           <button
                                             onClick={() => copyToClipboard(order.tracking_code!)}
-                                            className="flex-1 sm:flex-none px-3 py-2 sm:py-1 text-xs bg-dark-800 hover:bg-dark-700 text-gray-200 rounded border border-dark-700 transition-colors duration-200 font-medium"
+                                            className="flex-1 sm:flex-none px-3 py-2 sm:py-1 text-xs bg-cloud-100 hover:bg-cloud-200 text-sage-800 rounded border border-cloud-200 transition-colors duration-200 font-medium"
                                           >
                                             Copiar código
                                           </button>
@@ -763,7 +774,7 @@ export default function MeusPedidosPage() {
                                           <a
                                             href={getTrackingLink(order.tracking_code, order.tracking_url) as string}
                                             target="_blank"
-                                            className="flex-1 sm:flex-none px-3 py-2 sm:py-1 text-xs bg-primary-600 hover:bg-primary-500 text-white rounded transition-colors duration-200 font-medium text-center"
+                                            className="flex-1 sm:flex-none px-3 py-2 sm:py-1 text-xs bg-primary-500 hover:bg-primary-600 text-white rounded transition-colors duration-200 font-medium text-center"
                                           >
                                             Acompanhar envio
                                           </a>
@@ -772,65 +783,77 @@ export default function MeusPedidosPage() {
                                     </div>
                                   </div>
                                 )}
-                                <div className="bg-dark-800 rounded-lg p-4">
-                                  <h4 className="text-sm font-semibold text-white mb-3">Informações do Cliente</h4>
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
-                                    <div className="flex items-center gap-2 text-gray-400">
-                                      <span className="w-16 sm:w-20 flex-shrink-0">Nome:</span>
-                                      <span className="text-white truncate">{order.customer_name}</span>
+                                <div className="bg-white rounded-lg p-4 border border-cloud-100">
+                                  <h4 className="text-sm font-semibold text-sage-900 mb-3">Informações do Cliente</h4>
+                                  <div className="space-y-3 text-xs sm:text-sm">
+                                    <div className="flex items-start gap-2">
+                                      <User size={16} className="flex-shrink-0 mt-0.5 text-sage-600" />
+                                      <div className="flex-1 min-w-0">
+                                        <span className="text-sage-600 font-semibold">Nome: </span>
+                                        <span className="text-sage-900">{order.customer_name}</span>
+                                      </div>
                                     </div>
-                                    <div className="flex items-center gap-2 text-gray-400">
-                                      <EnvelopeSimple size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
-                                      <span className="text-white truncate">{order.customer_email}</span>
+                                    <div className="flex items-start gap-2">
+                                      <EnvelopeSimple size={16} className="flex-shrink-0 mt-0.5 text-sage-600" />
+                                      <div className="flex-1 min-w-0">
+                                        <span className="text-sage-600 font-semibold">E-mail: </span>
+                                        <span className="text-sage-900 break-all">{order.customer_email}</span>
+                                      </div>
                                     </div>
                                     {order.customer_phone && (
-                                      <div className="flex items-center gap-2 text-gray-400">
-                                        <Phone size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
-                                        <span className="text-white truncate">{order.customer_phone}</span>
+                                      <div className="flex items-start gap-2">
+                                        <Phone size={16} className="flex-shrink-0 mt-0.5 text-sage-600" />
+                                        <div className="flex-1 min-w-0">
+                                          <span className="text-sage-600 font-semibold">Telefone: </span>
+                                          <span className="text-sage-900">{order.customer_phone}</span>
+                                        </div>
                                       </div>
                                     )}
                                     {order.shipping_address && (
-                                      <div className="flex items-start gap-2 text-gray-400 md:col-span-2">
-                                        <MapPin size={14} className="mt-0.5 flex-shrink-0 sm:w-4 sm:h-4" />
-                                        <span className="text-white text-xs sm:text-sm">{formatAddress(order.shipping_address)}</span>
+                                      <div className="flex items-start gap-2">
+                                        <MapPin size={16} className="flex-shrink-0 mt-0.5 text-sage-600" />
+                                        <div className="flex-1 min-w-0">
+                                          <span className="text-sage-600 font-semibold">Endereço: </span>
+                                          <span className="text-sage-900 text-xs sm:text-sm">{formatAddress(order.shipping_address)}</span>
+                                        </div>
                                       </div>
                                     )}
                                   </div>
                                 </div>
-                                <div className="bg-dark-800 rounded-lg p-4">
-                                  <h4 className="text-sm font-semibold text-white mb-3">Resumo do Pedido</h4>
+                                <div className="bg-white rounded-lg p-4 border border-cloud-100">
+                                  <h4 className="text-sm font-semibold text-sage-900 mb-3">Resumo do Pedido</h4>
                                   <div className="space-y-2 text-sm">
-                                    <div className="flex justify-between text-gray-400">
+                                    <div className="flex justify-between text-sage-600">
                                       <span>Subtotal:</span>
-                                      <span className="text-white">{formatCurrency(order.subtotal)}</span>
+                                      <span className="text-sage-900">{formatCurrency(order.subtotal)}</span>
                                     </div>
                                     {order.shipping_cost > 0 && (
-                                      <div className="flex justify-between text-gray-400">
+                                      <div className="flex justify-between text-sage-600">
                                         <span>Frete:</span>
-                                        <span className="text-white">{formatCurrency(order.shipping_cost)}</span>
+                                        <span className="text-sage-900">{formatCurrency(order.shipping_cost)}</span>
                                       </div>
                                     )}
                                     {order.tax_amount > 0 && (
-                                      <div className="flex justify-between text-gray-400">
+                                      <div className="flex justify-between text-sage-600">
                                         <span>Impostos:</span>
-                                        <span className="text-white">{formatCurrency(order.tax_amount)}</span>
+                                        <span className="text-sage-900">{formatCurrency(order.tax_amount)}</span>
                                       </div>
                                     )}
                                     {order.discount_amount > 0 && (
-                                      <div className="flex justify-between text-green-400">
+                                      <div className="flex justify-between text-green-600">
                                         <span>Desconto:</span>
                                         <span>-{formatCurrency(order.discount_amount)}</span>
                                       </div>
                                     )}
-                                    <div className="flex justify-between text-lg font-semibold text-white pt-2 border-t border-dark-700">
+                                    <div className="flex justify-between text-lg font-semibold text-primary-600 pt-2 border-t border-cloud-200">
                                       <span>Total:</span>
                                       <span>{formatCurrency(order.total_amount)}</span>
                                     </div>
                                   </div>
                                 </div>
                                 {order.notes && (
-                                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                                    <p className="text-sm text-blue-400">
+                                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <p className="text-sm text-blue-700">
                                       <strong>Observações:</strong> {order.notes}
                                     </p>
                                   </div>
