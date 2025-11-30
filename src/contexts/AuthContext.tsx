@@ -128,11 +128,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include', 
+        cache: 'no-store',
       });
       
       setTimeout(() => {
         checkAuth();
-      }, 300);
+      }, 1000);
     } catch (error) {
       console.error('Erro no logout:', error);
       setUser(null);

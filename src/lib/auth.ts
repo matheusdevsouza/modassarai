@@ -199,23 +199,48 @@ export function setAuthCookie(response: NextResponse, token: string, refreshToke
   }
   return response;
 }
-export function clearAuthCookies(response: NextResponse): NextResponse {
+export function clearAuthCookies(response: NextResponse, request?: NextRequest): NextResponse {
   const isProduction = process.env.NODE_ENV === 'production';
-  const baseOptions = {
+  
+  if (request) {
+    const token = getTokenFromRequest(request);
+    if (token) {
+      try {
+        const payload = verifyToken(token);
+        if (payload?.sessionId) {
+          activeSessions.delete(payload.sessionId);
+        }
+      } catch (error) {
+      }
+    }
+  }
+  
+  const secureFlag = isProduction ? '; Secure' : '';
+  const sameSiteFlag = '; SameSite=Lax';
+  
+  const headers = response.headers;
+  headers.append('Set-Cookie', `auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly${sameSiteFlag}${secureFlag}`);
+  headers.append('Set-Cookie', `auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly${sameSiteFlag}${secureFlag}`);
+  headers.append('Set-Cookie', `refresh-token=; Path=/api/auth/refresh; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly${sameSiteFlag}${secureFlag}`);
+  
+  response.cookies.delete('auth-token');
+  response.cookies.set('auth-token', '', {
     httpOnly: true,
     secure: isProduction,
-    sameSite: 'lax' as const,
+    sameSite: 'lax',
     maxAge: 0,
     path: '/',
-  };
-
-  response.cookies.delete('auth-token');
-  response.cookies.set('auth-token', '', baseOptions);
+    expires: new Date(0),
+  });
   
   response.cookies.delete('refresh-token');
   response.cookies.set('refresh-token', '', {
-    ...baseOptions,
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: 'lax',
+    maxAge: 0,
     path: '/api/auth/refresh',
+    expires: new Date(0),
   });
   
   return response;

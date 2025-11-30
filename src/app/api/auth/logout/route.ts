@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
       { success: true, message: 'Logout realizado com sucesso!' },
       { status: 200 }
     );
-    return clearAuthCookies(response);
+    return clearAuthCookies(response, request);
   } catch (error) {
 
     return NextResponse.json(
