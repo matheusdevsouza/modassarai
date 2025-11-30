@@ -86,15 +86,17 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[199]"
+            className="fixed inset-0 bg-black/60 z-[199]"
+            style={{ willChange: 'opacity' }}
           />
           
           <motion.aside
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.28 }}
+            transition={{ type: 'tween', duration: 0.28, ease: 'easeOut' }}
             className="fixed top-0 right-0 h-full w-full max-w-md z-[200] bg-sage-50 border-l border-cloud-100 shadow-2xl flex flex-col"
+            style={{ willChange: 'transform' }}
           >
           <div className="flex items-center justify-between px-6 py-5 border-b border-cloud-100">
             <div className="flex items-center gap-2">
@@ -105,7 +107,7 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
               <X size={28} />
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto scrollbar-hide">
+          <div className="flex-1 overflow-y-auto scrollbar-hide" style={{ contain: 'layout style paint' }}>
             <AnimatePresence mode="wait">
               {!isShippingMode ? (
                 <motion.div
@@ -113,8 +115,9 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
                   className="px-6 py-4"
+                  style={{ willChange: 'transform, opacity' }}
                 >
                   {state.items.length === 0 ? (
                     <div className="text-center text-sage-700 mt-16">
@@ -125,7 +128,7 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                     <>
                       <ul className="space-y-4">
                         {state.items.map(item => (
-                          <li key={item.product.id} className="bg-white border border-cloud-100 rounded-xl p-4 flex gap-4 items-center hover:border-primary-300 transition-all shadow-sm">
+                          <li key={item.product.id} className="bg-white border border-cloud-100 rounded-xl p-4 flex gap-4 items-center hover:border-primary-300 transition-colors shadow-sm">
                             <div className="relative w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-sand-100">
                               <Image
                                 src={item.image || '/images/Logo.png'}
@@ -133,6 +136,7 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                                 fill
                                 className="object-cover"
                                 sizes="80px"
+                                loading="lazy"
                               />
                             </div>
                             <div className="flex-1 min-w-0">
@@ -178,8 +182,9 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
                   className="px-6 py-6"
+                  style={{ willChange: 'transform, opacity' }}
                 >
                   <button
                     onClick={closeShippingMode}
@@ -253,13 +258,14 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                   </AnimatePresence>
                   
                   <AnimatePresence>
-                    {shippingOptions.length > 0 && !isLoadingShipping && (
+                      {shippingOptions.length > 0 && !isLoadingShipping && (
                       <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.2 }}
                         className="space-y-3"
+                        style={{ willChange: 'opacity' }}
                       >
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
@@ -281,10 +287,10 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                           {shippingOptions.slice(0, 4).map((option, index) => (
                             <motion.button
                               key={option.id}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: index * 0.08, duration: 0.3 }}
-                              whileHover={{ scale: 1.01, y: -2 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ delay: index * 0.05, duration: 0.15 }}
+                              whileHover={{ scale: 1.01 }}
                               whileTap={{ scale: 0.99 }}
                               onClick={() => selectOption(option)}
                               className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative overflow-hidden ${
@@ -292,6 +298,7 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                                   ? 'border-primary-500 bg-primary-50 shadow-lg'
                                   : 'border-cloud-200 bg-white hover:border-primary-300 hover:shadow-md'
                               }`}
+                              style={{ willChange: 'transform' }}
                             >
                               {selectedOption?.id === option.id && (
                                 <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 to-transparent" />

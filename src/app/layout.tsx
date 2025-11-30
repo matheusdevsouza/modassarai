@@ -40,7 +40,7 @@ export default function RootLayout({
       </head>
       <body className={`${montserrat.variable} ${inter.variable} ${montserrat.className} bg-sand-100 text-primary-700 antialiased relative`}>
         <div 
-          className="fixed inset-0 pointer-events-none z-[9999] opacity-5"
+          className="fixed inset-0 pointer-events-none z-[9999] opacity-5 md:opacity-0"
           style={{
             backgroundImage: 'url(/images/site-noise.png)',
             backgroundRepeat: 'repeat',

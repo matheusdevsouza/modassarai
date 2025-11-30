@@ -147,15 +147,17 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[199]"
+            className="fixed inset-0 bg-black/60 z-[199]"
+            style={{ willChange: 'opacity' }}
           />
           
           <motion.aside
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.28 }}
+            transition={{ type: 'tween', duration: 0.28, ease: 'easeOut' }}
             className="fixed top-0 right-0 h-full w-full md:w-[70vw] max-w-4xl z-[200] bg-sage-50 border-l border-cloud-100 shadow-2xl flex flex-col"
+            style={{ willChange: 'transform' }}
           >
             <div className="flex items-center justify-between px-6 py-5 border-b border-cloud-100">
               <div className="flex items-center gap-2">
@@ -175,7 +177,7 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto scrollbar-hide px-6 py-4">
+            <div className="flex-1 overflow-y-auto scrollbar-hide px-6 py-4" style={{ contain: 'layout style paint' }}>
               {state.items.length === 0 ? (
                 <div className="text-center text-sage-700 mt-16">
                   <Heart size={48} className="mx-auto mb-4 opacity-40 text-sage-400" weight="regular" />
@@ -192,10 +194,12 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                       return (
                         <motion.div
                           key={favorite.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
-                          className="bg-white border border-cloud-100 rounded-xl p-4 hover:border-primary-300 transition-all shadow-sm relative group"
+                          transition={{ duration: 0.2 }}
+                          className="bg-white border border-cloud-100 rounded-xl p-4 hover:border-primary-300 transition-colors shadow-sm relative group"
+                          style={{ willChange: 'opacity' }}
                         >
                           <button
                             onClick={() => removeFavorite(favorite.id)}
@@ -214,8 +218,9 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                               src={favorite.image || favorite.product.image || '/images/Logo.png'}
                               alt={favorite.product.name}
                               fill
-                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              className="object-cover transition-transform duration-200 group-hover:scale-105"
                               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              loading="lazy"
                             />
                           </Link>
 
@@ -256,7 +261,7 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                                   (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione')) ||
                                   (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
                                 )}
-                                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-colors duration-200 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
                                 title={
                                   (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione'))
                                     ? 'Selecione um tamanho'

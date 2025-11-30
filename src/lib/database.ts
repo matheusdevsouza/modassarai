@@ -101,13 +101,14 @@ interface TestimonialFilters {
   limit?: number
 }
 
-function getDbConfig(): DBConfig | { connectionString: string; max?: number; idleTimeoutMillis?: number; connectionTimeoutMillis?: number } {
+function getDbConfig(): DBConfig | { connectionString: string; max?: number; idleTimeoutMillis?: number; connectionTimeoutMillis?: number; allowExitOnIdle?: boolean } {
   if (process.env.DATABASE_URL) {
     return {
       connectionString: process.env.DATABASE_URL,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+      max: 20,
+      idleTimeoutMillis: 60000,
+      connectionTimeoutMillis: 10000,
+      allowExitOnIdle: false,
     }
   }
   
@@ -130,8 +131,8 @@ function getDbConfig(): DBConfig | { connectionString: string; max?: number; idl
     password,
     database,
     max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    idleTimeoutMillis: 60000,
+    connectionTimeoutMillis: 10000,
   }
 }
 
@@ -145,12 +146,26 @@ function initializePool() {
   if (process.env.NODE_ENV === 'development') {
     if (!(globalThis as any)._pgPool) {
       (globalThis as any)._pgPool = new Pool(config)
+      setupPoolErrorHandling((globalThis as any)._pgPool)
     }
     pool = (globalThis as any)._pgPool
   } else {
     pool = new Pool(config)
+    setupPoolErrorHandling(pool)
   }
   return pool;
+}
+
+function setupPoolErrorHandling(poolInstance: Pool) {
+  poolInstance.on('error', (err: Error) => {
+    console.error('Erro inesperado no pool de conexões do PostgreSQL:', err)
+  })
+  
+  poolInstance.on('connect', () => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ Nova conexão estabelecida com o banco de dados')
+    }
+  })
 }
 
 export function getPool(): Pool {
@@ -172,7 +187,7 @@ function convertQueryToPg(sql: string): string {
   return converted;
 }
 
-async function query(sql: string, params: any[] = []): Promise<any> {
+async function query(sql: string, params: any[] = [], retries: number = 2): Promise<any> {
   try {
     if (typeof window !== 'undefined') {
       throw new Error('Database queries cannot be executed in the browser');
@@ -199,9 +214,22 @@ async function query(sql: string, params: any[] = []): Promise<any> {
       rows: result.rows
     }
   } catch (error: any) {
+    const isConnectionError = 
+      error.message?.includes('Connection terminated') ||
+      error.message?.includes('connection timeout') ||
+      error.message?.includes('Connection terminated unexpectedly') ||
+      error.code === 'ECONNRESET' ||
+      error.code === 'ETIMEDOUT' ||
+      error.code === 'ENOTFOUND'
+    
+    if (isConnectionError && retries > 0) {
+      console.warn(`⚠️ Erro de conexão detectado. Tentando novamente... (${retries} tentativas restantes)`)
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      return query(sql, params, retries - 1)
+    }
+    
     console.error('Erro na query:', error)
     console.error('SQL Original:', sql)
-    
     
     throw error
   }
@@ -1096,33 +1124,17 @@ export async function queryWithEncryption(sql: string, params: any[] = [], table
                 const value = processedParams[fieldIndex];
                 if (value === null || value === undefined || value === '' || (typeof value === 'string' && value.trim() === '')) {
                   processedParams[fieldIndex] = null;
-                  console.log(`[ENCRYPTION] Campo ${fieldToEncrypt} (índice ${fieldIndex}) definido como NULL explícito`);
                 } else if (typeof value === 'string' && value.trim() !== '') {
                   const encrypted = encryptValue(value);
                   processedParams[fieldIndex] = encrypted !== null ? encrypted : null;
-                  console.log(`[ENCRYPTION] Campo ${fieldToEncrypt} (índice ${fieldIndex}) criptografado: ${encrypted ? 'SIM' : 'NULL (erro na criptografia)'}`);
                 } else {
                   processedParams[fieldIndex] = null;
-                  console.log(`[ENCRYPTION] Campo ${fieldToEncrypt} (índice ${fieldIndex}) forçado para NULL (tipo: ${typeof value}, valor: ${value})`);
                 }
               }
             });
           }
         }
       }
-    }
-
-    if (isInsert && tableName === 'users') {
-      console.log('[QUERY_WITH_ENCRYPTION] Parâmetros finais antes de enviar ao banco:', {
-        sql: sql.substring(0, 200),
-        params: processedParams.map((p, i) => ({
-          index: i,
-          value: p === null ? 'NULL' : (typeof p === 'string' ? (p.length > 50 ? p.substring(0, 50) + '...' : p) : p),
-          type: p === null ? 'null' : typeof p,
-          isNull: p === null,
-          isUndefined: p === undefined
-        }))
-      });
     }
 
     const result = await query(sql, processedParams);
