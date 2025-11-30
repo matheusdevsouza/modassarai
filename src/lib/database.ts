@@ -180,25 +180,12 @@ async function query(sql: string, params: any[] = []): Promise<any> {
     const pool = getPool()
     const pgSql = convertQueryToPg(sql);
     
-    const normalizedParams = params.map((param, index) => {
+    const normalizedParams = params.map((param) => {
       if (param === undefined || param === '' || (typeof param === 'string' && param.trim() === '')) {
-        console.log(`[QUERY] Parâmetro ${index + 1} normalizado para NULL (valor original: ${param}, tipo: ${typeof param})`);
         return null;
       }
       return param;
     });
-    
-    if (sql.toUpperCase().includes('INSERT INTO USERS') || sql.toUpperCase().includes('INSERT INTO users')) {
-      console.log('[QUERY] INSERT INTO users - Parâmetros normalizados:', {
-        sql: pgSql,
-        params: normalizedParams.map((p, i) => ({
-          index: i + 1,
-          value: p === null ? 'NULL' : (typeof p === 'string' ? p.substring(0, 20) + '...' : p),
-          type: p === null ? 'null' : typeof p,
-          isNull: p === null
-        }))
-      });
-    }
     
     const result = await pool.query(pgSql, normalizedParams)
     
@@ -215,18 +202,6 @@ async function query(sql: string, params: any[] = []): Promise<any> {
     console.error('Erro na query:', error)
     console.error('SQL Original:', sql)
     
-    if (error?.code === 'ENOTFOUND') {
-      const hostname = error?.hostname || 'desconhecido'
-      console.error(`❌ ERRO DE DNS: Não foi possível resolver o hostname "${hostname}"`)
-      console.error(`💡 Verifique se:`)
-      console.error(`   1. A DATABASE_URL está correta no Vercel`)
-      console.error(`   2. O formato está correto: postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres`)
-      console.error(`   3. O projeto Supabase não está pausado`)
-      console.error(`   4. Se estiver usando formato antigo (db.xxx.supabase.co), tente o formato novo do pooler`)
-    } else if (error?.code === 'ECONNREFUSED') {
-      console.error(`❌ ERRO DE CONEXÃO: Conexão recusada`)
-      console.error(`💡 Verifique se a DATABASE_URL está configurada no Vercel`)
-    }
     
     throw error
   }

@@ -191,10 +191,4 @@ export function logSQLInjectionAttempt(request: NextRequest, details: string) {
   const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
   const userAgent = request.headers.get('user-agent') || 'unknown';
   const timestamp = new Date().toISOString();
-  console.log(`🚨 SECURITY ALERT DETECTED:`);
-  console.log(`   IP: ${ip}`);
-  console.log(`   User-Agent: ${userAgent}`);
-  console.log(`   URL: ${request.url}`);
-  console.log(`   Details: ${details}`);
-  console.log(`   Timestamp: ${timestamp}`);
 }

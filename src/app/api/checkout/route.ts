@@ -12,15 +12,56 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { items, customer, shipping_address } = body
+    
     if (!items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
         { error: 'Items são obrigatórios' },
         { status: 400 }
       )
     }
+    
+    if (!customer) {
+      return NextResponse.json(
+        { error: 'Dados do cliente são obrigatórios' },
+        { status: 400 }
+      )
+    }
+    
+    if (!customer.name || !customer.name.trim()) {
+      return NextResponse.json(
+        { error: 'Nome do cliente é obrigatório' },
+        { status: 400 }
+      )
+    }
+    
+    if (!customer.email || !customer.email.trim()) {
+      return NextResponse.json(
+        { error: 'Email do cliente é obrigatório' },
+        { status: 400 }
+      )
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(customer.email)) {
+      return NextResponse.json(
+        { error: 'Email inválido' },
+        { status: 400 }
+      )
+    }
+    
+    if (customer.phone) {
+      if (!customer.phone.area_code || !customer.phone.number) {
+        return NextResponse.json(
+          { error: 'Telefone deve conter código de área e número' },
+          { status: 400 }
+        )
+      }
+    }
+    
     const total = items.reduce((sum: number, item: any) => {
       return sum + (item.price * item.quantity)
     }, 0)
+    
     const preferenceData = {
       items: items.map((item: any) => ({
         id: item.id,
@@ -32,12 +73,12 @@ export async function POST(request: NextRequest) {
         description: item.description || item.name
       })),
       payer: {
-        name: customer?.name || 'Cliente',
-        email: customer?.email || 'cliente@email.com',
-        phone: {
-          area_code: customer?.phone?.area_code || '11',
-          number: customer?.phone?.number || '999999999'
-        },
+        name: customer.name.trim(),
+        email: customer.email.trim().toLowerCase(),
+        phone: customer.phone ? {
+          area_code: customer.phone.area_code,
+          number: customer.phone.number
+        } : undefined,
         address: shipping_address ? {
           street_name: shipping_address.street,
           street_number: shipping_address.number,

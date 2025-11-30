@@ -158,30 +158,24 @@ export function Header() {
                 <Truck size={20} weight="regular" className="relative z-10" />
               </motion.button>
               
-              <AnimatePresence>
+              <motion.button
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsFavoritesSidebarOpen(true)}
+                className="relative p-3 bg-transparent text-sage-600 hover:text-primary-600 rounded-2xl transition-all duration-300 group"
+                title="Favoritos"
+              >
+                <Heart size={22} weight="regular" className="relative z-10" />
                 {favoritesState.itemCount > 0 && (
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.2 }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setIsFavoritesSidebarOpen(true)}
-                    className="relative p-2.5 sm:p-3 rounded-xl transition-all duration-300 group bg-white/50 hover:bg-white border border-cloud-200 hover:border-primary-300 shadow-sm hover:shadow-md"
-                    title="Favoritos"
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-1 -right-1 bg-primary-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md border-2 border-white z-20"
                   >
-                    <Heart size={20} weight="fill" className="relative z-10 text-sage-700 group-hover:text-primary-600" />
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 bg-primary-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md border-2 border-white z-20"
-                    >
-                      {favoritesState.itemCount}
-                    </motion.span>
-                  </motion.button>
+                    {favoritesState.itemCount}
+                  </motion.span>
                 )}
-              </AnimatePresence>
+              </motion.button>
               
               <motion.button
                 whileHover={{ scale: 1.1, y: -2 }}

@@ -3,6 +3,7 @@ import database from '@/lib/database';
 import { authenticateUser, verifyAdminAccess } from '@/lib/auth';
 import { generateAuditHash, formatAddress } from '@/lib/security';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
+import { applyAdminRateLimit } from '@/lib/admin-rate-limit';
 
 export const dynamic = 'force-dynamic';
 import bcrypt from 'bcryptjs';
@@ -11,6 +12,11 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    const rateLimitResponse = await applyAdminRateLimit(request, '/api/admin/orders/[id]/reveal-data');
+    if (rateLimitResponse) {
+      return rateLimitResponse;
+    }
+    
     const user = await authenticateUser(request);
     if (!user) {
       return NextResponse.json(

@@ -84,7 +84,7 @@ export function decryptObject(obj: any, fieldsToDecrypt: string[]): any {
 }
 export const ENCRYPTION_FIELDS = {
   users: ['email', 'phone', 'address'],
-  orders: ['customer_email', 'customer_phone', 'customer_cpf', 'shipping_address'],
+  orders: ['customer_name', 'customer_email', 'customer_phone', 'customer_cpf', 'shipping_address'],
 };
 export function encryptForDatabase(tableName: string, data: any): any {
   const fieldsToEncrypt = ENCRYPTION_FIELDS[tableName as keyof typeof ENCRYPTION_FIELDS];

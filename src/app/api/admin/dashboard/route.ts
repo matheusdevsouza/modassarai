@@ -114,10 +114,8 @@ export async function GET(request: NextRequest) {
           p.price,
           p.stock_quantity,
           p.created_at,
-          b.name as brand,
           CASE WHEN p.stock_quantity <= p.min_stock_level THEN 'low_stock' ELSE 'active' END as status
         FROM products p
-        LEFT JOIN brands b ON p.brand_id = b.id
         ORDER BY p.created_at DESC
         LIMIT 5
       `)
@@ -129,7 +127,7 @@ export async function GET(request: NextRequest) {
     const processedRecentOrders = recentOrders.map((order: any) => ({
       id: order.id,
       orderNumber: order.order_number,
-      customerName: order.customer_name || 'Cliente não identificado',
+      customerName: order.customer_name || null,
       total: parseFloat(order.total_amount),
       status: order.status,
       createdAt: order.created_at
@@ -138,7 +136,6 @@ export async function GET(request: NextRequest) {
       id: product.id,
       name: product.name,
       price: parseFloat(product.price) || 0,
-      brand: product.brand,
       stock: parseInt(product.stock_quantity),
       status: product.status,
       createdAt: product.created_at

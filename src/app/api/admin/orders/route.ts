@@ -28,12 +28,14 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || '';
     const status = searchParams.get('status') || '';
     const paymentStatus = searchParams.get('paymentStatus') || '';
+    const isOrderNumberSearch = search && /^[A-Z]+-?\d*/.test(search);
+    
     let whereClause = '';
     const params: any[] = [];
-    if (search) {
-      whereClause += ' WHERE (order_number LIKE ? OR customer_name LIKE ? OR customer_email LIKE ?)';
+    if (search && isOrderNumberSearch) {
+      whereClause += ' WHERE order_number LIKE ?';
       const searchTerm = `%${search}%`;
-      params.push(searchTerm, searchTerm, searchTerm);
+      params.push(searchTerm);
     }
     if (status && status !== 'all') {
       if (whereClause) {
@@ -51,16 +53,21 @@ export async function GET(request: NextRequest) {
       }
       params.push(paymentStatus);
     }
-    const offset = (page - 1) * limit;
+    
+    const needsPostProcessingSearch = search && !isOrderNumberSearch;
+    const queryLimit = needsPostProcessingSearch ? 10000 : limit; 
+    const offset = needsPostProcessingSearch ? 0 : (page - 1) * limit;
+    
     const orders = await database.query(`
       SELECT * FROM orders 
-      ${whereClause}
+      ${whereClause || 'WHERE 1=1'}
       ORDER BY created_at DESC 
-      LIMIT ? OFFSET ?
-    `, [...params, limit.toString(), offset.toString()]);
+      ${needsPostProcessingSearch ? '' : `LIMIT ? OFFSET ?`}
+    `, needsPostProcessingSearch ? params : [...params, queryLimit.toString(), offset.toString()]);
+    
     const totalResult = await database.query(`
       SELECT COUNT(*) as total FROM orders 
-      ${whereClause}
+      ${whereClause || 'WHERE 1=1'}
     `, params);
     const totalOrders = totalResult[0].total;
     const [statsResult] = await database.query(`
@@ -112,12 +119,12 @@ export async function GET(request: NextRequest) {
       });
       return acc;
     }, {});
-    const processedOrders = orders.map((order: any) => {
+    let processedOrders = orders.map((order: any) => {
       const decryptedOrder = decryptFromDatabase('orders', order);
       return {
         id: decryptedOrder.id,
         order_number: decryptedOrder.order_number,
-        customer_name: decryptedOrder.customer_name || 'Cliente não identificado',
+        customer_name: decryptedOrder.customer_name || null,
         customer_email: decryptedOrder.customer_email,
         customer_phone: decryptedOrder.customer_phone,
         customer_address: decryptedOrder.shipping_address,
@@ -135,6 +142,20 @@ export async function GET(request: NextRequest) {
         items: itemsByOrder[decryptedOrder.id] || []
       };
     });
+
+    let finalTotalOrders = totalOrders;
+    if (search && !isOrderNumberSearch) {
+      const searchLower = search.toLowerCase();
+      const filteredOrders = processedOrders.filter((order: any) => {
+        const nameMatch = order.customer_name?.toLowerCase().includes(searchLower);
+        const emailMatch = order.customer_email?.toLowerCase().includes(searchLower);
+        return nameMatch || emailMatch;
+      });
+      
+      finalTotalOrders = filteredOrders.length;
+      const startIndex = (page - 1) * limit;
+      processedOrders = filteredOrders.slice(startIndex, startIndex + limit);
+    }
     const stats = {
       totalOrders: parseInt(statsResult.totalOrders) || 0,
       totalRevenue: parseFloat(statsResult.totalRevenue) || 0,
@@ -157,8 +178,8 @@ export async function GET(request: NextRequest) {
         pagination: {
           page,
           limit,
-          total: totalOrders,
-          pages: Math.ceil(totalOrders / limit)
+          total: finalTotalOrders,
+          pages: Math.ceil(finalTotalOrders / limit)
         }
       }
     });

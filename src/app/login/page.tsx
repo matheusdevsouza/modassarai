@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import TwoFactorModal from '@/components/TwoFactorModal';
+
 export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
@@ -14,7 +16,12 @@ export default function LoginPage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [showResendVerification, setShowResendVerification] = useState(false);
   const [resendEmail, setResendEmail] = useState('');
-  const { login, resendVerification } = useAuth();
+  const [show2FAModal, setShow2FAModal] = useState(false);
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [sending2FACode, setSending2FACode] = useState(false);
+  
+  const { login, resendVerification, checkAuth } = useAuth();
   const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -27,28 +34,120 @@ export default function LoginPage() {
     setLoading(true);
     setMessage(null);
     setShowResendVerification(false);
+    setShow2FAModal(false);
+    
     try {
-      const result = await login(formData.email, formData.password);
-      if (result.success) {
-        setMessage({ type: 'success', text: result.message });
-        setTimeout(() => {
-          if (result.user?.is_admin) {
-            router.push('/admin');
-          } else {
-            router.push('/');
-          }
-        }, 1500);
+      const response = await fetch('/api/auth/send-2fa-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSessionToken(data.sessionToken);
+        setExpiresAt(data.expiresAt);
+        setShow2FAModal(true);
+        setMessage({ 
+          type: 'success', 
+          text: 'Código de verificação enviado para seu e-mail!' 
+        });
       } else {
-        setMessage({ type: 'error', text: result.message });
-        if (result.emailNotVerified) {
+        setMessage({ type: 'error', text: data.message || 'Erro ao enviar código de verificação' });
+        if (data.emailNotVerified) {
           setShowResendVerification(true);
           setResendEmail(formData.email);
         }
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Erro interno do servidor' });
+      console.error('Erro ao solicitar código 2FA:', error);
+      setMessage({ type: 'error', text: 'Erro interno do servidor. Tente novamente.' });
     } finally {
       setLoading(false);
+    }
+  };
+  
+  const handleResend2FACode = async (): Promise<{ success: boolean; message?: string; retryAfter?: number }> => {
+    if (sending2FACode) {
+      return { success: false, message: 'Aguarde...' };
+    }
+    
+    setSending2FACode(true);
+    try {
+      const response = await fetch('/api/auth/send-2fa-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSessionToken(data.sessionToken);
+        setExpiresAt(data.expiresAt);
+        return { 
+          success: true, 
+          message: 'Código reenviado com sucesso!',
+          retryAfter: data.retryAfter || 60
+        };
+      } else {
+        return { 
+          success: false, 
+          message: data.message || 'Erro ao reenviar código',
+          retryAfter: data.retryAfter || 60
+        };
+      }
+    } catch (error) {
+      console.error('Erro ao reenviar código 2FA:', error);
+      return { success: false, message: 'Erro ao reenviar código. Tente novamente.' };
+    } finally {
+      setSending2FACode(false);
+    }
+  };
+  
+  const handle2FASuccess = async () => {
+    setShow2FAModal(false);
+    setMessage({ type: 'success', text: 'Login realizado com sucesso!' });
+    
+    try {
+      const meResponse = await fetch('/api/auth/me', {
+        credentials: 'include'
+      });
+      const meData = await meResponse.json();
+      
+      if (meData.success && meData.user) {
+        await checkAuth();
+        
+        setTimeout(() => {
+          if (meData.user.is_admin) {
+            router.push('/admin');
+          } else {
+            router.push('/');
+          }
+        }, 500);
+      } else {
+        setTimeout(() => {
+          router.push('/');
+        }, 500);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar contexto após login 2FA:', error);
+      setTimeout(() => {
+        router.push('/');
+      }, 500);
     }
   };
   const handleResendVerification = async () => {
@@ -201,6 +300,21 @@ export default function LoginPage() {
           </div>
         )}
       </div>
+      
+      <TwoFactorModal
+        isOpen={show2FAModal}
+        email={formData.email}
+        password={formData.password}
+        sessionToken={sessionToken}
+        expiresAt={expiresAt}
+        onClose={() => {
+          setShow2FAModal(false);
+          setSessionToken(null);
+          setExpiresAt(null);
+        }}
+        onSuccess={handle2FASuccess}
+        onResendCode={handleResend2FACode}
+      />
     </section>
   );
 }

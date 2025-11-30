@@ -1,0 +1,313 @@
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { EnvelopeSimple, Spinner, X, Clock, ArrowCounterClockwise } from 'phosphor-react';
+
+interface TwoFactorModalProps {
+  isOpen: boolean;
+  email: string;
+  password: string;
+  sessionToken: string | null;
+  expiresAt: string | null;
+  onClose: () => void;
+  onSuccess: () => void;
+  onResendCode: () => Promise<{ success: boolean; message?: string; retryAfter?: number }>;
+}
+
+export default function TwoFactorModal({
+  isOpen,
+  email,
+  password,
+  sessionToken,
+  expiresAt,
+  onClose,
+  onSuccess,
+  onResendCode
+}: TwoFactorModalProps) {
+  const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const cooldownIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (isOpen && expiresAt) {
+      const updateTimer = () => {
+        const now = Date.now();
+        const expiry = new Date(expiresAt).getTime();
+        const remaining = Math.max(0, Math.floor((expiry - now) / 1000));
+        setTimeRemaining(remaining);
+      };
+
+      updateTimer();
+      timerIntervalRef.current = setInterval(updateTimer, 1000);
+
+      return () => {
+        if (timerIntervalRef.current) {
+          clearInterval(timerIntervalRef.current);
+        }
+      };
+    }
+  }, [isOpen, expiresAt]);
+
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      cooldownIntervalRef.current = setInterval(() => {
+        setResendCooldown(prev => {
+          if (prev <= 1) {
+            if (cooldownIntervalRef.current) {
+              clearInterval(cooldownIntervalRef.current);
+            }
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (cooldownIntervalRef.current) {
+        clearInterval(cooldownIntervalRef.current);
+      }
+    };
+  }, [resendCooldown]);
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleCodeChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+
+    const newCode = code.split('');
+    newCode[index] = value.slice(-1);
+    setCode(newCode.join('').slice(0, 6));
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    setError(null);
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !code[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+    if (e.key === 'ArrowLeft' && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+    if (e.key === 'ArrowRight' && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    setCode(pasted);
+    
+    const nextIndex = Math.min(pasted.length, 5);
+    inputRefs.current[nextIndex]?.focus();
+    
+    setError(null);
+  };
+
+  const handleVerify = async () => {
+    if (code.length !== 6) {
+      setError('Por favor, insira o código completo de 6 dígitos');
+      return;
+    }
+
+    if (!sessionToken) {
+      setError('Erro: Token de sessão não encontrado. Solicite um novo código.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/auth/verify-2fa-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          code: code,
+          sessionToken
+        }),
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        onSuccess();
+      } else {
+        setError(data.message || 'Código incorreto. Tente novamente.');
+        setCode('');
+        inputRefs.current[0]?.focus();
+      }
+    } catch (error) {
+      console.error('Erro ao verificar código:', error);
+      setError('Erro ao verificar código. Tente novamente.');
+      setCode('');
+      inputRefs.current[0]?.focus();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return;
+
+    setResendLoading(true);
+    setError(null);
+
+    try {
+      const result = await onResendCode();
+      
+      if (result.success) {
+        setCode('');
+        setResendCooldown(result.retryAfter || 60);
+        inputRefs.current[0]?.focus();
+      } else {
+        setError(result.message || 'Erro ao reenviar código');
+        if (result.retryAfter) {
+          setResendCooldown(result.retryAfter);
+        }
+      }
+    } catch (error) {
+      setError('Erro ao reenviar código. Tente novamente.');
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-10 relative"
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-6 right-6 text-sage-500 hover:text-sage-700 transition-colors"
+            disabled={loading}
+          >
+            <X size={24} />
+          </button>
+
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <EnvelopeSimple size={36} className="text-primary-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-sage-900 mb-3">
+              Verificação em Duas Etapas
+            </h2>
+            <p className="text-sage-600 text-sm mb-2">
+              Digite o código de 6 dígitos enviado para
+            </p>
+            <p className="text-sage-900 font-semibold text-base">{email}</p>
+          </div>
+
+          {error && (
+            <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
+          <div className="mb-8">
+            <div className="flex gap-3 justify-center">
+              {[0, 1, 2, 3, 4, 5].map((index) => (
+                <input
+                  key={index}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={code[index] || ''}
+                  onChange={(e) => handleCodeChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={handlePaste}
+                  className="w-16 h-16 bg-white text-center text-3xl font-bold border-[3px] border-primary-500 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-200 transition-all shadow-sm hover:border-primary-600"
+                  disabled={loading || (timeRemaining !== null && timeRemaining === 0)}
+                />
+              ))}
+            </div>
+            
+            {timeRemaining !== null && timeRemaining > 0 && (
+              <div className="mt-6 mb-6 flex items-center justify-center gap-2 text-sage-600 text-sm">
+                <Clock size={16} />
+                <span>Código expira em: <strong>{formatTime(timeRemaining)}</strong></span>
+              </div>
+            )}
+            
+            {timeRemaining !== null && timeRemaining === 0 && (
+              <div className="mt-6 mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center">
+                Código expirado. Solicite um novo código.
+              </div>
+            )}
+          </div>
+
+          <motion.button
+            onClick={handleVerify}
+            disabled={loading || code.length !== 6 || (timeRemaining !== null && timeRemaining === 0)}
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            whileTap={{ scale: loading ? 1 : 0.98 }}
+            className="w-full bg-primary-500 hover:bg-primary-600 disabled:bg-cloud-200 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg mb-6 flex items-center justify-center gap-2 transition-all text-base"
+          >
+            {loading ? (
+              <>
+                <Spinner size={20} className="animate-spin" />
+                Verificando...
+              </>
+            ) : (
+              'Verificar Código'
+            )}
+          </motion.button>
+
+          <div className="text-center pt-2">
+            <button
+              onClick={handleResend}
+              disabled={resendLoading || resendCooldown > 0}
+              className="text-primary-600 hover:text-primary-700 text-sm font-medium disabled:text-sage-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto transition-colors"
+            >
+              {resendLoading ? (
+                <>
+                  <Spinner size={16} className="animate-spin" />
+                  Enviando...
+                </>
+              ) : resendCooldown > 0 ? (
+                <>
+                  <Clock size={16} />
+                  Reenviar em {formatTime(resendCooldown)}
+                </>
+              ) : (
+                <>
+                  <ArrowCounterClockwise size={16} />
+                  Reenviar Código
+                </>
+              )}
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </AnimatePresence>
+  );
+}
+

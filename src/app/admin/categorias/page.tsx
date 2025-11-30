@@ -390,10 +390,10 @@ export default function AdminCategories() {
   };
   if (loading && categories.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <FaSpinner className="animate-spin text-4xl text-primary-500 mx-auto mb-4" />
-          <p className="text-sage-600">Carregando categorias...</p>
+      <div className="min-h-screen bg-primary-50 flex items-center justify-center">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-2 border-transparent border-t-primary-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-2 border-transparent border-b-primary-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
         </div>
       </div>
     );
@@ -500,8 +500,8 @@ export default function AdminCategories() {
                   {stats.active}
                 </p>
               </div>
-              <div className="bg-green-200 p-2 rounded-full">
-                <FaUsers className="text-green-600" size={14} />
+              <div className="bg-primary-200 p-2 rounded-full">
+                <FaUsers className="text-primary-600" size={14} />
               </div>
             </div>
           </div>
@@ -513,8 +513,8 @@ export default function AdminCategories() {
                   {stats.inactive}
                 </p>
               </div>
-              <div className="bg-red-200 p-2 rounded-full">
-                <FaUsers className="text-red-600" size={14} />
+              <div className="bg-primary-200 p-2 rounded-full">
+                <FaUsers className="text-primary-600" size={14} />
               </div>
             </div>
           </div>

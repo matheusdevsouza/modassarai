@@ -435,15 +435,10 @@ export default function ProdutosPage() {
   };
   if (loading && products.length === 0) {
     return (
-      <div className="space-y-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-white rounded w-1/4 mb-6"></div>
-          <div className="h-12 bg-white rounded mb-6"></div>
-          <div className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-white rounded"></div>
-            ))}
-          </div>
+      <div className="min-h-screen bg-primary-50 flex items-center justify-center">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-2 border-transparent border-t-primary-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-2 border-transparent border-b-primary-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
         </div>
       </div>
     );

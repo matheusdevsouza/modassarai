@@ -226,17 +226,12 @@ export default function AdminUsers() {
       </motion.div>
     );
   };
-  if (loading) {
+  if (loading && users.length === 0) {
     return (
-      <div className="space-y-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-700 rounded w-1/4 mb-6"></div>
-          <div className="h-12 bg-gray-700 rounded mb-6"></div>
-          <div className="space-y-3">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-700 rounded"></div>
-            ))}
-          </div>
+      <div className="min-h-screen bg-primary-50 flex items-center justify-center">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-2 border-transparent border-t-primary-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-2 border-transparent border-b-primary-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
         </div>
       </div>
     );
@@ -316,8 +311,8 @@ export default function AdminUsers() {
                 {users.filter(u => u.status === 'active').length}
               </p>
             </div>
-            <div className="bg-green-200 p-2 rounded-full">
-              <FaUserCheck className="text-green-600" size={14} />
+            <div className="bg-primary-200 p-2 rounded-full">
+              <FaUserCheck className="text-primary-600" size={14} />
             </div>
           </div>
         </div>
@@ -342,8 +337,8 @@ export default function AdminUsers() {
                 {users.filter(u => !u.emailVerified).length}
               </p>
             </div>
-            <div className="bg-yellow-200 p-2 rounded-full">
-              <FaEnvelope className="text-yellow-600" size={14} />
+            <div className="bg-primary-200 p-2 rounded-full">
+              <FaEnvelope className="text-primary-600" size={14} />
             </div>
           </div>
         </div>
@@ -438,16 +433,7 @@ export default function AdminUsers() {
           </button>
         </div>
       )}
-      {loading ? (
-        <div className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-center py-12">
-            <FaSpinner className="animate-spin text-primary-500 text-2xl" />
-            <span className="ml-3 text-gray-400">Carregando usuários...</span>
-          </div>
-        </div>
-      ) : (
-        <>
-          <motion.div
+      <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -614,8 +600,6 @@ export default function AdminUsers() {
               </div>
             )}
           </motion.div>
-        </>
-      )}
       {totalPages > 1 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -27,11 +27,9 @@ export async function GET(request: NextRequest) {
     }> = [];
     const products = await database.query(
       `SELECT p.id, p.name, p.slug, p.price, p.description,
-              b.name as brand_name, 
               c.name as category_name,
               (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) as image_url
        FROM products p
-       LEFT JOIN brands b ON p.brand_id = b.id
        LEFT JOIN categories c ON p.category_id = c.id
        WHERE (p.name LIKE ? OR p.description LIKE ? OR p.slug LIKE ?)
        AND p.is_active = TRUE
@@ -46,7 +44,7 @@ export async function GET(request: NextRequest) {
         price: Number(product.price),
         image: product.image_url || '',
         type: 'product' as const,
-        brand: product.brand_name,
+        brand: undefined,
         category: product.category_name
       });
     });

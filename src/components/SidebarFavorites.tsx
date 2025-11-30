@@ -17,6 +17,7 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
   const { addItem } = useCart()
   const [productSizes, setProductSizes] = useState<{ [key: string]: any[] }>({})
   const [loadingSizes, setLoadingSizes] = useState<{ [key: string]: boolean }>({})
+
   const loadProductSizes = async (productId: string, slug?: string) => {
     if (!slug) return
     if (productSizes[productId] || loadingSizes[productId]) return
@@ -32,13 +33,10 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
         }))
       }
     } catch (error) {
-
     } finally {
       setLoadingSizes(prev => ({ ...prev, [productId]: false }))
     }
   }
-
-
 
   const productHasSizes = (productId: string): boolean => {
     const sizes = productSizes[productId] || []
@@ -107,7 +105,38 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.items.length, open]) 
+  }, [state.items.length, open])
+
+  useEffect(() => {
+    if (open) {
+      const scrollY = window.scrollY
+      
+      const htmlElement = document.documentElement
+      const bodyElement = document.body
+      
+      if (htmlElement) {
+        htmlElement.classList.add('lenis-stopped')
+      }
+      
+      bodyElement.style.position = 'fixed'
+      bodyElement.style.top = `-${scrollY}px`
+      bodyElement.style.width = '100%'
+      bodyElement.style.overflow = 'hidden'
+      
+      return () => {
+        if (htmlElement) {
+          htmlElement.classList.remove('lenis-stopped')
+        }
+        
+        bodyElement.style.position = ''
+        bodyElement.style.top = ''
+        bodyElement.style.width = ''
+        bodyElement.style.overflow = ''
+        
+        window.scrollTo(0, scrollY)
+      }
+    }
+  }, [open])
 
   return (
     <AnimatePresence>
@@ -126,12 +155,12 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.28 }}
-            className="fixed top-0 right-0 h-full w-full max-w-md z-[200] bg-[#0D0D0D] border-l border-dark-700 shadow-2xl flex flex-col"
+            className="fixed top-0 right-0 h-full w-full md:w-[70vw] max-w-4xl z-[200] bg-sage-50 border-l border-cloud-100 shadow-2xl flex flex-col"
           >
-            <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-dark-700">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-cloud-100">
               <div className="flex items-center gap-2">
-                <Heart size={20} className="sm:w-6 sm:h-6 text-primary-400" weight="fill" />
-                <span className="text-base sm:text-lg font-bold text-white">Meus Favoritos</span>
+                <Heart size={24} className="text-primary-600" weight="fill" />
+                <span className="text-lg font-bold text-sage-900">Meus Favoritos</span>
                 {state.itemCount > 0 && (
                   <span className="bg-primary-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                     {state.itemCount}
@@ -140,123 +169,120 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
               </div>
               <button 
                 onClick={onClose} 
-                className="text-gray-400 hover:text-primary-400 transition-colors p-1"
+                className="text-sage-700 hover:text-primary-600 transition-colors"
               >
-                <X size={24} className="sm:w-7 sm:h-7" />
+                <X size={28} />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="flex-1 overflow-y-auto scrollbar-hide px-6 py-4">
               {state.items.length === 0 ? (
-                <div className="text-center text-gray-400 mt-16">
-                  <Heart size={48} className="mx-auto mb-4 opacity-40" weight="regular" />
-                  <p className="text-lg mb-2">Seus favoritos estão vazios</p>
-                  <p className="text-sm">Adicione produtos que você ama aos favoritos!</p>
+                <div className="text-center text-sage-700 mt-16">
+                  <Heart size={48} className="mx-auto mb-4 opacity-40 text-sage-400" weight="regular" />
+                  <p className="text-lg mb-2 font-semibold">Seus favoritos estão vazios</p>
+                  <p className="text-sm text-sage-600">Adicione produtos que você ama aos favoritos!</p>
                 </div>
               ) : (
                 <>
-                  <ul className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {state.items.map(favorite => {
                       const sizes = getAvailableSizes(favorite.product.id)
                       const currentSize = favorite.size
 
                       return (
-                        <li 
-                          key={favorite.id} 
-                          className="bg-[#1f1f1f] border border-[#2a2a2a] rounded-xl p-3 sm:p-4 hover:border-primary-500/30 transition-all relative flex flex-col sm:flex-row gap-3 sm:gap-4 min-h-[140px] sm:min-h-0"
+                        <motion.div
+                          key={favorite.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          className="bg-white border border-cloud-100 rounded-xl p-4 hover:border-primary-300 transition-all shadow-sm relative group"
                         >
-                          <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex gap-1.5 sm:gap-2 z-10">
-                            <button
-                              onClick={() => removeFavorite(favorite.id)}
-                              className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 rounded-lg transition-colors backdrop-blur-sm touch-manipulation"
-                              title="Remover dos favoritos"
-                            >
-                              <Trash size={16} className="sm:w-4 sm:h-4" />
-                            </button>
-                          </div>
+                          <button
+                            onClick={() => removeFavorite(favorite.id)}
+                            className="absolute top-2 right-2 p-1.5 bg-cloud-100 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors opacity-0 group-hover:opacity-100 z-10"
+                            title="Remover dos favoritos"
+                          >
+                            <Trash size={16} />
+                          </button>
 
-                          <div className="flex gap-3 sm:gap-4 w-full">
+                          <Link 
+                            href={`/produto/${favorite.product.slug || favorite.product.id}`}
+                            onClick={onClose}
+                            className="relative w-full h-48 rounded-lg overflow-hidden bg-sand-100 mb-3 block"
+                          >
+                            <Image
+                              src={favorite.image || favorite.product.image || '/images/Logo.png'}
+                              alt={favorite.product.name}
+                              fill
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            />
+                          </Link>
+
+                          <div className="space-y-2">
                             <Link 
                               href={`/produto/${favorite.product.slug || favorite.product.id}`}
                               onClick={onClose}
-                              className="relative w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 rounded-lg overflow-hidden bg-dark-800 group"
+                              className="block"
                             >
-                              <Image
-                                src={favorite.image || favorite.product.image || '/images/Logo.png'}
-                                alt={favorite.product.name}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 640px) 96px, 128px"
-                              />
+                              <h3 className="font-semibold text-sage-900 text-sm hover:text-primary-600 transition-colors break-words line-clamp-2">
+                                {favorite.product.name}
+                              </h3>
                             </Link>
+                            
+                            <div className="text-primary-600 font-bold text-base">
+                              R$ {favorite.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            </div>
 
-                            <div className="flex-1 min-w-0 pr-14 sm:pr-16 flex flex-col">
-                              <Link 
-                                href={`/produto/${favorite.product.slug || favorite.product.id}`}
-                                onClick={onClose}
-                                className="block"
-                              >
-                                <h3 className="font-semibold text-sm sm:text-base text-white truncate mb-1 hover:text-primary-400 transition-colors">
-                                  {favorite.product.name}
-                                </h3>
-                              </Link>
-                              
-                              <div className="text-primary-400 font-bold text-sm sm:text-base mb-2">
-                                R$ {favorite.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                              </div>
-
-                              <div className="space-y-1 mb-2 sm:mb-3">
-                                {(currentSize || favorite.color) && (
-                                  <div className="text-xs text-gray-400 flex items-center gap-2 flex-wrap">
-                                    {currentSize && (
-                                      <span>
-                                        Tamanho: <span className="text-white font-medium">{currentSize}</span>
-                                      </span>
-                                    )}
-                                    {favorite.color && (
-                                      <span>
-                                        Cor: <span className="text-white font-medium">{favorite.color}</span>
-                                      </span>
-                                    )}
-                                  </div>
+                            {(currentSize || favorite.color) && (
+                              <div className="text-xs text-sage-700 flex items-center gap-1.5 flex-wrap">
+                                {currentSize && (
+                                  <span className="px-2 py-0.5 bg-cloud-100 rounded-md">
+                                    <span className="font-semibold">{currentSize}</span>
+                                  </span>
+                                )}
+                                {favorite.color && (
+                                  <span className="px-2 py-0.5 bg-cloud-100 rounded-md">
+                                    <span className="font-semibold">{favorite.color}</span>
+                                  </span>
                                 )}
                               </div>
+                            )}
 
-                              <div className="flex flex-col sm:flex-row gap-2 mt-3 sm:mt-auto">
-                                <button
-                                    onClick={() => handleAddToCart(favorite)}
-                                    disabled={Boolean(
-                                      (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione')) ||
-                                      (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
-                                    )}
-                                    className="flex-1 bg-primary-500 hover:bg-gradient-to-r hover:from-[var(--logo-gold,#D4A574)] hover:via-[var(--logo-gold-light,#E6B896)] hover:to-[var(--logo-gold,#D4A574)] text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary-500 touch-manipulation"
-                                    title={
-                                      (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione'))
-                                        ? 'Selecione um tamanho'
-                                        : (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
-                                          ? 'Tamanho esgotado'
-                                          : 'Adicionar ao carrinho'
-                                    }
-                                  >
-                                    <ShoppingCart size={18} className="sm:w-4 sm:h-4" />
-                                    <span>Adicionar</span>
-                                  </button>
-                                  <Link
-                                    href={`/produto/${favorite.product.slug || favorite.product.id}`}
-                                    onClick={onClose}
-                                    className="px-4 py-3 sm:px-3 sm:py-2 bg-dark-700 hover:bg-[#333333] text-gray-300 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 touch-manipulation"
-                                    title="Ver produto na loja"
-                                  >
-                                    <Eye size={18} className="sm:w-4 sm:h-4" />
-                                    <span>Ver</span>
-                                  </Link>
-                              </div>
+                            <div className="flex gap-2 pt-1">
+                              <button
+                                onClick={() => handleAddToCart(favorite)}
+                                disabled={Boolean(
+                                  (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione')) ||
+                                  (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
+                                )}
+                                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+                                title={
+                                  (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione'))
+                                    ? 'Selecione um tamanho'
+                                    : (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
+                                      ? 'Tamanho esgotado'
+                                      : 'Adicionar ao carrinho'
+                                }
+                              >
+                                <ShoppingCart size={16} />
+                                <span>Adicionar</span>
+                              </button>
+                              <Link
+                                href={`/produto/${favorite.product.slug || favorite.product.id}`}
+                                onClick={onClose}
+                                className="px-3 py-2 bg-cloud-100 hover:bg-cloud-200 text-sage-800 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                                title="Ver produto na loja"
+                              >
+                                <Eye size={16} />
+                                <span>Ver</span>
+                              </Link>
                             </div>
                           </div>
-                        </li>
+                        </motion.div>
                       )
                     })}
-                  </ul>
+                  </div>
 
                   {state.items.length > 0 && (
                     <div className="flex justify-center mt-6">
@@ -266,9 +292,8 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                             clearFavorites()
                           }
                         }}
-                        className="py-2 px-4 sm:px-6 rounded-xl bg-dark-800 text-gray-400 hover:bg-red-500/20 hover:text-red-400 transition-colors text-xs sm:text-sm flex items-center gap-2 w-full sm:w-auto justify-center"
+                        className="py-2 px-6 rounded-xl bg-cloud-100 text-sage-800 hover:bg-sage-200 transition-colors text-sm"
                       >
-                        <Trash size={16} />
                         Limpar Todos os Favoritos
                       </button>
                     </div>
@@ -276,12 +301,16 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                 </>
               )}
             </div>
-                
+                  
             {state.items.length > 0 && (
-              <div className="border-t border-dark-700 px-4 sm:px-6 py-3 sm:py-4 bg-dark-950">
-                <div className="text-center text-xs sm:text-sm text-gray-400">
-                  <p>{state.itemCount} {state.itemCount === 1 ? 'item favoritado' : 'itens favoritados'}</p>
-                  <p className="text-xs mt-1 hidden sm:block">Clique em &quot;Ver&quot; para ver detalhes do produto</p>
+              <div className="border-t border-cloud-100 px-6 py-4 bg-white">
+                <div className="text-center text-sm text-sage-700">
+                  <p className="font-semibold">
+                    {state.itemCount} {state.itemCount === 1 ? 'item favoritado' : 'itens favoritados'}
+                  </p>
+                  <p className="text-xs mt-1 text-sage-600">
+                    Clique em &quot;Ver&quot; para ver detalhes do produto
+                  </p>
                 </div>
               </div>
             )}
@@ -291,4 +320,3 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
     </AnimatePresence>
   )
 }
-

@@ -5,6 +5,7 @@ import { useCart } from '@/contexts/CartContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useShipping } from '@/hooks/useShipping'
 import { 
   CreditCard, 
   MapPin, 
@@ -78,6 +79,19 @@ export default function CheckoutPage() {
     city: '',
     state: ''
   })
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
+  const handleFieldBlur = (fieldName: string) => {
+    setTouchedFields(prev => ({ ...prev, [fieldName]: true }))
+  }
+  
+  const shouldShowError = (fieldName: string, value: string) => {
+    return touchedFields[fieldName] && value.trim() === ''
+  }
+  
+  const shouldShowEmailConfirmError = () => {
+    if (!touchedFields.emailConfirm) return false
+    return customerData.emailConfirm.trim() === '' || customerData.email !== customerData.emailConfirm
+  }
   const paymentMethods: PaymentMethod[] = [
     {
       id: 'credit_card',
@@ -101,7 +115,77 @@ export default function CheckoutPage() {
       installments: [1]
     }
   ]
-  const total = cartState.total
+  
+  const { 
+    options: shippingOptions, 
+    selectedOption: selectedShipping, 
+    isLoading: isLoadingShipping, 
+    error: shippingError,
+    calculateShipping,
+    selectOption: selectShippingOption,
+    zipCode: shippingZipCode
+  } = useShipping({ cartItems: cartState.items, initialZipCode: customerData.zipCode })
+  
+  useEffect(() => {
+    if (shippingZipCode && shippingZipCode.length === 8 && shippingZipCode !== customerData.zipCode) {
+      setCustomerData(prev => ({
+        ...prev,
+        zipCode: shippingZipCode
+      }))
+    }
+  }, [shippingZipCode, customerData.zipCode])
+  
+  const shippingCost = selectedShipping?.price || 0
+  const total = cartState.total + shippingCost
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    try {
+      const savedShipping = sessionStorage.getItem('mariapistache_shipping')
+      if (savedShipping) {
+        const shippingData = JSON.parse(savedShipping)
+        
+        const oneHour = 60 * 60 * 1000
+        if (shippingData.timestamp && Date.now() - shippingData.timestamp < oneHour) {
+          const savedZipCode = shippingData.zipCode
+          
+          if (savedZipCode && savedZipCode.length === 8) {
+            setCustomerData(prev => {
+              if (prev.zipCode !== savedZipCode) {
+                return {
+                  ...prev,
+                  zipCode: savedZipCode
+                }
+              }
+              return prev
+            })
+            
+            if (!customerData.street || !customerData.city) {
+              fetch(`https://viacep.com.br/ws/${savedZipCode}/json/`)
+                .then(res => res.json())
+                .then(data => {
+                  if (data && !data.erro) {
+                    setCustomerData(prev => ({
+                      ...prev,
+                      street: data.logradouro || prev.street,
+                      neighborhood: data.bairro || prev.neighborhood,
+                      city: data.localidade || prev.city,
+                      state: data.uf || prev.state
+                    }))
+                  }
+                })
+                .catch(() => {
+                })
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar frete salvo:', error)
+    }
+  }, []) 
+
   useEffect(() => {
     if (user?.email && customerData.email === user.email) {
       setCustomerData(prev => ({ ...prev, emailConfirm: user.email }))
@@ -157,7 +241,20 @@ export default function CheckoutPage() {
       if (customerData.zipCode && cepClean.length !== 8) {
         validationErrors.push('CEP deve ter 8 dígitos')
       }
+      if (!selectedShipping && customerData.zipCode.length === 8) {
+        validationErrors.push('Por favor, selecione uma opção de frete')
+      }
       if (validationErrors.length > 0) {
+        const allRequiredFields = ['name', 'email', 'emailConfirm', 'phone', 'cpf', 'zipCode', 'street', 'number', 'neighborhood', 'city', 'state']
+        const fieldsToMarkAsTouched: Record<string, boolean> = {}
+        allRequiredFields.forEach(field => {
+          const value = customerData[field as keyof CustomerData]
+          if (!value || value.toString().trim() === '') {
+            fieldsToMarkAsTouched[field] = true
+          }
+        })
+        setTouchedFields(prev => ({ ...prev, ...fieldsToMarkAsTouched }))
+        
         showErrorMessages(validationErrors)
         return
       }
@@ -194,7 +291,8 @@ export default function CheckoutPage() {
         customer: {
           name: customerData.name,
           email: customerData.email,
-          phone: customerData.phone
+          phone: customerData.phone,
+          cpf: customerData.cpf || null
         },
         shipping_address: {
           street: customerData.street,
@@ -204,7 +302,8 @@ export default function CheckoutPage() {
           city: customerData.city,
           state: customerData.state,
           zipcode: customerData.zipCode,
-          shipping_cost: 0 
+          shipping_cost: selectedShipping?.price || 0,
+          shipping_method: selectedShipping ? `${selectedShipping.company} - ${selectedShipping.name}` : null
         },
         payment_method: selectedPaymentMethod
       }
@@ -223,20 +322,12 @@ export default function CheckoutPage() {
       if (!result.success) {
         throw new Error(result.error || 'Erro ao criar pedido')
       }
-      const initPoint = process.env.NODE_ENV === 'production' 
-        ? result.init_point 
-        : result.sandbox_init_point
-      if (initPoint) {
-        clearCart()
-        window.open(initPoint, '_blank', 'noopener,noreferrer')
-        router.push('/meus-pedidos')
-      } else {
-        clearCart()
-        showErrorMessages(['Pedido criado com sucesso! O Mercado Pago não está configurado.'])
-        setTimeout(() => {
-          router.push('/meus-pedidos')
-        }, 3000)
-      }
+      
+      const orderToken = result.accessToken || result.orderId
+      
+      clearCart()
+      
+      router.push(`/pedido-status/${orderToken}?redirect=true`)
     } catch (error) {
       showErrorMessages([`Erro ao finalizar pedido: ${(error as Error).message}`])
     } finally {
@@ -302,8 +393,8 @@ export default function CheckoutPage() {
     )
   }
   return (
-    <div className="min-h-screen bg-sand-100">
-      <div className="container mx-auto px-4 py-4 pt-12">
+    <div className="min-h-screen bg-sand-100 pt-48 pb-12">
+      <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -412,8 +503,9 @@ export default function CheckoutPage() {
                         type="text"
                         value={customerData.name}
                         onChange={(e) => setCustomerData({...customerData, name: e.target.value})}
+                        onBlur={() => handleFieldBlur('name')}
                         className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                          customerData.name.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                          shouldShowError('name', customerData.name) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="Seu nome"
                         required
@@ -425,8 +517,9 @@ export default function CheckoutPage() {
                         type="email"
                         value={customerData.email}
                         onChange={(e) => setCustomerData({...customerData, email: e.target.value})}
+                        onBlur={() => handleFieldBlur('email')}
                         className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                          customerData.email.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                          shouldShowError('email', customerData.email) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="seu@email.com"
                         required
@@ -438,14 +531,14 @@ export default function CheckoutPage() {
                         type="email"
                         value={customerData.emailConfirm}
                         onChange={(e) => setCustomerData({...customerData, emailConfirm: e.target.value})}
+                        onBlur={() => handleFieldBlur('emailConfirm')}
                         className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                          customerData.emailConfirm.trim() === '' ? 'border-red-500' : 
-                          customerData.email !== customerData.emailConfirm ? 'border-red-500' : 'border-cloud-200'
+                          shouldShowEmailConfirmError() ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="Confirme seu e-mail"
                         required
                       />
-                      {customerData.emailConfirm.trim() !== '' && customerData.email !== customerData.emailConfirm && (
+                      {touchedFields.emailConfirm && customerData.emailConfirm.trim() !== '' && customerData.email !== customerData.emailConfirm && (
                         <p className="text-red-600 text-sm mt-1">Os e-mails não coincidem</p>
                       )}
                     </div>
@@ -455,8 +548,9 @@ export default function CheckoutPage() {
                         type="tel"
                         value={customerData.phone}
                         onChange={(e) => setCustomerData({...customerData, phone: e.target.value})}
+                        onBlur={() => handleFieldBlur('phone')}
                         className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                          customerData.phone.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                          shouldShowError('phone', customerData.phone) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="(11) 99999-9999"
                         required
@@ -468,8 +562,9 @@ export default function CheckoutPage() {
                         type="text"
                         value={customerData.cpf}
                         onChange={(e) => setCustomerData({...customerData, cpf: e.target.value})}
+                        onBlur={() => handleFieldBlur('cpf')}
                         className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                          customerData.cpf.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                          shouldShowError('cpf', customerData.cpf) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="000.000.000-00"
                         required
@@ -484,29 +579,94 @@ export default function CheckoutPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="md:col-span-2">
                         <label className="block text-sage-900 mb-2 font-medium">CEP <span className="text-red-500">*</span></label>
-                        <input
-                          type="text"
-                          value={customerData.zipCode}
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, '').slice(0, 8)
-                            setCustomerData({...customerData, zipCode: value})
-                          }}
-                          className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                            customerData.zipCode.trim() === '' ? 'border-red-500' : 'border-cloud-200'
-                          }`}
-                          placeholder="06790100"
-                          maxLength={8}
-                          required
-                        />
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={customerData.zipCode}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0, 8)
+                              setCustomerData({...customerData, zipCode: value})
+                              if (value.length === 8) {
+                                calculateShipping(value)
+                              }
+                            }}
+                            onBlur={() => handleFieldBlur('zipCode')}
+                            className={`flex-1 px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                              shouldShowError('zipCode', customerData.zipCode) ? 'border-red-500' : 'border-cloud-200'
+                            }`}
+                            placeholder="06790100"
+                            maxLength={8}
+                            required
+                          />
+                          {customerData.zipCode.length === 8 && (
+                            <button
+                              type="button"
+                              onClick={() => calculateShipping(customerData.zipCode)}
+                              disabled={isLoadingShipping}
+                              className="px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium whitespace-nowrap"
+                            >
+                              {isLoadingShipping ? 'Calculando...' : 'Calcular Frete'}
+                            </button>
+                          )}
+                        </div>
                       </div>
+                      
+                      {(customerData.zipCode.length === 8 || shippingOptions.length > 0) && (
+                        <div className="md:col-span-2">
+                          {isLoadingShipping ? (
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                              <p className="text-blue-700 text-sm">Calculando opções de frete...</p>
+                            </div>
+                          ) : shippingError ? (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                              <p className="text-red-700 text-sm">{shippingError}</p>
+                            </div>
+                          ) : shippingOptions.length > 0 ? (
+                            <div className="bg-white border border-cloud-200 rounded-lg p-4">
+                              <label className="block text-sage-900 mb-3 font-medium flex items-center gap-2">
+                                <Truck size={20} className="text-primary-600" />
+                                Selecione o Frete
+                              </label>
+                              <div className="space-y-2">
+                                {shippingOptions.map((option) => (
+                                  <button
+                                    key={option.id}
+                                    type="button"
+                                    onClick={() => selectShippingOption(option)}
+                                    className={`w-full text-left p-3 rounded-lg border transition-colors ${
+                                      selectedShipping?.id === option.id
+                                        ? 'border-primary-500 bg-primary-50'
+                                        : 'border-cloud-200 hover:border-primary-300'
+                                    }`}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex-1">
+                                        <div className="font-semibold text-sage-900">{option.company}</div>
+                                        <div className="text-sm text-sage-600">
+                                          {option.estimatedDays} {option.estimatedDays === 1 ? 'dia útil' : 'dias úteis'}
+                                        </div>
+                                      </div>
+                                      <div className="font-bold text-primary-600 text-lg">
+                                        R$ {option.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                      </div>
+                                    </div>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                      
                       <div className="md:col-span-2">
                         <label className="block text-sage-900 mb-2 font-medium">Rua <span className="text-red-500">*</span></label>
                         <input
                           type="text"
                           value={customerData.street}
                           onChange={(e) => setCustomerData({...customerData, street: e.target.value})}
+                          onBlur={() => handleFieldBlur('street')}
                           className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                            customerData.street.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                            shouldShowError('street', customerData.street) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="Nome da rua"
                           required
@@ -518,8 +678,9 @@ export default function CheckoutPage() {
                           type="text"
                           value={customerData.number}
                           onChange={(e) => setCustomerData({...customerData, number: e.target.value})}
+                          onBlur={() => handleFieldBlur('number')}
                           className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                            customerData.number.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                            shouldShowError('number', customerData.number) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="123"
                           required
@@ -541,8 +702,9 @@ export default function CheckoutPage() {
                           type="text"
                           value={customerData.neighborhood}
                           onChange={(e) => setCustomerData({...customerData, neighborhood: e.target.value})}
+                          onBlur={() => handleFieldBlur('neighborhood')}
                           className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                            customerData.neighborhood.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                            shouldShowError('neighborhood', customerData.neighborhood) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="Nome do bairro"
                           required
@@ -554,8 +716,9 @@ export default function CheckoutPage() {
                           type="text"
                           value={customerData.city}
                           onChange={(e) => setCustomerData({...customerData, city: e.target.value})}
+                          onBlur={() => handleFieldBlur('city')}
                           className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                            customerData.city.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                            shouldShowError('city', customerData.city) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="Nome da cidade"
                           required
@@ -567,8 +730,9 @@ export default function CheckoutPage() {
                           type="text"
                           value={customerData.state}
                           onChange={(e) => setCustomerData({...customerData, state: e.target.value})}
+                          onBlur={() => handleFieldBlur('state')}
                           className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
-                            customerData.state.trim() === '' ? 'border-red-500' : 'border-cloud-200'
+                            shouldShowError('state', customerData.state) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="UF"
                           required
@@ -674,6 +838,16 @@ export default function CheckoutPage() {
                        <div className="flex justify-between">
                          <span>Subtotal:</span>
                         <span>R$ {cartState.total.toFixed(2).replace('.', ',')}</span>
+                       </div>
+                       <div className="flex justify-between">
+                         <span>Frete:</span>
+                         <span>
+                           {selectedShipping ? (
+                             <>R$ {selectedShipping.price.toFixed(2).replace('.', ',')}</>
+                           ) : (
+                             <span className="text-sage-500">Não selecionado</span>
+                           )}
+                         </span>
                        </div>
                       <div className="border-t border-cloud-200 pt-2 mt-2">
                         <div className="flex justify-between font-semibold text-sage-900">
@@ -781,7 +955,7 @@ export default function CheckoutPage() {
                       whileTap={{ scale: 0.95 }}
                       onClick={handleFinishOrder}
                       disabled={isLoading || (!authenticated && !Object.values(guestChecklist).every(accepted => accepted))}
-                      className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                      className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
                     >
                       {isLoading ? 'Processando...' : 'Finalizar Pedido'}
                     </motion.button>
@@ -869,6 +1043,16 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-sage-800">
                   <span>Subtotal ({cartState.itemCount} itens)</span>
                   <span>R$ {cartState.total.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div className="flex justify-between text-sage-800">
+                  <span>Frete</span>
+                  <span>
+                    {selectedShipping ? (
+                      <>R$ {selectedShipping.price.toFixed(2).replace('.', ',')}</>
+                    ) : (
+                      <span className="text-sage-500 text-sm">Calcule o frete</span>
+                    )}
+                  </span>
                 </div>
                  <div className="flex justify-between text-lg font-bold text-sage-900 border-t border-cloud-200 pt-3">
                    <span>Total Final</span>

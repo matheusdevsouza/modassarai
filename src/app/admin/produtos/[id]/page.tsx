@@ -166,10 +166,9 @@ export default function ProductDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-primary-50 flex items-center justify-center">
-        <div className="relative w-20 h-20">
-          <div className="absolute inset-0 border-4 border-transparent border-t-primary-500 border-r-primary-500/50 rounded-full animate-spin"></div>
-          <div className="absolute inset-3 border-4 border-transparent border-b-primary-600 border-l-primary-600/50 rounded-full animate-spin" style={{ animationDirection: 'reverse' }}></div>
-          <div className="absolute inset-6 border-2 border-transparent border-r-primary-500 rounded-full animate-spin" style={{ animationDuration: '2s' }}></div>
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-2 border-transparent border-t-primary-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-2 border-transparent border-b-primary-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
         </div>
       </div>
     )
@@ -519,7 +518,6 @@ export default function ProductDetailPage() {
               <MediaManager 
                 productId={product.id} 
                 onMediaUpdate={() => {
-                  console.log('Mídia atualizada');
                 }}
               />
             </div>

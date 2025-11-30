@@ -27,6 +27,16 @@ const RATE_LIMIT_CONFIG = {
     windowMs: 60 * 60 * 1000,
     blockDuration: 60 * 60 * 1000,
   },
+  passwordResetRequest: {
+    maxAttempts: 3,
+    windowMs: 60 * 60 * 1000,
+    blockDuration: 60 * 60 * 1000,
+  },
+  passwordResetSubmit: {
+    maxAttempts: 5,
+    windowMs: 60 * 60 * 1000,
+    blockDuration: 60 * 60 * 1000,
+  },
   contact: {
     maxAttempts: 5,
     windowMs: 60 * 60 * 1000,
@@ -46,6 +56,31 @@ const RATE_LIMIT_CONFIG = {
     maxAttempts: 20,
     windowMs: 60 * 1000,
     blockDuration: 10 * 60 * 1000,
+  },
+  adminGeneral: {
+    maxAttempts: 200,
+    windowMs: 60 * 1000,
+    blockDuration: 5 * 60 * 1000,
+  },
+  adminSensitive: {
+    maxAttempts: 10,
+    windowMs: 5 * 60 * 1000,
+    blockDuration: 30 * 60 * 1000,
+  },
+  adminDataExport: {
+    maxAttempts: 3,
+    windowMs: 60 * 60 * 1000,
+    blockDuration: 2 * 60 * 60 * 1000,
+  },
+  adminSecurityAudit: {
+    maxAttempts: 5,
+    windowMs: 15 * 60 * 1000,
+    blockDuration: 30 * 60 * 1000,
+  },
+  adminRevealData: {
+    maxAttempts: 10,
+    windowMs: 15 * 60 * 1000,
+    blockDuration: 30 * 60 * 1000,
   },
 };
 function getRateLimitKey(identifier: string, type: keyof typeof RATE_LIMIT_CONFIG): string {
@@ -186,6 +221,56 @@ export function createRateLimitMiddleware(type: keyof typeof RATE_LIMIT_CONFIG) 
     };
   };
 }
+/**
+ * Verifica rate limiting por múltiplos identificadores (ex: IP + Email)
+ * Retorna false se QUALQUER um dos identificadores estiver bloqueado
+ */
+export function checkMultipleRateLimits(
+  identifiers: string[],
+  type: keyof typeof RATE_LIMIT_CONFIG,
+  request?: NextRequest
+): { allowed: boolean; remaining: number; resetTime: number; blocked: boolean; blockedBy?: string } {
+  let mostRestrictive: { remaining: number; resetTime: number; blocked: boolean } | null = null;
+  let blockedByIdentifier: string | undefined = undefined;
+
+  for (const identifier of identifiers) {
+    const result = checkRateLimit(identifier, type, request);
+    
+    if (!result.allowed) {
+      blockedByIdentifier = identifier;
+      return {
+        allowed: false,
+        remaining: result.remaining,
+        resetTime: result.resetTime,
+        blocked: result.blocked,
+        blockedBy: identifier
+      };
+    }
+
+    if (!mostRestrictive || result.remaining < mostRestrictive.remaining) {
+      mostRestrictive = {
+        remaining: result.remaining,
+        resetTime: result.resetTime,
+        blocked: result.blocked
+      };
+    }
+  }
+
+  return {
+    allowed: true,
+    remaining: mostRestrictive?.remaining || 0,
+    resetTime: mostRestrictive?.resetTime || Date.now(),
+    blocked: false
+  };
+}
+
+/**
+ * Função helper para verificar rate limiting por email (normalizado)
+ */
+export function normalizeEmailForRateLimit(email: string): string {
+  return email.trim().toLowerCase();
+}
+
 if (typeof setInterval !== 'undefined') {
   setInterval(cleanupExpiredRateLimits, 5 * 60 * 1000);
 }

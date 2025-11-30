@@ -119,6 +119,11 @@ export interface OrderShippedEmailData {
   shippingCompany: string;
   estimatedDelivery: string;
 }
+export interface TwoFactorCodeEmailData {
+  email: string;
+  name: string;
+  code: string;
+}
 export async function sendVerificationEmail(data: VerificationEmailData): Promise<void> {
   const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verificar-email?token=${data.verificationToken}`;
   const html = generateEmailTemplate({
@@ -326,4 +331,55 @@ export async function sendOrderShippedEmail(data: OrderShippedEmailData): Promis
     html,
   };
   await transporter.sendMail(mailOptions);
+}
+export async function send2FACodeEmail(data: TwoFactorCodeEmailData): Promise<void> {
+  const codeDisplay = data.code.match(/.{1,1}/g)?.join(' ') || data.code;
+  
+  const html = generateEmailTemplate({
+    title: 'Código de Verificação',
+    greeting: 'Olá',
+    name: data.name,
+    content: `
+      <p style="margin: 0 0 20px 0;">Você solicitou acesso à sua conta na <strong style="color: #0F4024;">Maria Pistache</strong>.</p>
+      
+      <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border: 2px solid #86EFAC; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center;">
+        <p style="margin: 0 0 12px 0; color: #166534; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Seu Código de Verificação</p>
+        <div style="font-size: 36px; font-weight: 700; color: #0F4024; letter-spacing: 8px; font-family: 'Courier New', monospace; margin: 12px 0;">
+          ${codeDisplay}
+        </div>
+        <p style="margin: 12px 0 0 0; color: #166534; font-size: 12px;">Este código expira em 10 minutos</p>
+      </div>
+      
+      <div style="background-color: #FEF3C7; border-left: 4px solid #D4AF37; padding: 14px 16px; border-radius: 4px; margin: 20px 0;">
+        <p style="margin: 0 0 8px 0; color: #1F2937; font-size: 15px; font-weight: 600;">⚠️ Importante:</p>
+        <ul style="margin: 0; padding-left: 20px; color: #4B5563; font-size: 14px; line-height: 1.8;">
+          <li>Nunca compartilhe este código com ninguém</li>
+          <li>A Maria Pistache nunca pedirá seu código por telefone ou e-mail</li>
+          <li>Se você não solicitou este código, ignore este e-mail e altere sua senha imediatamente</li>
+        </ul>
+      </div>
+      
+      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Use este código no campo de verificação para concluir o login.</p>
+    `,
+    buttonText: '',
+    buttonUrl: '',
+    expiryTime: '10 minutos',
+    footerNote: 'Este código é válido por apenas 10 minutos e só pode ser usado uma vez. Se você não solicitou este código, sua conta pode estar em risco - altere sua senha imediatamente.',
+  });
+  
+  const mailOptions = {
+    from: `"Maria Pistache" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    to: data.email,
+    subject: `Código de Verificação - ${data.code} - Maria Pistache`,
+    html,
+  };
+  
+  try {
+    const transporter = createTransporter();
+    await transporter.verify();
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error('Erro ao enviar e-mail 2FA:', error);
+    await saveEmailToFile(mailOptions);
+  }
 }

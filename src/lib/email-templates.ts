@@ -21,7 +21,9 @@ function getLogoUrl(): string {
     return `${cleanUrl}/images/logo.png`;
   }
   
-  return 'https://mariapistache.com.br/images/logo.png';
+  return process.env.NEXT_PUBLIC_APP_URL 
+    ? `${process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, '')}/images/logo.png`
+    : '/images/logo.png';
 }
 
 const LOGO_URL = getLogoUrl();
@@ -207,11 +209,11 @@ export function generateEmailTemplate(options: EmailTemplateOptions): string {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0">
                       <tr>
                         <td style="padding: 0 12px;">
-                          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://mariapistache.com'}" style="color: ${PRIMARY_COLOR}; text-decoration: none; font-size: 12px; font-weight: 500;">Visite nosso site</a>
+                          <a href="${process.env.NEXT_PUBLIC_APP_URL || '#'}" style="color: ${PRIMARY_COLOR}; text-decoration: none; font-size: 12px; font-weight: 500;">Visite nosso site</a>
                         </td>
                         <td style="padding: 0 12px; color: ${TEXT_LIGHT};">•</td>
                         <td style="padding: 0 12px;">
-                          <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://mariapistache.com'}/contato" style="color: ${PRIMARY_COLOR}; text-decoration: none; font-size: 12px; font-weight: 500;">Contato</a>
+                          <a href="${process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/contato` : '#'}" style="color: ${PRIMARY_COLOR}; text-decoration: none; font-size: 12px; font-weight: 500;">Contato</a>
                         </td>
                       </tr>
                     </table>

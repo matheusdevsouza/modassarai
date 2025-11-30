@@ -3,6 +3,7 @@ import database from '@/lib/database';
 import { authenticateUser } from '@/lib/auth';
 import { encryptForDatabase } from '@/lib/transparent-encryption';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { randomUUID } from 'crypto';
 
 export const dynamic = 'force-dynamic';
 import { detectSQLInjection } from '@/lib/sql-injection-protection';
@@ -115,38 +116,47 @@ export async function POST(request: NextRequest) {
       });
     }
     const subtotal = total;
-    const shippingCost = 0.00;
-    const orderNumber = `SAR-${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    const shippingCost = shipping_address?.shipping_cost ? parseFloat(String(shipping_address.shipping_cost)) : 0.00;
+    const finalTotal = subtotal + shippingCost;
+    const orderNumber = `MP-${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    const accessToken = randomUUID();
+    const cpfCleaned = customer.cpf ? customer.cpf.replace(/\D/g, '') : '';
+    const customerCpf = cpfCleaned && cpfCleaned.length === 11 ? cpfCleaned : null;
+    
     const orderData = {
       customer_name: customer.name,
       customer_email: customer.email,
       customer_phone: customer.phone,
-      customer_cpf: customer.cpf || null,
+      customer_cpf: customerCpf,
       shipping_address: JSON.stringify(shipping_address)
     };
+    
+    const encryptedOrderData = encryptForDatabase('orders', orderData);
+    
     const orderResult = await database.query(
       `INSERT INTO orders (
-        user_id, order_number, status, payment_status, payment_method,
+        user_id, order_number, access_token, status, payment_status, payment_method,
         subtotal, shipping_cost, tax_amount, discount_amount, total_amount, currency,
         customer_name, customer_email, customer_phone, customer_cpf, shipping_address
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         user?.userId || null,
         orderNumber,
+        accessToken,
         'pending',
         'pending',
         'Mercado Pago',
         subtotal,
-        shippingCost || 0.00,
+        shippingCost,
         0.00,
         0.00,
-        total,
+        finalTotal,
         'BRL',
-        orderData.customer_name,
-        orderData.customer_email,
-        orderData.customer_phone,
-        orderData.customer_cpf,
-        orderData.shipping_address
+        encryptedOrderData.customer_name,
+        encryptedOrderData.customer_email,
+        encryptedOrderData.customer_phone,
+        encryptedOrderData.customer_cpf,
+        encryptedOrderData.shipping_address
       ]
     );
     const orderId = orderResult.insertId;
@@ -193,13 +203,24 @@ export async function POST(request: NextRequest) {
     } catch (invErr) {
     }
     try {
+      const mpItems = orderItems.map(item => ({
+        id: item.product_id.toString(),
+        title: item.size ? `${item.product_name} - Tam ${item.size}` : item.product_name,
+        quantity: item.quantity,
+        unit_price: item.price
+      }));
+
+      if (shippingCost > 0) {
+        mpItems.push({
+          id: 'shipping',
+          title: shipping_address.shipping_method || 'Frete',
+          quantity: 1,
+          unit_price: shippingCost
+        });
+      }
+
       const preferenceData = {
-        items: orderItems.map(item => ({
-          id: item.product_id.toString(),
-          title: item.size ? `${item.product_name} - Tam ${item.size}` : item.product_name,
-          quantity: item.quantity,
-          unit_price: item.price
-        })),
+        items: mpItems,
         payer: {
           name: customer.name,
           email: customer.email,
@@ -208,25 +229,31 @@ export async function POST(request: NextRequest) {
         external_reference: orderNumber,
         notification_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/mercadopago`,
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success`,
-          failure: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/failure`,
-          pending: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/pending`
+          success: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?order=${orderNumber}`,
+          failure: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/failure?order=${orderNumber}`,
+          pending: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/pending?order=${orderNumber}`
         },
         auto_return: 'approved'
       };
       const preferenceResult = await preference.create({ body: preferenceData });
+      
+      const isProduction = process.env.NODE_ENV === 'production'
+      const initPointUrl = isProduction
+        ? (preferenceResult.init_point || preferenceResult.sandbox_init_point)
+        : (preferenceResult.sandbox_init_point || preferenceResult.init_point);
+      
       await database.query(
-        'UPDATE orders SET external_reference = ? WHERE id = ?',
-        [preferenceResult.id, orderId]
+        'UPDATE orders SET external_reference = ?, init_point_url = ? WHERE id = ?',
+        [preferenceResult.id, initPointUrl, orderId]
       );
+      
       return NextResponse.json({
         success: true,
         orderId: orderId,
         orderNumber: orderNumber,
+        accessToken: accessToken, 
         preferenceId: preferenceResult.id,
-        init_point: preferenceResult.init_point,
-        sandbox_init_point: preferenceResult.sandbox_init_point,
-        total: total
+        total: finalTotal
       });
     } catch (mpError) {
       await database.query(

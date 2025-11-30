@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
             }));
             await sendPaymentConfirmationEmail({
               email: order.customer_email,
-              name: order.customer_name || "Cliente",
+              name: order.customer_name || order.customer_email?.split('@')[0] || 'Cliente',
               orderNumber: order.order_number,
               totalAmount: parseFloat(order.total_amount),
               items: items

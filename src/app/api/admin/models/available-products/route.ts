@@ -39,7 +39,6 @@ export async function GET(request: NextRequest) {
         m.name as current_model_name,
         pi.image_url as primary_image
       FROM products p
-      LEFT JOIN brands b ON p.brand_id = b.id
       LEFT JOIN models m ON p.model_id = m.id
       LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
       WHERE p.is_active = TRUE
@@ -59,7 +58,6 @@ export async function GET(request: NextRequest) {
     let countQuery = `
       SELECT COUNT(*) as total 
       FROM products p
-      LEFT JOIN brands b ON p.brand_id = b.id
       WHERE p.is_active = TRUE
     `;
     const countParams = [];

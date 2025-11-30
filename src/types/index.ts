@@ -16,6 +16,10 @@ export interface Product {
   slug?: string
   createdAt: Date
   updatedAt: Date
+  weight?: number
+  length?: number
+  width?: number
+  height?: number
 }
 export interface Category {
   id: string
@@ -156,6 +160,46 @@ export interface ShippingOption {
   price: number
   estimatedDays: number
   company: string
+  companyId?: number
+  deliveryRange?: {
+    min: number
+    max: number
+  }
+}
+
+export interface MelhorEnvioProduct {
+  id: string
+  width: number
+  height: number
+  length: number
+  weight: number
+  insurance_value: number
+  quantity: number
+}
+
+export interface MelhorEnvioQuote {
+  id: number
+  name: string
+  price: string
+  currency: string
+  delivery_time: number
+  delivery_range: {
+    min: number
+    max: number
+  }
+  company: {
+    id: number
+    name: string
+    picture: string
+  }
+}
+
+export interface ShippingState {
+  options: ShippingOption[]
+  selectedOption: ShippingOption | null
+  isLoading: boolean
+  error: string | null
+  zipCode: string
 }
 export interface ShippingCalculation {
   zipCode: string

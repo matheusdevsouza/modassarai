@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateToken, setAuthCookie, loginWithEncryptedData } from '@/lib/auth';
+import { generateToken, setAuthCookie, loginWithEncryptedData, recordLoginAttempt, checkLoginRateLimit } from '@/lib/auth';
 import database from '@/lib/database';
-import { checkRateLimit, getClientIP } from '@/lib/rate-limit';
+import { checkRateLimit, getClientIP, checkMultipleRateLimits, normalizeEmailForRateLimit } from '@/lib/rate-limit';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
 
 export const dynamic = 'force-dynamic';
@@ -10,20 +10,23 @@ import { processSafeUserData } from '@/lib/safe-user-data';
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIP(request);
-    const rateLimit = checkRateLimit(ip, 'login', request);
-    if (!rateLimit.allowed) {
+    
+    const ipRateLimit = checkRateLimit(ip, 'login', request);
+    if (!ipRateLimit.allowed) {
       return NextResponse.json(
         { 
           success: false, 
-          message: `Muitas tentativas. Tente novamente em ${Math.ceil((rateLimit.resetTime - Date.now()) / 1000 / 60)} minutos.`,
+          message: `Muitas tentativas deste IP. Tente novamente em ${Math.ceil((ipRateLimit.resetTime - Date.now()) / 1000 / 60)} minutos.`,
           error: 'Rate limit exceeded'
         },
         { status: 429 }
       );
     }
+    
     const body = await request.json();
     const { email, password } = body;
-    const normalizedEmail = (email || '').trim().toLowerCase();
+    const normalizedEmail = normalizeEmailForRateLimit(email || '');
+    
     if (detectSQLInjection(normalizedEmail) || detectSQLInjection(password, true)) {
       return NextResponse.json(
         { 
@@ -48,8 +51,39 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    
+    const emailRateLimit = checkRateLimit(normalizedEmail, 'login', request);
+    if (!emailRateLimit.allowed) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: `Muitas tentativas de login para este e-mail. Tente novamente em ${Math.ceil((emailRateLimit.resetTime - Date.now()) / 1000 / 60)} minutos.`,
+          error: 'Rate limit exceeded'
+        },
+        { status: 429 }
+      );
+    }
+    
+    const loginLockout = checkLoginRateLimit(normalizedEmail);
+    if (!loginLockout.allowed) {
+      const minutes = Math.ceil(loginLockout.remainingTime / 60);
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: `Conta temporariamente bloqueada devido a múltiplas tentativas falhadas. Tente novamente em ${minutes} minutos.`,
+          error: 'Account locked',
+          remainingTime: loginLockout.remainingTime
+        },
+        { status: 429 }
+      );
+    }
+    
     const loginResult = await loginWithEncryptedData(normalizedEmail, password, database.query);
+    
     if (!loginResult.success) {
+      recordLoginAttempt(normalizedEmail, false); 
+      recordLoginAttempt(ip, false); 
+      
       return NextResponse.json(
         { success: false, message: loginResult.error },
         { status: 401 }
@@ -73,6 +107,10 @@ export async function POST(request: NextRequest) {
       );
     }
     await database.updateUserLastLogin(user.id);
+    
+    recordLoginAttempt(normalizedEmail, true); 
+    recordLoginAttempt(ip, true); 
+    
     const safeUser = processSafeUserData(user);
     const tokenPayload = {
       userId: safeUser.internalId,

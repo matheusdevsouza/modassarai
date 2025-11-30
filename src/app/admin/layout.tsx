@@ -14,12 +14,11 @@ import {
   FaBars,
   FaTimes,
   FaChartLine,
-  FaBell,
-  FaSearch,
   FaHome,
   FaLayerGroup,
   FaArrowLeft,
-  FaArrowRight
+  FaArrowRight,
+  FaFileAlt
 } from 'react-icons/fa';
 export default function AdminLayout({
   children,
@@ -84,10 +83,9 @@ export default function AdminLayout({
   if (loading || checkingAdmin) {
     return (
       <div className="min-h-screen bg-primary-50 flex items-center justify-center">
-        <div className="relative w-20 h-20">
-          <div className="absolute inset-0 border-4 border-transparent border-t-primary-500 border-r-primary-500/50 rounded-full animate-spin"></div>
-          <div className="absolute inset-3 border-4 border-transparent border-b-primary-400 border-l-primary-400/50 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
-          <div className="absolute inset-6 border-2 border-transparent border-t-primary-500 border-r-primary-500/50 rounded-full animate-spin" style={{ animationDuration: '2s' }}></div>
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-2 border-transparent border-t-primary-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-2 border-transparent border-b-primary-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
         </div>
       </div>
     );
@@ -126,6 +124,7 @@ export default function AdminLayout({
       title: 'Sistema',
       items: [
         { href: '/admin/usuarios', icon: FaUsers, label: 'Usuários' },
+        { href: '/admin/logs', icon: FaFileAlt, label: 'Logs' },
       ]
     },
   ];
@@ -396,34 +395,18 @@ export default function AdminLayout({
             >
               <FaBars size={18} />
             </button>
-            <div className="hidden md:flex items-center gap-3">
-              <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
-              <span className="text-sage-700 text-sm font-medium">Painel Administrativo</span>
-            </div>
             <Link
               href="/"
-              className="flex items-center gap-2 px-3 py-2 text-primary-600 hover:text-primary-700 hover:bg-primary-50 transition-all duration-300 rounded-lg border border-primary-200 hover:border-primary-300"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
             >
               <FaHome size={16} />
               <span className="text-sm font-medium">Voltar ao Site</span>
             </Link>
           </div>
           <div className="flex items-center gap-4">
-            <div className="relative hidden md:block">
-              <input
-                type="text"
-                placeholder="Pesquisar..."
-                className="w-56 bg-white border border-primary-100 rounded-lg px-3 py-2 pl-9 text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-300 focus:bg-white transition-all duration-300 text-sm"
-              />
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sage-500" size={14} />
-            </div>
-            <button className="relative p-2 text-sage-700 hover:text-primary-600 transition-colors rounded-lg hover:bg-primary-50">
-              <FaBell size={16} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
             <div className="flex items-center gap-3">
               <div className="text-right hidden sm:block">
-                <div className="text-sm font-medium text-sage-900">Bem-vindo, {user?.name?.split(' ')[0]}</div>
+                <div className="text-sm font-medium text-sage-900">{user?.name?.split(' ')[0]}</div>
                 <div className="text-xs text-sage-600">Administrador</div>
               </div>
               <div className="w-7 h-7 bg-primary-100 rounded-full flex items-center justify-center border border-primary-300">

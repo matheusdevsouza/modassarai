@@ -50,7 +50,6 @@ interface DashboardStats {
     products: Array<{
       id: number;
       name: string;
-      brand: string;
       price: number;
       createdAt: string;
     }>;
@@ -109,14 +108,10 @@ export default function AdminDashboard() {
   };
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-white rounded w-1/4 mb-6"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-white border border-primary-100 rounded-xl"></div>
-            ))}
-          </div>
+      <div className="min-h-screen bg-primary-50 flex items-center justify-center">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-2 border-transparent border-t-primary-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-2 border-transparent border-b-primary-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}></div>
         </div>
       </div>
     );
@@ -379,7 +374,7 @@ export default function AdminDashboard() {
               <div className="w-2.5 h-2.5 rounded-full bg-primary-500"></div>
               <div className="flex-1 min-w-0">
                 <div className="text-sage-900 font-medium text-sm">
-                  {product.name || 'Produto sem nome'} - {product.brand || 'Marca não informada'}
+                  {product.name || 'Produto sem nome'}
                 </div>
                 <div className="text-sage-600 text-xs">
                   R$ {(product.price || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}

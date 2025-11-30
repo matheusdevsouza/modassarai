@@ -42,7 +42,6 @@ export async function GET(
         b.name as brand_name,
         pi.image_url as primary_image
       FROM products p
-      LEFT JOIN brands b ON p.brand_id = b.id
       LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
       WHERE p.category_id = ? AND p.is_active = TRUE
       ORDER BY p.name ASC

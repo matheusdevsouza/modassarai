@@ -88,14 +88,22 @@ export default function CreateProductModal({ isOpen, onClose, onSuccess }: Creat
   const loadInitialData = async () => {
     try {
       setLoading(true);
-      const categoriesRes = await fetch('/api/admin/categories');
+      setError(null);
+      const categoriesRes = await fetch('/api/admin/categories?limit=1000&status=all');
       const categoriesData = await categoriesRes.json();
-      if (categoriesData.success) {
-        setCategories(categoriesData.data || []);
+      
+      if (categoriesData.success && categoriesData.data) {
+        const categoriesArray = Array.isArray(categoriesData.data.categories) 
+          ? categoriesData.data.categories 
+          : (Array.isArray(categoriesData.data) ? categoriesData.data : []);
+        setCategories(categoriesArray);
+      } else {
+        setCategories([]);
       }
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
       setError('Erro ao carregar dados do formulário');
+      setCategories([]);
     } finally {
       setLoading(false);
     }
@@ -373,9 +381,13 @@ export default function CreateProductModal({ isOpen, onClose, onSuccess }: Creat
                           required
                         >
                           <option value="">Selecione uma categoria</option>
-                          {categories.map(category => (
-                            <option key={category.id} value={category.id}>{category.name}</option>
-                          ))}
+                          {Array.isArray(categories) && categories.length > 0 ? (
+                            categories.map(category => (
+                              <option key={category.id} value={category.id}>{category.name}</option>
+                            ))
+                          ) : (
+                            <option value="" disabled>Carregando categorias...</option>
+                          )}
                         </select>
                       </div>
                     </div>

@@ -1,12 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getUserByEmail, createPasswordResetToken, deleteExpiredPasswordResetTokens } from '@/lib/database'
 import { sendPasswordResetEmail } from '@/lib/email'
+import { checkRateLimit, getClientIP, normalizeEmailForRateLimit } from '@/lib/rate-limit'
 import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = getClientIP(request)
+    
+    const ipRateLimit = checkRateLimit(ip, 'passwordResetRequest', request)
+    if (!ipRateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: `Muitas solicitações de recuperação de senha. Tente novamente em ${Math.ceil((ipRateLimit.resetTime - Date.now()) / 1000 / 60)} minutos.`
+        },
+        { status: 429 }
+      )
+    }
+    
     const body = await request.json()
     const { email } = body || {}
     if (!email || typeof email !== 'string') {
@@ -15,7 +28,17 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    const normalizedEmail = email.trim().toLowerCase()
+    const normalizedEmail = normalizeEmailForRateLimit(email)
+    
+    const emailRateLimit = checkRateLimit(normalizedEmail, 'passwordResetRequest', request)
+    if (!emailRateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: `Muitas solicitações para este e-mail. Tente novamente em ${Math.ceil((emailRateLimit.resetTime - Date.now()) / 1000 / 60)} minutos.`
+        },
+        { status: 429 }
+      )
+    }
     const user = await getUserByEmail(normalizedEmail)
     await deleteExpiredPasswordResetTokens()
     
