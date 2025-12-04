@@ -3,8 +3,9 @@ import { useEffect, useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 function ProdutosContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [produtos, setProdutos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -308,13 +309,24 @@ function ProdutosContent() {
                         </motion.div>
                       </div>
                     </div>
-                    <div className="p-4 sm:p-5 bg-white">
+                    <div className="p-4 sm:p-5 bg-white flex flex-col">
                       <h3 className="text-base sm:text-lg font-semibold text-sage-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300">
                         {prod.name}
                       </h3>
-                      <span className="text-xl sm:text-2xl font-bold text-primary-600">
+                      <span className="text-xl sm:text-2xl font-bold text-primary-600 mb-3">
                         R$ {Number(prod.price).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-300 text-sm sm:text-base mt-auto"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          router.push(`/produto/${prod.slug}`);
+                        }}
+                      >
+                        Ver Detalhes
+                      </motion.button>
                     </div>
                   </Link>
                 ))}

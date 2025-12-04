@@ -226,7 +226,7 @@ export default function PedidoStatusPage() {
 
     const statusMap: Record<string, { icon: React.ReactNode; color: string; bgColor: string; title: string; message: string }> = {
       pending: {
-        icon: <Clock size={48} weight="fill" />,
+        icon: <Clock size={32} className="sm:w-10 sm:h-10 md:w-12 md:h-12" weight="fill" />,
         color: 'text-yellow-600',
         bgColor: 'bg-yellow-100',
         title: 'Aguardando Pagamento',
@@ -235,21 +235,21 @@ export default function PedidoStatusPage() {
           : 'Seu pedido está aguardando confirmação do pagamento. Aguarde alguns instantes...'
       },
       paid: {
-        icon: <CheckCircle size={48} weight="fill" />,
+        icon: <CheckCircle size={32} className="sm:w-10 sm:h-10 md:w-12 md:h-12" weight="fill" />,
         color: 'text-green-600',
         bgColor: 'bg-green-100',
         title: 'Pagamento Aprovado!',
         message: 'Seu pagamento foi confirmado com sucesso. Seu pedido está sendo processado!'
       },
       failed: {
-        icon: <XCircle size={48} weight="fill" />,
+        icon: <XCircle size={32} className="sm:w-10 sm:h-10 md:w-12 md:h-12" weight="fill" />,
         color: 'text-red-600',
         bgColor: 'bg-red-100',
         title: 'Pagamento Recusado',
         message: 'Não foi possível processar o pagamento. Por favor, tente novamente.'
       },
       cancelled: {
-        icon: <XCircle size={48} weight="fill" />,
+        icon: <XCircle size={32} className="sm:w-10 sm:h-10 md:w-12 md:h-12" weight="fill" />,
         color: 'text-gray-600',
         bgColor: 'bg-gray-100',
         title: 'Pedido Cancelado',
@@ -288,10 +288,10 @@ export default function PedidoStatusPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
-        <div className="text-center">
-          <Spinner size={64} className="animate-spin text-primary-600 mx-auto mb-4" />
-          <p className="text-sage-700 text-lg">Carregando status do pedido...</p>
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center pt-40 sm:pt-48">
+        <div className="text-center px-4">
+          <Spinner size={48} className="animate-spin text-primary-600 mx-auto mb-3 sm:mb-4 sm:w-16 sm:h-16" />
+          <p className="text-sage-700 text-base sm:text-lg">Carregando status do pedido...</p>
         </div>
       </div>
     )
@@ -299,20 +299,20 @@ export default function PedidoStatusPage() {
 
   if (error || !orderStatus) {
     return (
-      <div className="min-h-screen bg-sand-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-50 flex items-center justify-center pt-40 sm:pt-48 pb-8 px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white border border-cloud-200 rounded-2xl p-8 max-w-md mx-4 text-center shadow-sm"
+          className="bg-white border border-cloud-200 rounded-xl sm:rounded-2xl p-6 sm:p-8 max-w-md w-full text-center shadow-sm"
         >
-          <WarningCircle size={64} className="text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-sage-900 mb-4">Erro</h1>
-          <p className="text-sage-700 mb-6">{error || 'Pedido não encontrado'}</p>
+          <WarningCircle size={48} className="text-red-500 mx-auto mb-3 sm:mb-4 sm:w-16 sm:h-16" />
+          <h1 className="text-xl sm:text-2xl font-bold text-sage-900 mb-3 sm:mb-4">Erro</h1>
+          <p className="text-sage-700 mb-5 sm:mb-6 text-sm sm:text-base">{error || 'Pedido não encontrado'}</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleGoToHome}
-            className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-all shadow-md"
+            className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-all shadow-md text-sm sm:text-base w-full sm:w-auto"
           >
             Voltar ao Início
           </motion.button>
@@ -322,44 +322,44 @@ export default function PedidoStatusPage() {
   }
 
   return (
-    <div className="min-h-screen bg-sand-50 pt-48 pb-12">
+    <div className="min-h-screen bg-sand-50 pt-40 pb-8 sm:pt-48 sm:pb-12">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white border border-cloud-100 rounded-2xl p-8 max-w-2xl mx-auto shadow-sm"
+          className="bg-white border border-cloud-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 max-w-2xl mx-auto shadow-sm"
         >
-          <div className="text-center mb-6">
+          <div className="text-center mb-4 sm:mb-6">
             {statusConfig && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className={`w-24 h-24 ${statusConfig.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}
+                className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 ${statusConfig.bgColor} rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4`}
               >
-                <div className={statusConfig.color}>
+                <div className={`${statusConfig.color} w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center`}>
                   {statusConfig.icon}
                 </div>
               </motion.div>
             )}
-            <h1 className="text-3xl font-bold text-sage-900 mb-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-sage-900 mb-2 px-2">
               {statusConfig?.title || 'Status do Pedido'}
             </h1>
-            <p className="text-sage-700 text-lg mb-4">
+            <p className="text-sage-700 text-sm sm:text-base md:text-lg mb-3 sm:mb-4 px-2">
               {statusConfig?.message || 'Aguardando atualização...'}
             </p>
-            <div className="bg-cloud-50 rounded-lg p-4 inline-block">
-              <p className="text-sm text-sage-600 mb-1">Número do Pedido</p>
-              <p className="text-xl font-bold text-primary-600">{orderStatus.order_number}</p>
+            <div className="bg-cloud-50 rounded-lg p-3 sm:p-4 inline-block">
+              <p className="text-xs sm:text-sm text-sage-600 mb-1">Número do Pedido</p>
+              <p className="text-lg sm:text-xl font-bold text-primary-600">{orderStatus.order_number}</p>
             </div>
           </div>
 
-          <div className="bg-cloud-50 rounded-xl p-6 mb-6">
-            <h2 className="text-lg font-semibold text-sage-900 mb-4">Informações do Pedido</h2>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-sage-700">Status:</span>
-                <span className="font-semibold text-sage-900 capitalize">
+          <div className="bg-cloud-50 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-lg font-semibold text-sage-900 mb-3 sm:mb-4">Informações do Pedido</h2>
+            <div className="space-y-2.5 sm:space-y-3">
+              <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+                <span className="text-sage-700 text-sm sm:text-base">Status:</span>
+                <span className="font-semibold text-sage-900 capitalize text-sm sm:text-base">
                   {orderStatus.status === 'pending' ? 'Pendente' :
                    orderStatus.status === 'paid' ? 'Pago' :
                    orderStatus.status === 'processing' ? 'Processando' :
@@ -368,9 +368,9 @@ export default function PedidoStatusPage() {
                    orderStatus.status === 'cancelled' ? 'Cancelado' : orderStatus.status}
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-sage-700">Pagamento:</span>
-                <span className="font-semibold text-sage-900 capitalize">
+              <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+                <span className="text-sage-700 text-sm sm:text-base">Pagamento:</span>
+                <span className="font-semibold text-sage-900 capitalize text-sm sm:text-base">
                   {orderStatus.payment_status === 'pending' ? 'Pendente' :
                    orderStatus.payment_status === 'paid' ? 'Aprovado' :
                    orderStatus.payment_status === 'failed' ? 'Recusado' :
@@ -378,14 +378,14 @@ export default function PedidoStatusPage() {
                 </span>
               </div>
               {orderStatus.payment_method && (
-                <div className="flex justify-between">
-                  <span className="text-sage-700">Forma de Pagamento:</span>
-                  <span className="font-semibold text-sage-900">{orderStatus.payment_method}</span>
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+                  <span className="text-sage-700 text-sm sm:text-base">Forma de Pagamento:</span>
+                  <span className="font-semibold text-sage-900 text-sm sm:text-base break-words">{orderStatus.payment_method}</span>
                 </div>
               )}
-              <div className="flex justify-between">
-                <span className="text-sage-700">Data do Pedido:</span>
-                <span className="font-semibold text-sage-900">
+              <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+                <span className="text-sage-700 text-sm sm:text-base">Data do Pedido:</span>
+                <span className="font-semibold text-sage-900 text-sm sm:text-base">
                   {new Date(orderStatus.created_at).toLocaleDateString('pt-BR', {
                     day: '2-digit',
                     month: '2-digit',
@@ -402,59 +402,59 @@ export default function PedidoStatusPage() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6"
+              className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6"
             >
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex-1">
-                  <p className="text-yellow-800 font-semibold mb-1">Abrir checkout do Mercado Pago</p>
-                  <p className="text-yellow-700 text-sm">Clique no botão abaixo para abrir o checkout em uma nova aba</p>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                <div className="flex-1 min-w-0">
+                  <p className="text-yellow-800 font-semibold mb-1 text-sm sm:text-base">Abrir checkout do Mercado Pago</p>
+                  <p className="text-yellow-700 text-xs sm:text-sm">Clique no botão abaixo para abrir o checkout em uma nova aba</p>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleOpenCheckout}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-2 whitespace-nowrap"
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-4 py-2.5 sm:px-6 sm:py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
                 >
-                  <CreditCard size={20} />
-                  Abrir Checkout
-                  <ArrowSquareOut size={20} />
+                  <CreditCard size={18} className="sm:w-5 sm:h-5" />
+                  <span>Abrir Checkout</span>
+                  <ArrowSquareOut size={18} className="sm:w-5 sm:h-5" />
                 </motion.button>
               </div>
             </motion.div>
           )}
 
           {orderStatus.payment_status === 'pending' && !initPoint && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-              <div className="flex items-center gap-3">
-                <Spinner size={24} className="animate-spin text-yellow-600" />
-                <p className="text-yellow-700 text-sm">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Spinner size={20} className="animate-spin text-yellow-600 flex-shrink-0 sm:w-6 sm:h-6" />
+                <p className="text-yellow-700 text-xs sm:text-sm">
                   Aguardando confirmação do pagamento... Atualizando automaticamente.
                 </p>
               </div>
             </div>
           )}
   
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             {shouldShowMyOrdersButton ? (
               <>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleGoToOrders}
-                  className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                  className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
                 >
-                  <Receipt size={20} />
-                  Ver Meus Pedidos
-                  <ArrowRight size={20} />
+                  <Receipt size={18} className="sm:w-5 sm:h-5" />
+                  <span>Ver Meus Pedidos</span>
+                  <ArrowRight size={18} className="sm:w-5 sm:h-5" />
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleGoToHome}
-                  className="bg-cloud-100 hover:bg-cloud-200 text-sage-800 font-semibold px-8 py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                  className="bg-cloud-100 hover:bg-cloud-200 text-sage-800 font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
                 >
-                  <House size={20} />
-                  Voltar ao Início
+                  <House size={18} className="sm:w-5 sm:h-5" />
+                  <span>Voltar ao Início</span>
                 </motion.button>
               </>
             ) : (
@@ -462,10 +462,10 @@ export default function PedidoStatusPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleGoToHome}
-                className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
               >
-                <House size={20} />
-                Voltar ao Início
+                <House size={18} className="sm:w-5 sm:h-5" />
+                <span>Voltar ao Início</span>
               </motion.button>
             )}
           </div>

@@ -4,8 +4,7 @@ import { motion, useInView } from 'framer-motion'
 import { formatPrice } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Heart, ArrowRight, Sparkle } from 'phosphor-react'
-import { useFavorites } from '@/contexts/FavoritesContext'
+import { ArrowRight, Sparkle } from 'phosphor-react'
 
 const NewArrivalsSkeleton = () => (
   <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden bg-sand-100">
@@ -37,7 +36,6 @@ export function NewArrivalsSection() {
   const [loading, setLoading] = useState(true)
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-50px' })
-  const { addFavorite, removeFavorite, isProductFavorite, getProductFavoriteId } = useFavorites()
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -166,7 +164,6 @@ export function NewArrivalsSection() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
         >
           {products.map((product, index) => {
-            const isFavorite = isProductFavorite(product.id?.toString() || '')
             return (
               <motion.div
                 key={product.id}
@@ -192,37 +189,6 @@ export function NewArrivalsSection() {
                           priority={index < 2}
                         />
                       </motion.div>
-                      
-                      <motion.button
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          const productId = product.id?.toString()
-                          if (!productId) return
-                          
-                          if (isProductFavorite(productId)) {
-                            const favoriteId = getProductFavoriteId(productId)
-                            if (favoriteId) {
-                              removeFavorite(favoriteId)
-                            }
-                          } else {
-                            addFavorite(product, undefined, undefined, product.primary_image || (product.images && product.images[0]?.url))
-                          }
-                        }}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className={`absolute top-3 right-3 p-2.5 rounded-full shadow-lg z-20 transition-all duration-300 ${
-                          isFavorite 
-                            ? 'bg-red-500 text-white' 
-                            : 'bg-white/95 backdrop-blur-sm text-sage-700 hover:bg-white'
-                        }`}
-                      >
-                        <Heart 
-                          size={18} 
-                          className={isFavorite ? 'text-white' : 'text-sage-700'} 
-                          weight={isFavorite ? 'fill' : 'regular'} 
-                        />
-                      </motion.button>
                     </div>
                     
                     <div className="p-5 bg-white">

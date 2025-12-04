@@ -396,24 +396,24 @@ export default function CheckoutPage() {
     )
   }
   return (
-    <div className="min-h-screen bg-sand-100 pt-48 pb-12">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-sand-100 pt-40 pb-8 sm:pt-48 sm:pb-12">
+      <div className="container mx-auto px-4 py-3 sm:py-4">
+        <div className="flex items-center justify-between flex-wrap gap-2 sm:gap-0">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-sage-700 hover:text-sage-900 transition-colors"
+            className="flex items-center gap-2 text-sage-700 hover:text-sage-900 transition-colors text-sm sm:text-base"
           >
-            <ArrowLeft size={20} />
-            Voltar
+            <ArrowLeft size={18} className="sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline">Voltar</span>
           </motion.button>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <ShoppingCart size={20} className="text-primary-600" />
-              <span className="text-sage-900 font-medium">{cartState.itemCount} item{cartState.itemCount !== 1 ? 's' : ''}</span>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <ShoppingCart size={18} className="text-primary-600 sm:w-5 sm:h-5" />
+              <span className="text-sage-900 font-medium text-sm sm:text-base">{cartState.itemCount} item{cartState.itemCount !== 1 ? 's' : ''}</span>
             </div>
-            <div className="text-sage-900 font-bold">
+            <div className="text-sage-900 font-bold text-sm sm:text-base">
               R$ {total.toFixed(2).replace('.', ',')}
             </div>
           </div>
@@ -422,10 +422,10 @@ export default function CheckoutPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3"
+            className="mt-3 sm:mt-4 bg-blue-50 border border-blue-200 rounded-lg p-2.5 sm:p-3"
           >
-            <div className="flex items-center gap-2 text-blue-700 text-sm">
-              <Info size={16} className="text-blue-600" />
+            <div className="flex items-start gap-2 text-blue-700 text-xs sm:text-sm">
+              <Info size={14} className="text-blue-600 flex-shrink-0 mt-0.5 sm:w-4 sm:h-4" />
               <span>
                 <strong>Usuário sem conta:</strong> Você receberá o código de rastreio por e-mail quando o pedido for despachado
               </span>
@@ -433,13 +433,13 @@ export default function CheckoutPage() {
           </motion.div>
         )}
       </div>
-      <div className="container mx-auto px-4 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+      <div className="container mx-auto px-4 pb-6 sm:pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <div className="lg:col-span-2 order-2 lg:order-1">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-primary-50 border border-cloud-100 rounded-2xl p-6 shadow-sm"
+              className="bg-primary-50 border border-cloud-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm"
             >
               <AnimatePresence>
                 {showErrors && errors.length > 0 && (
@@ -447,15 +447,15 @@ export default function CheckoutPage() {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6"
+                    className="bg-red-50 border border-red-200 rounded-lg sm:rounded-xl p-3 sm:p-4 mb-4 sm:mb-6"
                   >
-                    <div className="flex items-start gap-3">
-                      <Warning size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <h4 className="text-red-700 font-semibold mb-2">Erro na validação</h4>
+                    <div className="flex items-start gap-2 sm:gap-3">
+                      <Warning size={18} className="text-red-600 flex-shrink-0 mt-0.5 sm:w-5 sm:h-5" />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-red-700 font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Erro na validação</h4>
                         <ul className="space-y-1">
                           {errors.map((error, index) => (
-                            <li key={index} className="text-red-700 text-sm">
+                            <li key={index} className="text-red-700 text-xs sm:text-sm">
                               • {error}
                             </li>
                           ))}
@@ -463,18 +463,18 @@ export default function CheckoutPage() {
                       </div>
                       <button
                         onClick={() => setShowErrors(false)}
-                        className="text-red-600 hover:text-red-700 transition-colors"
+                        className="text-red-600 hover:text-red-700 transition-colors flex-shrink-0 p-1"
                       >
-                        <X size={16} />
+                        <X size={14} className="sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-              <div className="flex items-center justify-center mb-8">
+              <div className="flex items-center justify-center mb-6 sm:mb-8 overflow-x-auto pb-2">
                 {[1, 2, 3].map((step) => (
-                  <div key={step} className="flex items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
+                  <div key={step} className="flex items-center flex-shrink-0">
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-lg ${
                       currentStep >= step 
                         ? 'bg-primary-500 text-white shadow-md' 
                         : 'bg-cloud-200 text-sage-600'
@@ -482,7 +482,7 @@ export default function CheckoutPage() {
                       {step}
                     </div>
                     {step < 3 && (
-                      <div className={`w-64 h-1 mx-2 ${
+                      <div className={`w-12 sm:w-24 md:w-32 lg:w-64 h-1 mx-1 sm:mx-2 ${
                         currentStep > step ? 'bg-primary-500' : 'bg-cloud-200'
                       }`} />
                     )}
@@ -493,21 +493,21 @@ export default function CheckoutPage() {
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
-                  <div className="flex items-center gap-2 mb-6">
-                    <User size={24} className="text-primary-600" />
-                    <h2 className="text-2xl font-bold text-sage-900">Dados Pessoais</h2>
+                  <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                    <User size={20} className="text-primary-600 sm:w-6 sm:h-6" />
+                    <h2 className="text-xl sm:text-2xl font-bold text-sage-900">Dados Pessoais</h2>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                      <label className="block text-sage-900 mb-2 font-medium">Nome <span className="text-red-500">*</span></label>
+                      <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Nome <span className="text-red-500">*</span></label>
                       <input
                         type="text"
                         value={customerData.name}
                         onChange={(e) => setCustomerData({...customerData, name: e.target.value})}
                         onBlur={() => handleFieldBlur('name')}
-                        className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                           shouldShowError('name', customerData.name) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="Seu nome"
@@ -515,13 +515,13 @@ export default function CheckoutPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sage-900 mb-2 font-medium">E-mail <span className="text-red-500">*</span></label>
+                      <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">E-mail <span className="text-red-500">*</span></label>
                       <input
                         type="email"
                         value={customerData.email}
                         onChange={(e) => setCustomerData({...customerData, email: e.target.value})}
                         onBlur={() => handleFieldBlur('email')}
-                        className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                           shouldShowError('email', customerData.email) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="seu@email.com"
@@ -529,30 +529,30 @@ export default function CheckoutPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sage-900 mb-2 font-medium">Confirmar E-mail <span className="text-red-500">*</span></label>
+                      <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Confirmar E-mail <span className="text-red-500">*</span></label>
                       <input
                         type="email"
                         value={customerData.emailConfirm}
                         onChange={(e) => setCustomerData({...customerData, emailConfirm: e.target.value})}
                         onBlur={() => handleFieldBlur('emailConfirm')}
-                        className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                           shouldShowEmailConfirmError() ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="Confirme seu e-mail"
                         required
                       />
                       {touchedFields.emailConfirm && customerData.emailConfirm.trim() !== '' && customerData.email !== customerData.emailConfirm && (
-                        <p className="text-red-600 text-sm mt-1">Os e-mails não coincidem</p>
+                        <p className="text-red-600 text-xs sm:text-sm mt-1">Os e-mails não coincidem</p>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sage-900 mb-2 font-medium">Telefone <span className="text-red-500">*</span></label>
+                      <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Telefone <span className="text-red-500">*</span></label>
                       <input
                         type="tel"
                         value={customerData.phone}
                         onChange={(e) => setCustomerData({...customerData, phone: e.target.value})}
                         onBlur={() => handleFieldBlur('phone')}
-                        className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                           shouldShowError('phone', customerData.phone) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="(11) 99999-9999"
@@ -560,13 +560,13 @@ export default function CheckoutPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sage-900 mb-2 font-medium">CPF <span className="text-red-500">*</span></label>
+                      <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">CPF <span className="text-red-500">*</span></label>
                       <input
                         type="text"
                         value={customerData.cpf}
                         onChange={(e) => setCustomerData({...customerData, cpf: e.target.value})}
                         onBlur={() => handleFieldBlur('cpf')}
-                        className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                           shouldShowError('cpf', customerData.cpf) ? 'border-red-500' : 'border-cloud-200'
                         }`}
                         placeholder="000.000.000-00"
@@ -574,14 +574,14 @@ export default function CheckoutPage() {
                       />
                     </div>
                   </div>
-                  <div className="pt-6 border-t border-cloud-200">
-                    <div className="flex items-center gap-2 mb-6">
-                      <MapPin size={24} className="text-primary-600" />
-                      <h3 className="text-xl font-bold text-sage-900">Endereço de Entrega</h3>
+                  <div className="pt-4 sm:pt-6 border-t border-cloud-200">
+                    <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                      <MapPin size={20} className="text-primary-600 sm:w-6 sm:h-6" />
+                      <h3 className="text-lg sm:text-xl font-bold text-sage-900">Endereço de Entrega</h3>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="md:col-span-2">
-                        <label className="block text-sage-900 mb-2 font-medium">CEP <span className="text-red-500">*</span></label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                      <div className="sm:col-span-2">
+                        <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">CEP <span className="text-red-500">*</span></label>
                         <div className="flex gap-2">
                           <input
                             type="text"
@@ -594,7 +594,7 @@ export default function CheckoutPage() {
                               }
                             }}
                             onBlur={() => handleFieldBlur('zipCode')}
-                            className={`flex-1 px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                            className={`flex-1 px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                               shouldShowError('zipCode', customerData.zipCode) ? 'border-red-500' : 'border-cloud-200'
                             }`}
                             placeholder="06790100"
@@ -606,28 +606,28 @@ export default function CheckoutPage() {
                               type="button"
                               onClick={() => calculateShipping(customerData.zipCode)}
                               disabled={isLoadingShipping}
-                              className="px-4 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium whitespace-nowrap"
+                              className="px-3 py-2.5 sm:px-4 sm:py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium whitespace-nowrap text-xs sm:text-sm"
                             >
-                              {isLoadingShipping ? 'Calculando...' : 'Calcular Frete'}
+                              {isLoadingShipping ? 'Calculando...' : 'Calcular'}
                             </button>
                           )}
                         </div>
                       </div>
                       
                       {(customerData.zipCode.length === 8 || shippingOptions.length > 0) && (
-                        <div className="md:col-span-2">
+                        <div className="sm:col-span-2">
                           {isLoadingShipping ? (
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                              <p className="text-blue-700 text-sm">Calculando opções de frete...</p>
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 text-center">
+                              <p className="text-blue-700 text-xs sm:text-sm">Calculando opções de frete...</p>
                             </div>
                           ) : shippingError ? (
-                            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                              <p className="text-red-700 text-sm">{shippingError}</p>
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4">
+                              <p className="text-red-700 text-xs sm:text-sm">{shippingError}</p>
                             </div>
                           ) : shippingOptions.length > 0 ? (
-                            <div className="bg-white border border-cloud-200 rounded-lg p-4">
-                              <label className="block text-sage-900 mb-3 font-medium flex items-center gap-2">
-                                <Truck size={20} className="text-primary-600" />
+                            <div className="bg-white border border-cloud-200 rounded-lg p-3 sm:p-4">
+                              <label className="block text-sage-900 mb-2 sm:mb-3 font-medium flex items-center gap-2 text-sm sm:text-base">
+                                <Truck size={18} className="text-primary-600 sm:w-5 sm:h-5" />
                                 Selecione o Frete
                               </label>
                               <div className="space-y-2">
@@ -636,20 +636,20 @@ export default function CheckoutPage() {
                                     key={option.id}
                                     type="button"
                                     onClick={() => selectShippingOption(option)}
-                                    className={`w-full text-left p-3 rounded-lg border transition-colors ${
+                                    className={`w-full text-left p-2.5 sm:p-3 rounded-lg border transition-colors ${
                                       selectedShipping?.id === option.id
                                         ? 'border-primary-500 bg-primary-50'
                                         : 'border-cloud-200 hover:border-primary-300'
                                     }`}
                                   >
-                                    <div className="flex items-center justify-between">
-                                      <div className="flex-1">
-                                        <div className="font-semibold text-sage-900">{option.company}</div>
-                                        <div className="text-sm text-sage-600">
+                                    <div className="flex items-center justify-between gap-2 sm:gap-4">
+                                      <div className="flex-1 min-w-0">
+                                        <div className="font-semibold text-sage-900 text-sm sm:text-base truncate">{option.company}</div>
+                                        <div className="text-xs sm:text-sm text-sage-600">
                                           {option.estimatedDays} {option.estimatedDays === 1 ? 'dia útil' : 'dias úteis'}
                                         </div>
                                       </div>
-                                      <div className="font-bold text-primary-600 text-lg">
+                                      <div className="font-bold text-primary-600 text-base sm:text-lg flex-shrink-0">
                                         R$ {option.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                                       </div>
                                     </div>
@@ -661,14 +661,14 @@ export default function CheckoutPage() {
                         </div>
                       )}
                       
-                      <div className="md:col-span-2">
-                        <label className="block text-sage-900 mb-2 font-medium">Rua <span className="text-red-500">*</span></label>
+                      <div className="sm:col-span-2">
+                        <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Rua <span className="text-red-500">*</span></label>
                         <input
                           type="text"
                           value={customerData.street}
                           onChange={(e) => setCustomerData({...customerData, street: e.target.value})}
                           onBlur={() => handleFieldBlur('street')}
-                          className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                             shouldShowError('street', customerData.street) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="Nome da rua"
@@ -676,13 +676,13 @@ export default function CheckoutPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sage-900 mb-2 font-medium">Número <span className="text-red-500">*</span></label>
+                        <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Número <span className="text-red-500">*</span></label>
                         <input
                           type="text"
                           value={customerData.number}
                           onChange={(e) => setCustomerData({...customerData, number: e.target.value})}
                           onBlur={() => handleFieldBlur('number')}
-                          className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                             shouldShowError('number', customerData.number) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="123"
@@ -690,23 +690,23 @@ export default function CheckoutPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sage-900 mb-2 font-medium">Complemento</label>
+                        <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Complemento</label>
                         <input
                           type="text"
                           value={customerData.complement}
                           onChange={(e) => setCustomerData({...customerData, complement: e.target.value})}
-                          className="w-full px-4 py-3 bg-white border border-cloud-200 rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
+                          className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-cloud-200 rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base"
                           placeholder="Apto, bloco, etc."
                         />
                       </div>
                       <div>
-                        <label className="block text-sage-900 mb-2 font-medium">Bairro <span className="text-red-500">*</span></label>
+                        <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Bairro <span className="text-red-500">*</span></label>
                         <input
                           type="text"
                           value={customerData.neighborhood}
                           onChange={(e) => setCustomerData({...customerData, neighborhood: e.target.value})}
                           onBlur={() => handleFieldBlur('neighborhood')}
-                          className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                             shouldShowError('neighborhood', customerData.neighborhood) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="Nome do bairro"
@@ -714,13 +714,13 @@ export default function CheckoutPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sage-900 mb-2 font-medium">Cidade <span className="text-red-500">*</span></label>
+                        <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Cidade <span className="text-red-500">*</span></label>
                         <input
                           type="text"
                           value={customerData.city}
                           onChange={(e) => setCustomerData({...customerData, city: e.target.value})}
                           onBlur={() => handleFieldBlur('city')}
-                          className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                             shouldShowError('city', customerData.city) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="Nome da cidade"
@@ -728,13 +728,13 @@ export default function CheckoutPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sage-900 mb-2 font-medium">Estado <span className="text-red-500">*</span></label>
+                        <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Estado <span className="text-red-500">*</span></label>
                         <input
                           type="text"
                           value={customerData.state}
                           onChange={(e) => setCustomerData({...customerData, state: e.target.value})}
                           onBlur={() => handleFieldBlur('state')}
-                          className={`w-full px-4 py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 ${
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
                             shouldShowError('state', customerData.state) ? 'border-red-500' : 'border-cloud-200'
                           }`}
                           placeholder="UF"
@@ -743,15 +743,15 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center pt-6">
-                    <div className="text-sm text-sage-700">
+                  <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-0 pt-4 sm:pt-6">
+                    <div className="text-xs sm:text-sm text-sage-700 order-2 sm:order-1 text-center sm:text-left">
                       {getRequiredFieldsCount().filled} de {getRequiredFieldsCount().total} campos obrigatórios preenchidos
                     </div>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleNextStep}
-                      className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-all shadow-md hover:shadow-lg"
+                      className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-all shadow-md hover:shadow-lg text-sm sm:text-base order-1 sm:order-2 w-full sm:w-auto"
                     >
                       Continuar
                     </motion.button>
@@ -762,32 +762,34 @@ export default function CheckoutPage() {
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
-                  <div className="flex items-center gap-2 mb-6">
-                    <CreditCard size={24} className="text-primary-600" />
-                    <h2 className="text-2xl font-bold text-sage-900">Forma de Pagamento</h2>
+                  <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                    <CreditCard size={20} className="text-primary-600 sm:w-6 sm:h-6" />
+                    <h2 className="text-xl sm:text-2xl font-bold text-sage-900">Forma de Pagamento</h2>
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {paymentMethods.map((method) => (
                       <div
                         key={method.id}
-                        className={`p-4 rounded-lg border cursor-pointer transition-colors ${
+                        className={`p-3 sm:p-4 rounded-lg border cursor-pointer transition-colors ${
                           selectedPaymentMethod === method.id
                             ? 'border-primary-500 bg-primary-50 shadow-sm'
                             : 'border-cloud-200 hover:border-primary-300 bg-white'
                         }`}
                         onClick={() => setSelectedPaymentMethod(method.id)}
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="text-primary-600">
-                            {method.icon}
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <div className="text-primary-600 flex-shrink-0">
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
+                              {React.cloneElement(method.icon as React.ReactElement, { size: 20, className: 'sm:w-6 sm:h-6' })}
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-sage-900">{method.name}</h3>
-                            <p className="text-sm text-sage-700">{method.description}</p>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-sage-900 text-sm sm:text-base">{method.name}</h3>
+                            <p className="text-xs sm:text-sm text-sage-700">{method.description}</p>
                           </div>
-                          <div className={`w-5 h-5 rounded-full border-2 ${
+                          <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex-shrink-0 ${
                             selectedPaymentMethod === method.id
                               ? 'border-primary-500 bg-primary-500'
                               : 'border-cloud-300'
@@ -800,12 +802,12 @@ export default function CheckoutPage() {
                       </div>
                     ))}
                   </div>
-                  <div className="flex justify-between pt-6">
+                  <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 pt-4 sm:pt-6">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handlePrevStep}
-                      className="bg-cloud-100 hover:bg-cloud-200 text-sage-800 font-semibold px-8 py-3 rounded-xl transition-colors"
+                      className="bg-cloud-100 hover:bg-cloud-200 text-sage-800 font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-colors text-sm sm:text-base w-full sm:w-auto order-2 sm:order-1"
                     >
                       Voltar
                     </motion.button>
@@ -814,7 +816,7 @@ export default function CheckoutPage() {
                       whileTap={{ scale: 0.95 }}
                       onClick={handleNextStep}
                       disabled={!selectedPaymentMethod}
-                      className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                      className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg text-sm sm:text-base w-full sm:w-auto order-1 sm:order-2"
                     >
                       Continuar
                     </motion.button>
@@ -825,15 +827,15 @@ export default function CheckoutPage() {
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
-                  <div className="flex items-center gap-2 mb-6">
-                    <CheckCircle size={24} className="text-primary-600" />
-                    <h2 className="text-2xl font-bold text-sage-900">Confirmação do Pedido</h2>
+                  <div className="flex items-center gap-2 mb-4 sm:mb-6">
+                    <CheckCircle size={20} className="text-primary-600 sm:w-6 sm:h-6" />
+                    <h2 className="text-xl sm:text-2xl font-bold text-sage-900">Confirmação do Pedido</h2>
                   </div>
-                  <div className="bg-white border border-cloud-100 rounded-lg p-4 shadow-sm">
-                    <h3 className="font-semibold text-sage-900 mb-3">Resumo do Pedido</h3>
-                    <div className="space-y-2 text-sm text-sage-800">
+                  <div className="bg-white border border-cloud-100 rounded-lg p-3 sm:p-4 shadow-sm">
+                    <h3 className="font-semibold text-sage-900 mb-2 sm:mb-3 text-sm sm:text-base">Resumo do Pedido</h3>
+                    <div className="space-y-2 text-xs sm:text-sm text-sage-800">
                        <div className="flex justify-between">
                          <span>Itens:</span>
                          <span>{cartState.itemCount} produto{cartState.itemCount !== 1 ? 's' : ''}</span>
@@ -855,7 +857,7 @@ export default function CheckoutPage() {
                       <div className="border-t border-cloud-200 pt-2 mt-2">
                         <div className="flex justify-between font-semibold text-sage-900">
                            <span>Total Final:</span>
-                          <span className="text-lg text-primary-600">R$ {total.toFixed(2).replace('.', ',')}</span>
+                          <span className="text-base sm:text-lg text-primary-600">R$ {total.toFixed(2).replace('.', ',')}</span>
                          </div>
                        </div>
                      </div>
@@ -864,28 +866,28 @@ export default function CheckoutPage() {
                      <motion.div
                        initial={{ opacity: 0, y: 20 }}
                        animate={{ opacity: 1, y: 0 }}
-                       className="bg-white border border-cloud-100 rounded-lg p-6 shadow-sm"
+                       className="bg-white border border-cloud-100 rounded-lg p-4 sm:p-6 shadow-sm"
                      >
-                       <div className="flex items-center gap-3 mb-4">
-                         <Warning size={24} className="text-yellow-600" />
-                         <h3 className="text-lg font-semibold text-sage-900">Importante para Usuários sem Conta</h3>
+                       <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                         <Warning size={20} className="text-yellow-600 sm:w-6 sm:h-6 flex-shrink-0" />
+                         <h3 className="text-base sm:text-lg font-semibold text-sage-900">Importante para Usuários sem Conta</h3>
                        </div>
-                       <div className="space-y-4 mb-6">
-                         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                           <p className="text-yellow-800 text-sm leading-relaxed">
+                       <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
+                           <p className="text-yellow-800 text-xs sm:text-sm leading-relaxed">
                              <strong>⚠️ Atenção:</strong> Como você não está logado em uma conta, algumas funcionalidades estarão limitadas:
                            </p>
-                           <ul className="mt-2 space-y-1 text-yellow-700 text-sm">
+                           <ul className="mt-2 space-y-1 text-yellow-700 text-xs sm:text-sm">
                              <li>• Não será possível acompanhar o pedido na seção &quot;Meus Pedidos&quot;</li>
                              <li>• O histórico de compras não ficará salvo no site</li>
                              <li>• Não será possível alterar dados do pedido após a compra</li>
                            </ul>
                          </div>
-                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                           <p className="text-blue-800 text-sm leading-relaxed">
+                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+                           <p className="text-blue-800 text-xs sm:text-sm leading-relaxed">
                              <strong>📧 Boa notícia:</strong> Quando seu pedido for despachado, você receberá um e-mail com:
                            </p>
-                           <ul className="mt-2 space-y-1 text-blue-700 text-sm">
+                           <ul className="mt-2 space-y-1 text-blue-700 text-xs sm:text-sm">
                              <li>• Código de rastreio completo</li>
                              <li>• Link direto para o 17Track</li>
                              <li>• Instruções para rastreio manual no site</li>
@@ -893,37 +895,37 @@ export default function CheckoutPage() {
                            </ul>
                          </div>
                        </div>
-                       <div className="space-y-3">
-                         <label className="flex items-start gap-3 cursor-pointer">
+                       <div className="space-y-2.5 sm:space-y-3">
+                         <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
                            <input
                              type="checkbox"
                              checked={guestChecklist.acceptTerms}
                              onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptTerms: e.target.checked }))}
-                             className="mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2"
+                             className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2 flex-shrink-0"
                            />
-                           <span className="text-sm text-sage-800">
+                           <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
                              <span className="text-primary-600 font-medium">Aceito os termos de compra</span> e entendo que não estarei logado em uma conta
                            </span>
                          </label>
-                         <label className="flex items-start gap-3 cursor-pointer">
+                         <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
                            <input
                              type="checkbox"
                              checked={guestChecklist.acceptTracking}
                              onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptTracking: e.target.checked }))}
-                             className="mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2"
+                             className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2 flex-shrink-0"
                            />
-                           <span className="text-sm text-sage-800">
+                           <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
                              <span className="text-primary-600 font-medium">Aceito receber o código de rastreio por e-mail</span> quando o pedido for despachado
                            </span>
                          </label>
-                         <label className="flex items-start gap-3 cursor-pointer">
+                         <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
                            <input
                              type="checkbox"
                              checked={guestChecklist.acceptPrivacy}
                              onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptPrivacy: e.target.checked }))}
-                             className="mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-2 focus:ring-primary-500"
+                             className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-2 focus:ring-primary-500 flex-shrink-0"
                            />
-                           <span className="text-sm text-sage-800">
+                           <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
                              <span className="text-primary-600 font-medium">Aceito a política de privacidade</span> e autorizo o uso dos meus dados para processamento do pedido
                            </span>
                          </label>
@@ -932,10 +934,10 @@ export default function CheckoutPage() {
                          <motion.div
                            initial={{ opacity: 0, scale: 0.95 }}
                            animate={{ opacity: 1, scale: 1 }}
-                           className="mt-4 bg-green-50 border border-green-200 rounded-lg p-3"
+                           className="mt-3 sm:mt-4 bg-green-50 border border-green-200 rounded-lg p-2.5 sm:p-3"
                          >
-                           <div className="flex items-center gap-2 text-green-700 text-sm">
-                             <CheckCircle size={16} className="text-green-600" />
+                           <div className="flex items-center gap-2 text-green-700 text-xs sm:text-sm">
+                             <CheckCircle size={14} className="text-green-600 sm:w-4 sm:h-4 flex-shrink-0" />
                              <span>
                                <strong>Perfeito!</strong> Todos os termos foram aceitos. Você pode prosseguir com a compra.
                              </span>
@@ -944,12 +946,12 @@ export default function CheckoutPage() {
                        )}
                      </motion.div>
                    )}
-                  <div className="flex justify-between pt-6">
+                  <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 pt-4 sm:pt-6">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handlePrevStep}
-                      className="bg-cloud-100 hover:bg-cloud-200 text-sage-800 font-semibold px-8 py-3 rounded-xl transition-colors"
+                      className="bg-cloud-100 hover:bg-cloud-200 text-sage-800 font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-colors text-sm sm:text-base w-full sm:w-auto order-2 sm:order-1"
                     >
                       Voltar
                     </motion.button>
@@ -958,49 +960,49 @@ export default function CheckoutPage() {
                       whileTap={{ scale: 0.95 }}
                       onClick={handleFinishOrder}
                       disabled={isLoading || (!authenticated && !Object.values(guestChecklist).every(accepted => accepted))}
-                      className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-8 py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                      className="bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-2.5 sm:px-8 sm:py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg text-sm sm:text-base w-full sm:w-auto order-1 sm:order-2"
                     >
                       {isLoading ? 'Processando...' : 'Finalizar Pedido'}
                     </motion.button>
-                    {!authenticated && !Object.values(guestChecklist).every(accepted => accepted) && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-center mt-3"
-                      >
-                        <p className="text-sm text-sage-700">
-                          Para finalizar o pedido, aceite todos os termos acima
-                        </p>
-                      </motion.div>
-                    )}
                   </div>
+                  {!authenticated && !Object.values(guestChecklist).every(accepted => accepted) && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center mt-2 sm:mt-3"
+                    >
+                      <p className="text-xs sm:text-sm text-sage-700">
+                        Para finalizar o pedido, aceite todos os termos acima
+                      </p>
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
             </motion.div>
           </div>
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 order-1 lg:order-2">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-primary-50 border border-cloud-100 rounded-2xl p-6 sticky top-4 shadow-sm"
+              className="bg-primary-50 border border-cloud-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:sticky lg:top-4 shadow-sm"
             >
-              <h3 className="text-lg font-bold text-sage-900 mb-4">Resumo do Pedido</h3>
-              <div className="space-y-3 mb-4">
+              <h3 className="text-base sm:text-lg font-bold text-sage-900 mb-3 sm:mb-4">Resumo do Pedido</h3>
+              <div className="space-y-2.5 sm:space-y-3 mb-3 sm:mb-4 max-h-[400px] sm:max-h-none overflow-y-auto">
                 {cartState.items.map(item => (
-                  <div key={item.product.id} className="flex gap-3">
-                    <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-cloud-100">
+                  <div key={item.product.id} className="flex gap-2 sm:gap-3">
+                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0 rounded-lg overflow-hidden bg-cloud-100">
                       <Image
                         src={item.image || '/images/logo.png'}
                         alt={item.product.name}
                         fill
                         className="object-cover"
-                        sizes="64px"
+                        sizes="(max-width: 640px) 48px, 64px"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-sage-900 truncate">{item.product.name}</h3>
+                      <h3 className="font-semibold text-sage-900 truncate text-sm sm:text-base">{item.product.name}</h3>
                       {(item.size || item.color) && (
-                        <div className="text-sm text-sage-700 flex items-center gap-2 flex-wrap">
+                        <div className="text-xs sm:text-sm text-sage-700 flex items-center gap-1.5 sm:gap-2 flex-wrap">
                           {item.size && <span>Tamanho: {item.size}</span>}
                           {item.color && (
                             <span className="flex items-center gap-1">
@@ -1011,68 +1013,69 @@ export default function CheckoutPage() {
                           {!item.size && !item.color && <span>Tamanho: Único</span>}
                         </div>
                       )}
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-between mt-1.5 sm:mt-2 gap-2">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           <button
                             onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                            className="w-6 h-6 bg-cloud-200 rounded-full flex items-center justify-center hover:bg-cloud-300 transition-colors text-sage-800"
+                            className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center transition-colors text-sage-700 hover:text-primary-600"
                           >
-                            <Minus size={12} />
+                            <Minus size={10} className="sm:w-3 sm:h-3" weight="bold" />
                           </button>
-                          <span className="text-sage-900 font-semibold w-8 text-center">{item.quantity}</span>
+                          <span className="text-sage-900 font-semibold w-6 sm:w-8 text-center text-xs sm:text-sm">{item.quantity}</span>
                           <button
                             onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                            className="w-6 h-6 bg-cloud-200 rounded-full flex items-center justify-center hover:bg-cloud-300 transition-colors text-sage-800"
+                            className="w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center transition-colors text-sage-700 hover:text-primary-600"
                           >
-                            <Plus size={12} />
+                            <Plus size={10} className="sm:w-3 sm:h-3" weight="bold" />
                           </button>
                         </div>
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="text-red-600 hover:text-red-700 transition-colors"
+                          className="text-red-600 hover:text-red-700 transition-colors p-1.5 hover:bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0"
+                          title="Remover item"
                         >
-                          <Trash size={16} />
+                          <Trash size={16} className="sm:w-5 sm:h-5" />
                         </button>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-sage-900">R$ {(Number(item.price) * item.quantity).toFixed(2).replace('.', ',')}</p>
-                      <p className="text-sm text-sage-700">R$ {Number(item.price).toFixed(2).replace('.', ',')} cada</p>
+                    <div className="text-right flex-shrink-0">
+                      <p className="font-semibold text-sage-900 text-xs sm:text-sm">R$ {(Number(item.price) * item.quantity).toFixed(2).replace('.', ',')}</p>
+                      <p className="text-xs sm:text-sm text-sage-700">R$ {Number(item.price).toFixed(2).replace('.', ',')} cada</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="space-y-3 border-t border-cloud-200 pt-4">
-                <div className="flex justify-between text-sage-800">
+              <div className="space-y-2 sm:space-y-3 border-t border-cloud-200 pt-3 sm:pt-4">
+                <div className="flex justify-between text-sage-800 text-xs sm:text-sm">
                   <span>Subtotal ({cartState.itemCount} itens)</span>
                   <span>R$ {cartState.total.toFixed(2).replace('.', ',')}</span>
                 </div>
-                <div className="flex justify-between text-sage-800">
+                <div className="flex justify-between text-sage-800 text-xs sm:text-sm">
                   <span>Frete</span>
                   <span>
                     {selectedShipping ? (
                       <>R$ {selectedShipping.price.toFixed(2).replace('.', ',')}</>
                     ) : (
-                      <span className="text-sage-500 text-sm">Calcule o frete</span>
+                      <span className="text-sage-500 text-xs sm:text-sm">Calcule o frete</span>
                     )}
                   </span>
                 </div>
-                 <div className="flex justify-between text-lg font-bold text-sage-900 border-t border-cloud-200 pt-3">
+                 <div className="flex justify-between text-base sm:text-lg font-bold text-sage-900 border-t border-cloud-200 pt-2 sm:pt-3">
                    <span>Total Final</span>
                    <span className="text-primary-600">R$ {total.toFixed(2).replace('.', ',')}</span>
                  </div>
               </div>
-              <div className="mt-6 space-y-3">
-                <div className="flex items-center gap-3 text-sm text-sage-800">
-                  <Shield size={16} className="text-primary-600" />
+              <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-sage-800">
+                  <Shield size={14} className="text-primary-600 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span>Compra 100% segura</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-sage-800">
-                  <Truck size={16} className="text-primary-600" />
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-sage-800">
+                  <Truck size={14} className="text-primary-600 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span>Entrega em todo Brasil</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-sage-800">
-                  <CheckCircle size={16} className="text-primary-600" />
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-sage-800">
+                  <CheckCircle size={14} className="text-primary-600 sm:w-4 sm:h-4 flex-shrink-0" />
                   <span>Garantia de 30 dias</span>
                 </div>
               </div>

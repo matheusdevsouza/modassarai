@@ -76,7 +76,7 @@ export function Header() {
   }, [isMenuOpen])
   const menuItems = [
     { label: 'Início', href: '/' },
-    { label: 'Novidades', href: '/produtos?novidades=true' },
+    { label: 'Produtos', href: '/produtos' },
     { label: 'Vestidos', href: '/produtos?categoria=vestidos' },
     { label: 'Conjuntos', href: '/produtos?categoria=conjuntos' },
     { label: 'Acessórios', href: '/produtos?categoria=acessorios' },
@@ -200,7 +200,7 @@ export function Header() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 group overflow-hidden bg-primary-500 text-white shadow-md hover:shadow-lg"
+                  className="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 group overflow-hidden bg-primary-500 text-white shadow-md hover:shadow-lg"
                   title="Minha Conta"
                   onClick={() => setUserMenuOpen((open) => !open)}
                   id="user-menu-trigger"
@@ -353,7 +353,7 @@ export function Header() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="lg:hidden p-2.5 sm:p-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
+                className="lg:hidden p-2.5 sm:p-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
               >
                 {isMenuOpen ? (
                   <X size={20} weight="bold" />
@@ -468,7 +468,7 @@ export function Header() {
                   </div>
                   <button
                     onClick={() => setIsMenuOpen(false)}
-                    className="p-2 rounded-full bg-cloud-100 hover:bg-cloud-200 text-sage-700 hover:text-sage-900 transition-colors"
+                    className="p-2 rounded-full bg-cloud-100 hover:bg-cloud-200 text-sage-700 hover:text-sage-900 transition-colors flex items-center justify-center"
                   >
                     <X size={24} weight="bold" />
                   </button>

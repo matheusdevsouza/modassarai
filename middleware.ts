@@ -237,6 +237,7 @@ function setSecurityHeaders(response: NextResponse): NextResponse {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
     "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
     "img-src 'self' data: https: blob:",
+    "media-src 'self' https: blob: data:",
     "connect-src 'self' https://api.mercadopago.com https://viacep.com.br https://www.googletagmanager.com https://www.google-analytics.com https://17track.net",
     "frame-src 'self' https://www.mercadopago.com.br https://www.mercadopago.com https://17track.net",
     "frame-ancestors 'none'",

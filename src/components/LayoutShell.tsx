@@ -3,11 +3,17 @@ import { usePathname } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { SmoothScroll } from '@/components/SmoothScroll';
+import { ScrollToTop } from '@/components/ScrollToTop';
 export function LayoutShell({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
 	const isAdmin = pathname?.startsWith('/admin');
 	if (isAdmin) {
-		return <>{children}</>;
+		return (
+			<>
+				<ScrollToTop />
+				{children}
+			</>
+		);
 	}
 	return (
 		<SmoothScroll
@@ -20,6 +26,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
 				lerp: 0.1,
 			}}
 		>
+			<ScrollToTop />
 			<Header />
 			<main className="overflow-x-hidden">
 				{children}

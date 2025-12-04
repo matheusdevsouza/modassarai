@@ -18,6 +18,7 @@
     "test:penetration": "ts-node scripts/penetration-test.ts",
     "test:integration": "ts-node scripts/integration-test.ts",
     "test:security:all": "ts-node scripts/run-all-security-tests.ts",
+    "test:logs": "node scripts/test-all-logs.js",
     "test:brands": "ts-node scripts/test-brands-fix.ts",
     "generate:keys": "node scripts/generate-keys.js",
     "migrate:encryption": "node scripts/migrate-encryption.js",

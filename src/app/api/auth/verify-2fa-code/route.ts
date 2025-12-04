@@ -6,6 +6,7 @@ import { generateToken, setAuthCookie } from '@/lib/auth';
 import { decryptFromDatabase } from '@/lib/transparent-encryption';
 import { processSafeUserData } from '@/lib/safe-user-data';
 import { detectSQLInjection } from '@/lib/sql-injection-protection';
+import { systemLogger } from '@/lib/system-logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -85,6 +86,13 @@ export async function POST(request: NextRequest) {
     );
     
     if (!verificationResult.valid) {
+      await systemLogger.logAuth('warning', 'Tentativa de login 2FA falhada - código inválido', {
+        request,
+        userId: user.id,
+        userEmail: userEmail,
+        metadata: { reason: verificationResult.error || 'Código inválido ou expirado' }
+      });
+      
       return NextResponse.json(
         { 
           success: false, 
@@ -106,6 +114,14 @@ export async function POST(request: NextRequest) {
     };
     
     const token = generateToken(tokenPayload);
+    
+    await systemLogger.logAuth('success', 'Login 2FA realizado com sucesso', {
+      request,
+      userId: user.id,
+      userName: user.name,
+      userEmail: userEmail,
+      metadata: { isAdmin: !!safeUser.is_admin }
+    });
     
     const response = NextResponse.json(
       { 

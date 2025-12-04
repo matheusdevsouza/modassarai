@@ -7,6 +7,7 @@ import { hashPassword, validatePasswordStrength } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 import { processSafeUserData } from '@/lib/safe-user-data';
 import { checkRateLimit, getClientIP } from '@/lib/rate-limit';
+import { systemLogger } from '@/lib/system-logger';
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIP(request);
@@ -112,6 +113,15 @@ export async function POST(request: NextRequest) {
 
     }
     const safeUser = processSafeUserData(createdUser);
+    
+    await systemLogger.logUser('success', 'Novo usuário registrado', {
+      request,
+      userId: userId,
+      userName: name,
+      userEmail: email,
+      metadata: { ip, phone: phone ? 'provided' : 'not_provided' }
+    });
+    
     return NextResponse.json({
       success: true,
       message: 'Conta criada com sucesso! Verifique seu e-mail para ativar a conta.',
@@ -121,8 +131,13 @@ export async function POST(request: NextRequest) {
         resetAt: rateLimit.resetTime,
       },
     });
-  } catch (error) {
-
+  } catch (error: any) {
+    await systemLogger.logError('Erro durante registro de usuário', {
+      context: 'auth',
+      request,
+      error,
+      metadata: { endpoint: '/api/auth/register', email: body?.email }
+    });
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

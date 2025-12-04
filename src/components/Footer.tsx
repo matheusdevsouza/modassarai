@@ -107,7 +107,7 @@ export function Footer() {
                     <li key={link.href}>
                       <a
                         href={link.href}
-                        className="text-sm text-sage-700 transition-colors duration-300 hover:text-primary-600"
+                        className="text-sm text-sage-700 transition-all duration-300 hover:text-primary-500 hover:font-semibold"
                       >
                         {link.label}
                       </a>
@@ -210,7 +210,7 @@ export function Footer() {
                     <li key={link.href}>
                       <a
                         href={link.href}
-                        className="text-sm text-sage-700 transition-colors duration-300 hover:text-primary-600 block py-1"
+                        className="text-sm text-sage-700 transition-all duration-300 hover:text-primary-500 hover:font-semibold block py-1"
                       >
                         {link.label}
                       </a>

@@ -11,6 +11,7 @@ import { findUserByEmail, decryptFromDatabase } from '@/lib/transparent-encrypti
 import { loginWithEncryptedData } from '@/lib/auth';
 import { send2FACodeEmail } from '@/lib/email';
 import { detectSQLInjection } from '@/lib/sql-injection-protection';
+import { systemLogger } from '@/lib/system-logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -113,6 +114,14 @@ export async function POST(request: NextRequest) {
       email: userEmail,
       name: user.name,
       code: code
+    });
+    
+    await systemLogger.logAuth('info', 'Código 2FA enviado para usuário', {
+      request,
+      userId: user.id,
+      userName: user.name,
+      userEmail: userEmail,
+      metadata: { ip, sessionToken: sessionToken.substring(0, 10) + '...' }
     });
     
     return NextResponse.json({

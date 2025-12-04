@@ -112,6 +112,12 @@ export function SmoothScroll({ children, options }: SmoothScrollProps) {
       setTimeout(() => {
         ScrollTrigger.refresh()
       }, 100)
+    } else if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto'
+      })
     }
   }, [pathname])
   const scrollTo = useCallback((target: string | number | HTMLElement, scrollOptions?: any) => {

@@ -7,6 +7,7 @@ import { randomUUID } from 'crypto';
 
 export const dynamic = 'force-dynamic';
 import { detectSQLInjection } from '@/lib/sql-injection-protection';
+import { systemLogger } from '@/lib/system-logger';
 const client = new MercadoPagoConfig({
   accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!,
   options: { timeout: 5000 }
@@ -247,6 +248,19 @@ export async function POST(request: NextRequest) {
         [preferenceResult.id, initPointUrl, orderId]
       );
       
+      await systemLogger.logOrder('success', `Pedido criado: ${orderNumber}`, {
+        request,
+        userId: user?.userId,
+        userEmail: customer.email,
+        metadata: {
+          orderId,
+          orderNumber,
+          total: finalTotal,
+          itemCount: orderItems.length,
+          paymentMethod: 'Mercado Pago'
+        }
+      });
+      
       return NextResponse.json({
         success: true,
         orderId: orderId,
@@ -255,17 +269,32 @@ export async function POST(request: NextRequest) {
         preferenceId: preferenceResult.id,
         total: finalTotal
       });
-    } catch (mpError) {
+    } catch (mpError: any) {
       await database.query(
         'UPDATE orders SET status = ?, payment_status = ? WHERE id = ?',
         ['cancelled', 'failed', orderId]
       );
+      
+      await systemLogger.logOrder('error', `Erro ao processar pagamento do pedido ${orderNumber}`, {
+        request,
+        userId: user?.userId,
+        userEmail: customer.email,
+        error: mpError,
+        metadata: { orderId, orderNumber, error: mpError.message }
+      });
+      
       return NextResponse.json(
         { error: 'Erro ao processar pagamento. Tente novamente.' },
         { status: 500 }
       );
     }
-  } catch (error) {
+  } catch (error: any) {
+    await systemLogger.logError('Erro ao criar pedido', {
+      context: 'order',
+      request,
+      error,
+      metadata: { endpoint: '/api/checkout/create-order' }
+    });
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
       { status: 500 }

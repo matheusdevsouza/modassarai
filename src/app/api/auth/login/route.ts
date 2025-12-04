@@ -7,6 +7,7 @@ import { decryptFromDatabase } from '@/lib/transparent-encryption';
 export const dynamic = 'force-dynamic';
 import { detectSQLInjection, detectXSS } from '@/lib/sql-injection-protection';
 import { processSafeUserData } from '@/lib/safe-user-data';
+import { systemLogger } from '@/lib/system-logger';
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIP(request);
@@ -28,6 +29,11 @@ export async function POST(request: NextRequest) {
     const normalizedEmail = normalizeEmailForRateLimit(email || '');
     
     if (detectSQLInjection(normalizedEmail) || detectSQLInjection(password, true)) {
+      await systemLogger.logSecurity('error', 'Tentativa de SQL Injection detectada no login', {
+        request,
+        userEmail: normalizedEmail,
+        metadata: { attackType: 'SQL_INJECTION', field: 'email/password' }
+      });
       return NextResponse.json(
         { 
           success: false,
@@ -37,6 +43,11 @@ export async function POST(request: NextRequest) {
       );
     }
     if (detectXSS(normalizedEmail)) {
+      await systemLogger.logSecurity('error', 'Tentativa de XSS detectada no login', {
+        request,
+        userEmail: normalizedEmail,
+        metadata: { attackType: 'XSS', field: 'email' }
+      });
       return NextResponse.json(
         { 
           success: false,
@@ -82,7 +93,13 @@ export async function POST(request: NextRequest) {
     
     if (!loginResult.success) {
       recordLoginAttempt(normalizedEmail, false); 
-      recordLoginAttempt(ip, false); 
+      recordLoginAttempt(ip, false);
+      
+      await systemLogger.logAuth('warning', 'Tentativa de login falhada', {
+        request,
+        userEmail: normalizedEmail,
+        metadata: { reason: loginResult.error, ip }
+      });
       
       return NextResponse.json(
         { success: false, message: loginResult.error },
@@ -109,7 +126,7 @@ export async function POST(request: NextRequest) {
     await database.updateUserLastLogin(user.id);
     
     recordLoginAttempt(normalizedEmail, true); 
-    recordLoginAttempt(ip, true); 
+    recordLoginAttempt(ip, true);
     
     const safeUser = processSafeUserData(user);
     const tokenPayload = {
@@ -120,6 +137,15 @@ export async function POST(request: NextRequest) {
       isAdmin: !!safeUser.is_admin,
     };
     const token = generateToken(tokenPayload);
+    
+    await systemLogger.logAuth('success', 'Login realizado com sucesso', {
+      request,
+      userId: user.id,
+      userName: user.name,
+      userEmail: user.email,
+      metadata: { isAdmin: !!safeUser.is_admin, ip }
+    });
+    
     const response = NextResponse.json(
       { 
         success: true, 
@@ -129,8 +155,14 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
     return setAuthCookie(response, token);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro no login:', error);
+    await systemLogger.logError('Erro interno durante processo de login', {
+      context: 'auth',
+      request,
+      error,
+      metadata: { endpoint: '/api/auth/login' }
+    });
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

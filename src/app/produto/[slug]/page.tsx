@@ -19,12 +19,20 @@ export default function ProdutoPage() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [cep, setCep] = useState("");
-  const [freteMsg, setFreteMsg] = useState("");
+  const [shippingOptions, setShippingOptions] = useState<any[]>([]);
+  const [selectedShipping, setSelectedShipping] = useState<any | null>(null);
+  const [isLoadingShipping, setIsLoadingShipping] = useState(false);
+  const [shippingError, setShippingError] = useState<string | null>(null);
   const [zoomEnabled, setZoomEnabled] = useState(true);
   const [zoomPos, setZoomPos] = useState<{ x: number; y: number } | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const zoomRef = useRef<HTMLDivElement>(null);
+  const zoomLensRef = useRef<HTMLDivElement>(null);
+  const rafIdRef = useRef<number | null>(null);
+  const rectCacheRef = useRef<DOMRect | null>(null);
+  const mousePosRef = useRef<{ x: number; y: number } | null>(null);
+  const isZoomActiveRef = useRef<boolean>(false);
   const [suggested, setSuggested] = useState<any[]>([]);
   const [similar, setSimilar] = useState<any[]>([]);
   const { addItem } = useCart();
@@ -62,11 +70,119 @@ export default function ProdutoPage() {
   }, [addItem, product, selectedSize, selectedColor, quantity, allMedia]);
   const isCurrentMediaVideo = allMedia[selectedImage]?.type === 'video';
   const effectiveZoomEnabled = zoomEnabled && !isCurrentMediaVideo;
+  
+  const invalidateRectCache = useCallback(() => {
+    rectCacheRef.current = null;
+  }, []);
+
+  const animationLoopRef = useRef<number | null>(null);
+  
+  const startAnimationLoop = useCallback(() => {
+    if (animationLoopRef.current !== null) return; 
+    
+    const loop = () => {
+      if (!zoomRef.current || !zoomLensRef.current || !mousePosRef.current || !effectiveZoomEnabled) {
+        animationLoopRef.current = null;
+        return;
+      }
+      
+      if (!rectCacheRef.current) {
+        rectCacheRef.current = zoomRef.current.getBoundingClientRect();
+      }
+      
+      const rect = rectCacheRef.current;
+      const width = zoomRef.current.offsetWidth;
+      const height = zoomRef.current.offsetHeight;
+      const lens = zoomLensRef.current;
+      const { x, y } = mousePosRef.current;
+      
+      const clampedX = Math.max(0, Math.min(x - rect.left, width));
+      const clampedY = Math.max(0, Math.min(y - rect.top, height));
+
+      const left = Math.max(0, Math.min(clampedX - 64, width - 128));
+      const top = Math.max(0, Math.min(clampedY - 64, height - 128));
+      
+      const bgX = (clampedX / width) * 87.5;
+      const bgY = (clampedY / height) * 87.5;
+      
+      lens.style.transform = `translate3d(${Math.round(left)}px, ${Math.round(top)}px, 0)`;
+      lens.style.backgroundPosition = `${Math.round(bgX * 10) / 10}% ${Math.round(bgY * 10) / 10}%`;
+      
+      if (!isZoomActiveRef.current) {
+        isZoomActiveRef.current = true;
+        lens.style.opacity = '1';
+        lens.style.display = 'block';
+        setZoomPos({ x: clampedX, y: clampedY });
+      }
+      
+      animationLoopRef.current = requestAnimationFrame(loop);
+    };
+    
+    animationLoopRef.current = requestAnimationFrame(loop);
+  }, [effectiveZoomEnabled]);
+
+  const stopAnimationLoop = useCallback(() => {
+    if (animationLoopRef.current !== null) {
+      cancelAnimationFrame(animationLoopRef.current);
+      animationLoopRef.current = null;
+    }
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!effectiveZoomEnabled || !zoomRef.current || !zoomLensRef.current) return;
+    
+    mousePosRef.current = { x: e.clientX, y: e.clientY };
+    
+    if (animationLoopRef.current === null) {
+      startAnimationLoop();
+    }
+  }, [effectiveZoomEnabled, startAnimationLoop]);
+
+  const handleMouseLeave = useCallback(() => {
+    mousePosRef.current = null;
+    stopAnimationLoop();
+    
+    if (zoomLensRef.current) {
+      zoomLensRef.current.style.opacity = '0';
+      zoomLensRef.current.style.display = 'none';
+    }
+    
+    isZoomActiveRef.current = false;
+    setZoomPos(null);
+    invalidateRectCache();
+  }, [invalidateRectCache, stopAnimationLoop]);
+
+  useEffect(() => {
+    return () => {
+      stopAnimationLoop();
+    };
+  }, [stopAnimationLoop]);
+
   useEffect(() => {
     if (isCurrentMediaVideo) {
-      setZoomPos(null);
+      handleMouseLeave();
     }
-  }, [isCurrentMediaVideo]);
+  }, [isCurrentMediaVideo, handleMouseLeave]);
+
+  useEffect(() => {
+    invalidateRectCache();
+  }, [selectedImage, invalidateRectCache]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      invalidateRectCache();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [invalidateRectCache]);
+
+  useEffect(() => {
+    return () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
+  }, []);
   const toggleFavorite = useCallback(() => {
     if (!product) return;
     
@@ -153,13 +269,77 @@ export default function ProdutoPage() {
     };
     if (slug) fetchProduct();
   }, [slug, preloadImages]);
-  function handleCalcularFrete() {
-    if (!cep || cep.length < 8) {
-      setFreteMsg("Digite um CEP válido.");
+  async function handleCalcularFrete() {
+    if (!cep || cep.replace(/\D/g, '').length !== 8) {
+      setShippingError("Digite um CEP válido com 8 dígitos.");
+      setShippingOptions([]);
       return;
     }
-    setFreteMsg("Frete grátis para todo o Brasil!");
+
+    if (!product) {
+      setShippingError("Produto não disponível.");
+      return;
+    }
+
+    setIsLoadingShipping(true);
+    setShippingError(null);
+    setShippingOptions([]);
+    setSelectedShipping(null);
+
+    try {
+      const cleanedCep = cep.replace(/\D/g, '');
+      
+      const products = [{
+        id: product.id.toString(),
+        weight: (product as any).weight || 0.3,
+        length: (product as any).length || 20,
+        width: (product as any).width || 15,
+        height: (product as any).height || 5,
+        price: parseFloat(product.price),
+        quantity: quantity
+      }];
+
+      const response = await fetch('/api/shipping', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          postalCode: cleanedCep,
+          products
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Erro ao calcular frete');
+      }
+
+      const options = data.data || [];
+      
+      if (options.length === 0) {
+        setShippingError('Nenhuma opção de frete disponível para este CEP');
+        setShippingOptions([]);
+      } else {
+        setShippingOptions(options);
+        setSelectedShipping(options[0]); 
+        setShippingError(null);
+      }
+    } catch (error: any) {
+      console.error('Erro ao calcular frete:', error);
+      setShippingError(error.message || 'Erro ao calcular frete. Tente novamente.');
+      setShippingOptions([]);
+    } finally {
+      setIsLoadingShipping(false);
+    }
   }
+
+  useEffect(() => {
+    setShippingOptions([]);
+    setSelectedShipping(null);
+    setShippingError(null);
+  }, [product?.id, quantity, selectedSize, selectedColor]);
   
   useEffect(() => {
     if (product) {
@@ -267,15 +447,9 @@ export default function ProdutoPage() {
                       ? 'cursor-zoom-in border-primary-500 ring-2 ring-primary-500/30' 
                       : 'cursor-pointer hover:border-primary-500/50'
                   }`}
-                  onMouseMove={effectiveZoomEnabled ? (e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const clampedX = Math.max(0, Math.min(x, rect.width));
-                    const clampedY = Math.max(0, Math.min(y, rect.height));
-                    setZoomPos({ x: clampedX, y: clampedY });
-                  } : undefined}
-                  onMouseLeave={() => setZoomPos(null)}
+                  onMouseMove={effectiveZoomEnabled ? handleMouseMove : undefined}
+                  onMouseLeave={handleMouseLeave}
+                  onMouseEnter={invalidateRectCache}
                 >
                   {allMedia[selectedImage] && (
                     <>
@@ -297,25 +471,25 @@ export default function ProdutoPage() {
                       )}
                     </>
                   )}
-                  <AnimatePresence>
-                  {effectiveZoomEnabled && zoomPos && allMedia[selectedImage] && allMedia[selectedImage].type === 'image' && zoomRef.current && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        transition={{ duration: 0.2 }}
+                  {effectiveZoomEnabled && allMedia[selectedImage] && allMedia[selectedImage].type === 'image' && (
+                      <div
+                        ref={zoomLensRef}
                         className="absolute w-32 h-32 rounded-full border-2 border-primary-500 shadow-2xl shadow-primary-500/50 pointer-events-none z-20 overflow-hidden"
-                          style={{
-                          left: Math.max(0, Math.min(zoomPos.x - 64, zoomRef.current.offsetWidth - 128)),
-                          top: Math.max(0, Math.min(zoomPos.y - 64, zoomRef.current.offsetHeight - 128)),
-                            backgroundImage: `url(${allMedia[selectedImage].url})`,
+                        style={{
+                          opacity: 0,
+                          display: 'none',
+                          backgroundImage: `url(${allMedia[selectedImage].url})`,
                           backgroundSize: '800% 800%',
-                          backgroundPosition: `${(zoomPos.x / zoomRef.current.offsetWidth) * 87.5}% ${(zoomPos.y / zoomRef.current.offsetHeight) * 87.5}%`,
                           backgroundRepeat: 'no-repeat',
+                          willChange: 'transform, background-position',
+                          transform: 'translate3d(0, 0, 0)',
+                          backfaceVisibility: 'hidden',
+                          WebkitBackfaceVisibility: 'hidden',
+                          perspective: 1000,
+                          WebkitPerspective: 1000,
                         }}
                       />
                     )}
-                  </AnimatePresence>
                   <div className="absolute top-4 right-4 flex gap-2">
                     <button
                       onClick={() => setZoomEnabled(!zoomEnabled)}
@@ -462,14 +636,49 @@ export default function ProdutoPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-6"
           >
-            <div className="rounded-3xl p-8 bg-sage-50 shadow-sm">
-              <div className="flex items-start justify-between mb-6">
+            <div className="rounded-3xl p-4 sm:p-6 lg:p-8 bg-sage-50 shadow-sm">
+              <div className="flex gap-2 mb-4 lg:hidden justify-end">
+                <button
+                  onClick={toggleFavorite}
+                  disabled={isFavoriteButtonDisabled}
+                  className={`w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    isFavoriteButtonDisabled
+                      ? 'bg-dark-800/50 text-gray-600 cursor-not-allowed opacity-50'
+                      : isFavorite 
+                      ? 'bg-red-500 text-white hover:bg-red-600' 
+                      : 'bg-primary-500 text-white hover:bg-primary-600'
+                  }`}
+                  title={
+                    isFavoriteButtonDisabled
+                      ? hasSizes && !selectedSize && hasColors && !selectedColor
+                        ? 'Selecione um tamanho e uma cor para adicionar aos favoritos'
+                        : hasSizes && !selectedSize
+                        ? 'Selecione um tamanho para adicionar aos favoritos'
+                        : hasColors && !selectedColor
+                        ? 'Selecione uma cor para adicionar aos favoritos'
+                        : 'Selecione as opções necessárias para adicionar aos favoritos'
+                      : isFavorite 
+                      ? 'Remover dos favoritos' 
+                      : 'Adicionar aos favoritos'
+                  }
+                >
+                  <Heart size={20} weight={isFavorite ? 'fill' : 'regular'} />
+                </button>
+                <button
+                  onClick={shareProduct}
+                  className="w-11 h-11 bg-primary-500 text-white hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300"
+                  title="Compartilhar produto"
+                >
+                  <Share size={20} />
+                </button>
+              </div>
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4 sm:mb-6 gap-3 lg:gap-0">
                 <div className="flex-1">
-                  <h1 className="text-3xl lg:text-4xl font-bold text-sage-900 mb-2 leading-tight">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-sage-900 mb-2 sm:mb-0 leading-tight">
                     {product?.name || 'Carregando...'}
                   </h1>
                 </div>
-                <div className="flex gap-2 ml-4">
+                <div className="hidden lg:flex gap-2 ml-4 flex-shrink-0">
                   <button
                     onClick={toggleFavorite}
                     disabled={isFavoriteButtonDisabled}
@@ -499,6 +708,7 @@ export default function ProdutoPage() {
                   <button
                     onClick={shareProduct}
                     className="w-12 h-12 bg-primary-500 text-white hover:bg-primary-600 rounded-full flex items-center justify-center transition-all duration-300"
+                    title="Compartilhar produto"
                   >
                     <Share size={20} />
                   </button>
@@ -631,6 +841,94 @@ export default function ProdutoPage() {
                   </span>
                 </div>
               </div>
+              <div className="mb-8 pt-6 border-t border-cloud-200">
+                <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                  <Truck size={18} className="sm:w-5 sm:h-5 text-primary-500" />
+                  <h3 className="text-base sm:text-lg font-semibold text-sage-900">Calcular Frete</h3>
+                </div>
+                <div className="relative mb-3 flex">
+                  <input
+                    type="text"
+                    placeholder="Digite seu CEP"
+                    value={cep}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 8);
+                      setCep(value);
+                    }}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && cep.replace(/\D/g, '').length === 8) {
+                        handleCalcularFrete();
+                      }
+                    }}
+                    className="flex-1 bg-white border border-cloud-100 border-r-0 rounded-l-lg px-3 sm:px-4 py-2 sm:py-2.5 text-sage-900 placeholder-sage-400 focus:border-primary-500 focus:outline-none focus:z-10 transition-colors text-sm"
+                    maxLength={8}
+                  />
+                  <button
+                    onClick={handleCalcularFrete}
+                    disabled={isLoadingShipping}
+                    className="bg-primary-500 hover:bg-primary-600 text-white px-3 sm:px-4 rounded-r-lg border border-primary-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
+                    title="Calcular frete"
+                  >
+                    {isLoadingShipping ? (
+                      <Clock size={18} className="sm:w-5 sm:h-5 animate-spin" />
+                    ) : (
+                      <MagnifyingGlass size={18} className="sm:w-5 sm:h-5" />
+                    )}
+                  </button>
+                </div>
+                {isLoadingShipping && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-3 p-2.5 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-xs text-center"
+                  >
+                    Calculando opções de frete...
+                  </motion.div>
+                )}
+                {shippingError && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-3 p-2.5 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs"
+                  >
+                    {shippingError}
+                  </motion.div>
+                )}
+                {shippingOptions.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-2"
+                  >
+                    <label className="block text-sage-900 mb-2 font-medium text-xs">
+                      Opções de Frete
+                    </label>
+                    {shippingOptions.map((option) => (
+                      <button
+                        key={option.id}
+                        onClick={() => setSelectedShipping(option)}
+                        className={`w-full text-left p-2.5 sm:p-3 rounded-lg border transition-colors ${
+                          selectedShipping?.id === option.id
+                            ? 'border-primary-500 bg-primary-50'
+                            : 'border-cloud-200 hover:border-primary-300'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold text-sage-900 text-xs sm:text-sm truncate">{option.company || option.name}</div>
+                            <div className="text-xs text-sage-600">
+                              {option.estimatedDays} {option.estimatedDays === 1 ? 'dia útil' : 'dias úteis'}
+                            </div>
+                          </div>
+                          <div className="font-bold text-primary-600 text-sm sm:text-base flex-shrink-0">
+                            R$ {option.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -676,10 +974,6 @@ export default function ProdutoPage() {
                 </AnimatePresence>
               </motion.button>
               <div className="mt-6 space-y-3">
-                <div className="flex items-center gap-3 text-sm text-sage-800">
-                  <Truck size={18} />
-                  <span>Frete grátis para todo Brasil</span>
-                </div>
                 <div className="flex items-center gap-3 text-sm text-sage-800">
                   <Shield size={18} />
                   <span>Garantia de 30 dias</span>
@@ -737,89 +1031,6 @@ export default function ProdutoPage() {
             </div>
           </motion.div>
         </div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mt-10"
-        >
-          <div className="rounded-3xl bg-sage-50 shadow-sm">
-            <div className="hidden md:block p-6">
-              <h3 className="text-lg font-semibold text-sage-900 mb-4 flex items-center gap-2">
-                <Truck size={20} className="text-primary-400" />
-                Calcular Frete
-              </h3>
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  placeholder="Digite seu CEP"
-                  value={cep}
-                  onChange={(e) => setCep(e.target.value.replace(/\D/g, '').slice(0, 8))}
-                  className="flex-1 bg-white border border-cloud-100 rounded-lg px-4 py-3 text-sage-900 placeholder-sage-400 focus:border-primary-500 focus:outline-none transition-colors"
-                  maxLength={8}
-                />
-                <button
-                  onClick={handleCalcularFrete}
-                  className="bg-primary-500 hover:bg-gradient-to-r hover:from-[var(--logo-gold,#D4A574)] hover:via-[var(--logo-gold-light,#E6B896)] hover:to-[var(--logo-gold,#D4A574)] text-white px-6 py-3 rounded-lg font-semibold transition-all"
-                >
-                  Calcular
-                </button>
-              </div>
-              {freteMsg && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-3 p-3 bg-primary-500/20 border border-primary-500/30 rounded-lg text-primary-400 text-sm"
-                >
-                  {freteMsg}
-                </motion.div>
-              )}
-            </div>
-            <div className="md:hidden p-4">
-              <h3 className="text-xl font-bold text-sage-900 mb-4 flex items-center justify-center gap-3">
-                <div className="w-10 h-10 bg-primary-500/20 rounded-full flex items-center justify-center">
-                  <Truck size={24} className="text-primary-400" />
-                </div>
-                Calcular Frete
-              </h3>
-              <div className="space-y-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Digite seu CEP"
-                    value={cep}
-                    onChange={(e) => setCep(e.target.value.replace(/\D/g, '').slice(0, 8))}
-                    className="w-full bg-white border border-cloud-100 rounded-2xl px-5 py-4 text-sage-900 placeholder-sage-400 focus:border-primary-500 focus:outline-none transition-all duration-300 text-center text-lg font-medium"
-                    maxLength={8}
-                  />
-                  <div className="absolute inset-y-0 right-4 flex items-center">
-                    <div className="w-2 h-2 bg-primary-400 rounded-full"></div>
-                  </div>
-                </div>
-                <button
-                  onClick={handleCalcularFrete}
-                  className="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold py-4 px-6 rounded-2xl text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  Calcular Frete
-                </button>
-              </div>
-              {freteMsg && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-primary-500/20 border border-primary-500/30 rounded-2xl text-primary-400 text-center"
-                >
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
-                    <span className="font-semibold">Informação de Frete</span>
-                  </div>
-                  <p className="text-sm">{freteMsg}</p>
-                </motion.div>
-              )}
-            </div>
-          </div>
-        </motion.div>
         
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
