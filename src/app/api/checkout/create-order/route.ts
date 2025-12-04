@@ -279,8 +279,13 @@ export async function POST(request: NextRequest) {
         request,
         userId: user?.userId,
         userEmail: customer.email,
-        error: mpError,
-        metadata: { orderId, orderNumber, error: mpError.message }
+        metadata: { 
+          orderId, 
+          orderNumber, 
+          error: mpError.message,
+          errorName: mpError.name,
+          errorStack: mpError.stack
+        }
       });
       
       return NextResponse.json(

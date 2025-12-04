@@ -9,6 +9,9 @@ import { processSafeUserData } from '@/lib/safe-user-data';
 import { checkRateLimit, getClientIP } from '@/lib/rate-limit';
 import { systemLogger } from '@/lib/system-logger';
 export async function POST(request: NextRequest) {
+  let body: any = null;
+  let email: string | undefined = undefined;
+  
   try {
     const ip = getClientIP(request);
     const rateLimit = checkRateLimit(ip, 'register', request);
@@ -21,9 +24,9 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       );
     }
-    const body = await request.json();
+    body = await request.json();
     const name = (body.name || '').trim();
-    const email = (body.email || '').trim().toLowerCase();
+    email = (body.email || '').trim().toLowerCase();
     const password = body.password || '';
     const confirmPassword = body.confirmPassword || '';
     let phone = body.phone && String(body.phone).trim() ? String(body.phone).trim().substring(0, 50) : null;
@@ -136,7 +139,7 @@ export async function POST(request: NextRequest) {
       context: 'auth',
       request,
       error,
-      metadata: { endpoint: '/api/auth/register', email: body?.email }
+      metadata: { endpoint: '/api/auth/register', email: email || body?.email || 'unknown' }
     });
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },

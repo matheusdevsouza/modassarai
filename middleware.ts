@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifyToken, isAdmin, logSecurityEvent } from '@/lib/auth';
+import { verifyToken, isAdmin, logSecurityEvent, verifyAdminAccess } from '@/lib/auth';
+import database from '@/lib/database';
 
 const MAX_REQUESTS_PER_MINUTE = 100;
 const MAX_REQUESTS_PER_HOUR = 1000;
@@ -420,13 +421,18 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
+    let isAdminUser = false;
+    
     if (isAdminRoute(pathname)) {
-      if (!isAdmin(payload)) {
+      isAdminUser = await verifyAdminAccess(payload, database.query);
+      
+      if (!isAdminUser) {
         logSecurityEvent('UNAUTHORIZED_ADMIN_ACCESS', {
           ip: clientIP,
           pathname,
           userId: payload.userId,
-          userAgent
+          userAgent,
+          reason: 'Database verification failed'
         });
         const redirectResponse = NextResponse.redirect(new URL('/404', request.url));
         return setSecurityHeaders(redirectResponse);
@@ -436,13 +442,18 @@ export async function middleware(request: NextRequest) {
         ip: clientIP,
         pathname,
         userId: payload.userId,
-        userAgent
+        userAgent,
+        verified: 'database'
       });
+    } else {
+      if (isAdmin(payload)) {
+        isAdminUser = await verifyAdminAccess(payload, database.query);
+      }
     }
 
     response.headers.set('X-User-ID', payload.userId?.toString() || '');
     response.headers.set('X-User-Email', payload.email || '');
-    response.headers.set('X-User-Is-Admin', isAdmin(payload).toString());
+    response.headers.set('X-User-Is-Admin', isAdminUser.toString());
 
     if (isSensitiveRoute(pathname)) {
       logSecurityEvent('AUTHENTICATED_ACCESS', {
