@@ -54,13 +54,13 @@ const defaultCategories = [
     name: 'Elegância Clássica', 
     slug: 'classica', 
     description: 'Peças atemporais para ocasiões especiais',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80'
+    image: 'https://mariapistache.vercel.app/images/elegancia-classe.jpg'
   },
   { 
     name: 'Noite & Festa', 
     slug: 'noite-festa', 
     description: 'Brilhe em qualquer evento',
-    image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=80'
+    image: 'https://mariapistache.vercel.app/images/noite-festa.jpg'
   }
 ]
 
@@ -82,12 +82,14 @@ function CategoryCard({ category, index, defaultImage }: { category: Category & 
           <div className="absolute inset-0 overflow-hidden">
             <div 
               className="absolute inset-0 category-card-image-wrapper"
+              style={{ transform: 'scale(0.95)' }}
             >
               <Image
                 src={(category as any).image || defaultImage}
                 alt={category.name}
                 fill
                 className="object-cover"
+                style={{ objectPosition: 'center 5%' }}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority={index === 0}
               />

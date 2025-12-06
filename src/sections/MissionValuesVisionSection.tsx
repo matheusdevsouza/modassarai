@@ -1,7 +1,7 @@
 'use client'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Target, Heart, Eye, Sparkle } from 'phosphor-react'
+import { Target, Heart, Eye, Sparkle, CheckCircle } from 'phosphor-react'
 
 const MissionValuesVisionSkeleton = () => (
   <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden" style={{ 
@@ -75,7 +75,7 @@ export function MissionValuesVisionSection() {
       title: 'Missão',
       description: (
         <>
-          A Maria Pistache nasceu com o propósito de oferecer <strong>moda feminina contemporânea, leve e sofisticada</strong>. Criamos peças que valorizam a essência única de cada mulher, proporcionando conforto e elegância em todos os momentos. Nossa missão é vestir mulheres que buscam expressar sua personalidade através de roupas que combinam <strong>estilo atemporal com qualidade excepcional</strong>.
+          Oferecer moda feminina contemporânea e sofisticada. Nossa missão é vestir mulheres que buscam expressar sua personalidade com <span className="text-primary-400 font-semibold">conforto e elegância atemporal</span>.
         </>
       ),
     },
@@ -83,9 +83,24 @@ export function MissionValuesVisionSection() {
       icon: Heart,
       title: 'Valores',
       description: (
-        <>
-          Acreditamos profundamente na <strong>autenticidade, na qualidade dos nossos produtos e no respeito às pessoas</strong>. Valorizamos a sustentabilidade, a inclusão e o empoderamento feminino através da moda consciente e acessível. Cada peça é pensada com carinho e atenção aos detalhes, refletindo nosso <strong>compromisso com a excelência e o bem-estar das nossas clientes</strong>.
-        </>
+        <ul className="space-y-4 text-left">
+          <li className="flex items-start gap-3">
+            <CheckCircle size={20} weight="fill" className="text-primary-400 flex-shrink-0 mt-0.5" />
+            <span>Autenticidade e Qualidade</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <CheckCircle size={20} weight="fill" className="text-primary-400 flex-shrink-0 mt-0.5" />
+            <span>Sustentabilidade e Inclusão</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <CheckCircle size={20} weight="fill" className="text-primary-400 flex-shrink-0 mt-0.5" />
+            <span>Moda Consciente</span>
+          </li>
+          <li className="flex items-start gap-3">
+            <CheckCircle size={20} weight="fill" className="text-primary-400 flex-shrink-0 mt-0.5" />
+            <span>Respeito às Pessoas</span>
+          </li>
+        </ul>
       ),
     },
     {
@@ -93,7 +108,7 @@ export function MissionValuesVisionSection() {
       title: 'Visão',
       description: (
         <>
-          Buscamos ser <strong>referência em moda feminina no Brasil</strong>, reconhecida pela qualidade, inovação e compromisso genuíno com a satisfação das nossas clientes. Queremos construir uma marca que inspire confiança e admiração, criando <strong>conexões duradouras através de peças que contam histórias</strong> e celebram a beleza única de cada mulher.
+          Ser referência nacional em moda feminina, reconhecida pela <span className="text-primary-400 font-semibold">inovação</span> e <span className="text-primary-400 font-semibold">compromisso genuíno</span> com a satisfação, criando conexões duradouras que celebram a beleza única.
         </>
       ),
     },
@@ -177,7 +192,7 @@ export function MissionValuesVisionSection() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'visible'}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 max-w-7xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto"
         >
           {cards.map((card, index) => {
             const IconComponent = card.icon
@@ -185,33 +200,36 @@ export function MissionValuesVisionSection() {
               <motion.div
                 key={card.title}
                 variants={itemVariants}
-                whileHover={{ y: -8 }}
+                whileHover={{ y: -5, scale: 1.02 }}
                 transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="group relative"
               >
-                <div className="relative h-full bg-white/5 rounded-2xl p-10 md:p-12 border border-white/10 group-hover:border-primary-400/20 transition-all duration-500">
-                  <div className="relative z-10 flex flex-col h-full items-center text-center">
-                    <div className="mb-8">
+                <div className="relative h-full bg-white/5 rounded-3xl p-8 md:p-10 border border-white/10 group-hover:border-primary-400/40 transition-all duration-500 backdrop-blur-sm">
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="mb-6 flex justify-center">
                       <IconComponent
-                        size={40}
+                        size={52}
                         weight="thin"
                         className="text-primary-400"
                       />
                     </div>
                     
-                    <h3 className="text-3xl md:text-4xl font-bold text-sand-100 mb-6 tracking-wide uppercase" style={{ letterSpacing: '0.1em' }}>
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-6 text-center tracking-wide uppercase" style={{ letterSpacing: '0.05em' }}>
                       {card.title}
                     </h3>
                     
-                    <div className="w-20 h-px bg-gradient-to-r from-transparent via-primary-400/40 to-transparent mb-8 group-hover:via-primary-400/60 transition-all duration-500" />
-                    
-                    <p className="text-sm md:text-base text-sand-200/80 font-light leading-relaxed max-w-lg">
-                      {card.description}
-                    </p>
+                    <div className="flex-1">
+                      {card.title === 'Valores' ? (
+                        <div className="text-sm md:text-base text-white/90 font-normal leading-relaxed">
+                          {card.description}
+                        </div>
+                      ) : (
+                        <p className="text-sm md:text-base text-white/90 font-normal leading-relaxed text-center">
+                          {card.description}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-px h-32 bg-gradient-to-b from-transparent via-primary-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-32 bg-gradient-to-b from-transparent via-primary-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
               </motion.div>
             )
