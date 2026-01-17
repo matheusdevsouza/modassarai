@@ -151,35 +151,34 @@ export default function AdminLayout({
           />
         )}
       </AnimatePresence>
-      <motion.div 
-        className={`hidden lg:flex lg:flex-col fixed left-0 top-0 h-screen bg-primary-50 border-r border-primary-100 shadow-lg transition-all duration-300 z-30 ${
-          sidebarExpanded ? 'w-64 xl:w-72' : 'w-20'
-        }`}
+      <motion.div
+        className={`hidden lg:flex lg:flex-col fixed left-0 top-0 h-screen bg-primary-50 border-r border-primary-100 shadow-lg transition-all duration-300 z-30 ${sidebarExpanded ? 'w-64 xl:w-72' : 'w-20'
+          }`}
         initial={false}
         animate={{ width: sidebarExpanded ? 256 : 80 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
       >
         <div className={`flex items-center h-16 bg-primary-50 border-b border-primary-100 relative ${sidebarExpanded ? 'justify-center px-4 lg:px-6' : 'justify-center px-2'}`}>
-              <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <div className={`relative flex-shrink-0 ${sidebarExpanded ? 'w-10 h-10 lg:w-12 lg:h-12' : 'w-10 h-10'}`}>
-                  <Image
-                    src="/images/logo.png"
-                    alt="Maria Pistache"
-                    fill
+              <Image
+                src="/images/logo.png"
+                alt="Modas Saraí"
+                fill
                 sizes={sidebarExpanded ? "(max-width: 1024px) 40px, 48px" : "40px"}
-                    className="object-contain"
-                    priority
-                  />
-                </div>
-              </div>
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
           {sidebarExpanded && (
-              <button
-                onClick={() => setSidebarExpanded(!sidebarExpanded)}
-                className="absolute right-4 p-2 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 flex-shrink-0"
-                title="Retrair sidebar"
-              >
-                <FaArrowLeft size={16} />
-              </button>
+            <button
+              onClick={() => setSidebarExpanded(!sidebarExpanded)}
+              className="absolute right-4 p-2 text-sage-600 hover:text-primary-600 hover:bg-primary-100 rounded-lg transition-all duration-300 flex-shrink-0"
+              title="Retrair sidebar"
+            >
+              <FaArrowLeft size={16} />
+            </button>
           )}
         </div>
         <nav className={`flex-1 py-4 space-y-4 overflow-y-auto overflow-x-hidden transition-all duration-300 ${sidebarExpanded ? 'px-4' : 'px-2'}`}>
@@ -206,19 +205,16 @@ export default function AdminLayout({
                   >
                     <Link
                       href={item.href}
-                      className={`group relative flex items-center transition-all duration-300 rounded-lg border overflow-hidden ${
-                        sidebarExpanded ? 'px-3 py-2.5' : 'px-2 py-2.5 justify-center'
-                      } ${
-                        pathname === item.href
+                      className={`group relative flex items-center transition-all duration-300 rounded-lg border overflow-hidden ${sidebarExpanded ? 'px-3 py-2.5' : 'px-2 py-2.5 justify-center'
+                        } ${pathname === item.href
                           ? 'text-primary-600 bg-primary-100 border-primary-500'
                           : 'text-sage-700 hover:text-primary-600 border-transparent hover:border-primary-200 hover:bg-primary-50'
-                      }`}
+                        }`}
                       title={!sidebarExpanded ? item.label : undefined}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 via-primary-500/5 to-primary-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div className={`w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-200 group-hover:scale-110 transition-all duration-300 border border-primary-200 group-hover:border-primary-300 ${
-                        sidebarExpanded ? 'mr-3' : 'mr-0'
-                      }`}>
+                      <div className={`w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-200 group-hover:scale-110 transition-all duration-300 border border-primary-200 group-hover:border-primary-300 ${sidebarExpanded ? 'mr-3' : 'mr-0'
+                        }`}>
                         <item.icon className={`${pathname === item.href ? 'text-primary-600' : 'text-primary-500'} group-hover:text-primary-600 transition-colors duration-300`} size={16} />
                       </div>
                       <span className={`font-medium text-sm transition-all duration-300 whitespace-nowrap ${sidebarExpanded ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>{item.label}</span>
@@ -294,7 +290,7 @@ export default function AdminLayout({
             <div className="relative w-10 h-10 flex-shrink-0">
               <Image
                 src="/images/logo.png"
-                alt="Maria Pistache"
+                alt="Modas Saraí"
                 fill
                 sizes="40px"
                 className="object-contain"
@@ -331,11 +327,10 @@ export default function AdminLayout({
                   >
                     <Link
                       href={item.href}
-                      className={`group relative flex items-center px-3 py-2.5 transition-all duration-300 rounded-lg border overflow-hidden ${
-                        pathname === item.href
+                      className={`group relative flex items-center px-3 py-2.5 transition-all duration-300 rounded-lg border overflow-hidden ${pathname === item.href
                           ? 'text-primary-600 bg-primary-100 border-primary-500'
                           : 'text-sage-700 hover:text-primary-600 border-transparent hover:border-primary-200 hover:bg-primary-50'
-                      }`}
+                        }`}
                       onClick={() => setSidebarOpen(false)}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 via-primary-500/5 to-primary-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -376,9 +371,9 @@ export default function AdminLayout({
           </div>
         </div>
       </motion.div>
-      <div 
+      <div
         className="flex-1 flex flex-col transition-all duration-300"
-        style={{ 
+        style={{
           marginLeft: `${contentMargin}px`
         }}
       >

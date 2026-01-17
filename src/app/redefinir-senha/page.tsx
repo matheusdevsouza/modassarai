@@ -17,7 +17,7 @@ function ResetPasswordInner() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-  
+
   useEffect(() => {
     if (!token) {
       setMessage({ type: 'error', text: 'Token ausente ou inválido. Solicite novamente a redefinição.' })
@@ -48,27 +48,27 @@ function ResetPasswordInner() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setMessage(null)
-    
+
     if (!token) {
       setMessage({ type: 'error', text: 'Token inválido' })
       return
     }
-    
+
     if (!password || !confirmPassword) {
       setMessage({ type: 'error', text: 'Informe a nova senha e a confirmação' })
       return
     }
-    
+
     if (!passwordValidation.isValid) {
       setMessage({ type: 'error', text: 'A senha não atende aos requisitos de segurança' })
       return
     }
-    
+
     if (password !== confirmPassword) {
       setMessage({ type: 'error', text: 'As senhas não conferem' })
       return
     }
-    
+
     setLoading(true)
     try {
       const res = await fetch('/api/auth/reset-password', {
@@ -113,18 +113,17 @@ function ResetPasswordInner() {
       <div className="w-full max-w-md bg-primary-50 rounded-xl shadow-xl p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Maria Pistache Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-semibold text-sage-900 mb-2 text-center">Redefinir Senha</h1>
           <p className="text-sage-800 text-center text-sm">Crie uma nova senha para sua conta.</p>
         </div>
-        
+
         {message && (
-          <div className={`p-4 rounded-lg text-sm ${
-            message.type === 'success' 
-              ? 'bg-green-50 border border-green-200 text-green-700' 
+          <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
+              ? 'bg-green-50 border border-green-200 text-green-700'
               : 'bg-red-50 border border-red-200 text-red-700'
-          }`}>
+            }`}>
             {message.text}
           </div>
         )}
@@ -133,14 +132,14 @@ function ResetPasswordInner() {
           <div className="flex flex-col gap-2">
             <label htmlFor="password" className="text-sage-900 font-medium text-sm">Nova senha</label>
             <div className="relative">
-            <input
-              id="password"
+              <input
+                id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
                 required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="px-4 py-3 pr-12 rounded-lg bg-white border border-cloud-100 text-sage-900 placeholder-sage-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-500 transition-all w-full"
                 placeholder="Digite sua nova senha"
                 minLength={8}
@@ -157,16 +156,15 @@ function ResetPasswordInner() {
               <div className="mt-2">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="flex-1 bg-cloud-100 rounded-full h-2">
-                    <div 
+                    <div
                       className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor(passwordValidation.strength)}`}
                       style={{ width: `${(passwordValidation.strength / 5) * 100}%` }}
                     />
                   </div>
-                  <span className={`text-xs font-medium ${
-                    passwordValidation.strength <= 2 ? 'text-red-600' :
-                    passwordValidation.strength <= 3 ? 'text-yellow-600' :
-                    passwordValidation.strength <= 4 ? 'text-blue-600' : 'text-green-600'
-                  }`}>
+                  <span className={`text-xs font-medium ${passwordValidation.strength <= 2 ? 'text-red-600' :
+                      passwordValidation.strength <= 3 ? 'text-yellow-600' :
+                        passwordValidation.strength <= 4 ? 'text-blue-600' : 'text-green-600'
+                    }`}>
                     {getPasswordStrengthText(passwordValidation.strength)}
                   </span>
                 </div>
@@ -209,14 +207,14 @@ function ResetPasswordInner() {
           <div className="flex flex-col gap-2">
             <label htmlFor="confirmPassword" className="text-sage-900 font-medium text-sm">Confirmar nova senha</label>
             <div className="relative">
-            <input
+              <input
                 id="confirmPassword"
                 name="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 autoComplete="new-password"
                 required
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="px-4 py-3 pr-12 rounded-lg bg-white border border-cloud-100 text-sage-900 placeholder-sage-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-500 transition-all w-full"
                 placeholder="Confirme sua nova senha"
                 minLength={8}
@@ -230,9 +228,8 @@ function ResetPasswordInner() {
               </button>
             </div>
             {confirmPassword && (
-              <div className={`text-xs flex items-center gap-2 ${
-                password === confirmPassword ? 'text-green-600' : 'text-red-600'
-              }`}>
+              <div className={`text-xs flex items-center gap-2 ${password === confirmPassword ? 'text-green-600' : 'text-red-600'
+                }`}>
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
@@ -248,14 +245,14 @@ function ResetPasswordInner() {
           <motion.button
             type="submit"
             disabled={loading || !token || !passwordValidation.isValid || password !== confirmPassword}
-            whileHover={{ 
-              scale: 1.02, 
+            whileHover={{
+              scale: 1.02,
               y: -1,
             }}
             whileTap={{ scale: 0.97 }}
-            transition={{ 
-              duration: 0.35, 
-              ease: [0.25, 0.46, 0.45, 0.94] 
+            transition={{
+              duration: 0.35,
+              ease: [0.25, 0.46, 0.45, 0.94]
             }}
             className="group relative mt-4 bg-primary-500 hover:bg-primary-600 disabled:bg-cloud-200 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg text-sm w-full shadow-lg shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
           >
@@ -266,9 +263,9 @@ function ResetPasswordInner() {
                 x: ['-100%', '100%'],
               }}
               transition={{
-                opacity: { 
-                  duration: 0.5, 
-                  ease: [0.25, 0.46, 0.45, 0.94] 
+                opacity: {
+                  duration: 0.5,
+                  ease: [0.25, 0.46, 0.45, 0.94]
                 },
                 x: {
                   duration: 2,
@@ -289,7 +286,7 @@ function ResetPasswordInner() {
 }
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="min-h-[50vh]" />}> 
+    <Suspense fallback={<div className="min-h-[50vh]" />}>
       <ResetPasswordInner />
     </Suspense>
   )

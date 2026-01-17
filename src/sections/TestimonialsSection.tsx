@@ -18,10 +18,10 @@ interface Testimonial {
 }
 const TestimonialsSkeleton = () => (
   <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden" style={{
-    backgroundColor: '#0a1f13',
+    backgroundColor: '#1A1816',
     backgroundImage: `
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+      linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
     `,
     backgroundSize: '40px 40px'
   }}>
@@ -174,10 +174,10 @@ export function TestimonialsSection() {
   if (!testimonials.length) {
     return (
       <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden" style={{
-        backgroundColor: '#0a1f13',
+        backgroundColor: '#1A1816',
         backgroundImage: `
-          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+          linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px'
       }}>
@@ -232,10 +232,10 @@ export function TestimonialsSection() {
   }
   return (
     <section ref={sectionRef} className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden" style={{
-      backgroundColor: '#0a1f13',
+      backgroundColor: '#1A1816',
       backgroundImage: `
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+        linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
       `,
       backgroundSize: '40px 40px'
     }}>

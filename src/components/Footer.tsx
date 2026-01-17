@@ -68,57 +68,63 @@ export function Footer() {
             <Link href="/" className="inline-block mb-6">
               <Image
                 src="/images/logo.png"
-                alt="Maria Pistache"
+                alt="Modas Saraí"
                 width={120}
                 height={40}
                 className="h-10 w-auto"
               />
             </Link>
 
-            <p className="text-sm text-sage-700 mb-6 leading-relaxed max-w-xs">
+            <p className="text-sm text-sage-600 mb-5 leading-relaxed max-w-xs">
               Moda feminina contemporânea, leve e sofisticada para todos os momentos da sua vida.
             </p>
 
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-3 text-sm text-sage-600">
-                <FontAwesomeIcon icon={faLocationDot} className="w-4 h-4 text-primary-500 flex-shrink-0" />
-                <span>Rua João Meneghete, 427 - Taboão da Serra, SP</span>
+            {/* Clean Contact Info - No backgrounds/borders */}
+            <div className="space-y-2 mb-5 text-sm text-sage-600">
+              <div className="flex items-start gap-2">
+                <FontAwesomeIcon icon={faLocationDot} className="w-3.5 h-3.5 text-primary-500 mt-0.5 flex-shrink-0" />
+                <span className="leading-relaxed">Shopping Novo Porto Brás - Box 2562 (2º Andar) - R. Tiers, 282 - Canindé, São Paulo, SP</span>
               </div>
-              <div className="flex items-center gap-3 text-sm text-sage-600">
-                <FontAwesomeIcon icon={faPhone} className="w-4 h-4 text-primary-500 flex-shrink-0" />
-                <a href="tel:5511974835035" className="hover:text-primary-600 transition-colors duration-300">
-                  +55 11 97483-5035
-                </a>
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faPhone} className="w-3.5 h-3.5 text-primary-500 flex-shrink-0" />
+                <a href="tel:5511930055418" className="hover:text-primary-600 transition-colors">+55 11 93005-5418</a>
               </div>
-              <div className="flex items-center gap-3 text-sm text-sage-600">
-                <FontAwesomeIcon icon={faEnvelope} className="w-4 h-4 text-primary-500 flex-shrink-0" />
-                <a href="mailto:contato@mariapistache.com.br" className="hover:text-primary-600 transition-colors duration-300">
-                  contato@mariapistache.com.br
-                </a>
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faEnvelope} className="w-3.5 h-3.5 text-primary-500 flex-shrink-0" />
+                <a href="mailto:contato@modassarai.com.br" className="hover:text-primary-600 transition-colors">contato@modassarai.com.br</a>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <motion.a
-                href="https://www.instagram.com/mariapistacheoficial"
+            {/* Simple Social Links - No backgrounds */}
+            <div className="flex items-center gap-4">
+              <span className="text-xs text-sage-500">Siga-nos:</span>
+              <a
+                href="https://www.instagram.com/modassarai"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-md hover:bg-primary-600 hover:shadow-lg transition-all duration-300"
+                className="text-sage-500 hover:text-pink-500 transition-colors duration-300"
+                aria-label="Instagram"
               >
                 <FontAwesomeIcon icon={faInstagram} className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="https://tiktok.com/@mariapistache"
+              </a>
+              <a
+                href="https://tiktok.com/@modassarai"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center shadow-md hover:bg-primary-600 hover:shadow-lg transition-all duration-300"
+                className="text-sage-500 hover:text-sage-900 transition-colors duration-300"
+                aria-label="TikTok"
               >
                 <FontAwesomeIcon icon={faTiktok} className="w-5 h-5" />
-              </motion.a>
+              </a>
+              <a
+                href="https://wa.me/5511930055418"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sage-500 hover:text-green-500 transition-colors duration-300"
+                aria-label="WhatsApp"
+              >
+                <FontAwesomeIcon icon={faWhatsapp} className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
@@ -150,26 +156,26 @@ export function Footer() {
               Receba novidades e ofertas exclusivas!
             </p>
 
-            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-              <div className="relative">
+            <form onSubmit={handleNewsletterSubmit}>
+              <div className="flex">
                 <input
                   type="email"
                   placeholder="Seu e-mail"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white border border-cloud-200 rounded-lg px-4 py-3 text-sage-800 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all duration-300 text-sm"
+                  className="flex-1 bg-white border border-cloud-200 border-r-0 rounded-l-lg px-4 py-3 text-sage-800 placeholder-sage-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-100 transition-all duration-300 text-sm"
                   required
                 />
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="bg-primary-500 hover:bg-primary-600 text-white px-4 rounded-r-lg flex items-center justify-center transition-all duration-300"
+                  aria-label="Inscrever-se"
+                >
+                  <FontAwesomeIcon icon={faPaperPlane} className="w-4 h-4" />
+                </motion.button>
               </div>
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-sm hover:shadow-md"
-              >
-                <span className="text-sm">Inscrever-se</span>
-                <FontAwesomeIcon icon={faPaperPlane} className="w-4 h-4" />
-              </motion.button>
             </form>
           </div>
         </div>
@@ -179,21 +185,12 @@ export function Footer() {
         <div className="container mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-sage-600 text-center md:text-left">
-              © {new Date().getFullYear()} Maria Pistache. Todos os direitos reservados.
+              © {new Date().getFullYear()} Modas Saraí. Todos os direitos reservados.
               <br className="md:hidden" />
               <span className="hidden md:inline"> | </span>
-              CNPJ: 51.944.038/0001-05
+              CNPJ: 31.434.414/0001-52
             </p>
 
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-sage-500 mr-2">Pagamento:</span>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-sage-600 bg-white px-2 py-1 rounded border border-cloud-200">VISA</span>
-                <span className="text-xs text-sage-600 bg-white px-2 py-1 rounded border border-cloud-200">MC</span>
-                <span className="text-xs text-sage-600 bg-white px-2 py-1 rounded border border-cloud-200">PIX</span>
-                <span className="text-xs text-sage-600 bg-white px-2 py-1 rounded border border-cloud-200">BOLETO</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -209,7 +206,7 @@ export function Footer() {
       </motion.button>
 
       <motion.a
-        href="https://wa.me/5511974835035?text=Olá! Gostaria de saber mais sobre os produtos da Maria Pistache."
+        href="https://wa.me/5511930055418?text=Olá! Gostaria de saber mais sobre os produtos da Modas Saraí."
         target="_blank"
         rel="noopener noreferrer"
         whileHover={{ scale: 1.1 }}

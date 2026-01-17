@@ -92,12 +92,12 @@ export function Header() {
               animate={{ opacity: 1, x: 0 }}
               whileHover={{ scale: 1.05 }}
               className="flex items-center cursor-pointer group relative z-10"
-              title="Maria Pistache - Ir para a página inicial"
+              title="Modas Saraí - Ir para a página inicial"
             >
               <div className="relative w-12 h-12 sm:w-16 sm:h-16 transition-transform duration-300 group-hover:scale-105">
                 <Image
                   src="/images/logo.png"
-                  alt="Maria Pistache"
+                  alt="Modas Saraí"
                   fill
                   sizes="(max-width: 640px) 48px, 64px"
                   className="object-contain filter brightness-110"
@@ -451,7 +451,7 @@ export function Header() {
                   <div className="relative w-20 h-20">
                     <Image
                       src="/images/logo.png"
-                      alt="Maria Pistache"
+                      alt="Modas Saraí"
                       fill
                       sizes="80px"
                       className="object-contain"

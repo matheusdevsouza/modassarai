@@ -6,23 +6,23 @@ import { CartProvider } from '@/contexts/CartContext'
 import { FavoritesProvider } from '@/contexts/FavoritesContext'
 import { AuthProvider } from '@/contexts/AuthContext'
 import Link from 'next/link'
-const montserrat = Montserrat({ 
+const montserrat = Montserrat({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-montserrat',
 })
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-inter',
 })
 export const metadata: Metadata = {
-  title: 'Maria Pistache - Moda Feminina',
-  description: 'Moda feminina sofisticada, leve e contemporânea. Descubra as coleções da Maria Pistache.',
+  title: 'Modas Saraí - Moda Feminina',
+  description: 'Moda feminina sofisticada, leve e contemporânea. Descubra as coleções da Modas Saraí.',
   icons: {
-    icon: '/images/logo.png',
-    shortcut: '/images/logo.png',
-    apple: '/images/logo.png',
+    icon: '/images/icon.png',
+    shortcut: '/images/icon.png',
+    apple: '/images/icon.png',
   },
 }
 export default function RootLayout({
@@ -39,7 +39,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={`${montserrat.variable} ${inter.variable} ${montserrat.className} bg-sand-100 text-primary-700 antialiased relative`}>
-        <div 
+        <div
           className="fixed inset-0 pointer-events-none z-[9999] opacity-5 md:opacity-0"
           style={{
             backgroundImage: 'url(/images/site-noise.png)',
@@ -50,9 +50,9 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-            <LayoutShell>
-              {children}
-            </LayoutShell>
+              <LayoutShell>
+                {children}
+              </LayoutShell>
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>

@@ -29,13 +29,13 @@ const createTransporter = () => {
   const config = {
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
-    secure: true, 
+    secure: true,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
     tls: {
-      rejectUnauthorized: false, 
+      rejectUnauthorized: false,
       ciphers: 'SSLv3'
     }
   };
@@ -131,18 +131,18 @@ export async function sendVerificationEmail(data: VerificationEmailData): Promis
     greeting: 'Olá',
     name: data.name,
     content: `
-      <p style="margin: 0 0 16px 0;">Obrigado por se cadastrar na <strong style="color: #0F4024;">Maria Pistache</strong>! Estamos muito felizes em tê-lo(a) conosco.</p>
+      <p style="margin: 0 0 16px 0;">Obrigado por se cadastrar na <strong style="color: #0F4024;">Modas Saraí</strong>! Estamos muito felizes em tê-lo(a) conosco.</p>
       <p style="margin: 0;">Para ativar sua conta e começar a aproveitar todos os benefícios, clique no botão abaixo para verificar seu endereço de e-mail.</p>
     `,
     buttonText: 'Verificar E-mail',
     buttonUrl: verificationUrl,
     expiryTime: '24 horas',
-    footerNote: 'Se você não criou uma conta na Maria Pistache, pode ignorar este e-mail com segurança.',
+    footerNote: 'Se você não criou uma conta na Modas Saraí, pode ignorar este e-mail com segurança.',
   });
   const mailOptions = {
-    from: `"Maria Pistache" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: "Verifique sua conta - Maria Pistache",
+    subject: "Verifique sua conta - Modas Saraí",
     html,
   };
   try {
@@ -161,7 +161,7 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
     greeting: 'Olá',
     name: data.name,
     content: `
-      <p style="margin: 0 0 16px 0;">Recebemos uma solicitação para redefinir a senha da sua conta na <strong style="color: #0F4024;">Maria Pistache</strong>.</p>
+      <p style="margin: 0 0 16px 0;">Recebemos uma solicitação para redefinir a senha da sua conta na <strong style="color: #0F4024;">Modas Saraí</strong>.</p>
       <p style="margin: 0;">Clique no botão abaixo para criar uma nova senha segura.</p>
     `,
     buttonText: 'Redefinir Senha',
@@ -170,9 +170,9 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
     footerNote: 'Se você não solicitou a redefinição de senha, pode ignorar este e-mail com segurança. Sua senha permanecerá inalterada.',
   });
   const mailOptions = {
-    from: `"Maria Pistache" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: "Redefinir Senha - Maria Pistache",
+    subject: "Redefinir Senha - Modas Saraí",
     html,
   };
   await transporter.sendMail(mailOptions);
@@ -211,9 +211,9 @@ export async function sendTrackingEmail(data: TrackingEmailData): Promise<void> 
     buttonUrl: data.trackingUrl,
   });
   const mailOptions = {
-    from: `"Maria Pistache" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Rastreamento do Pedido ${data.orderNumber} - Maria Pistache`,
+    subject: `Rastreamento do Pedido ${data.orderNumber} - Modas Saraí`,
     html,
   };
   await transporter.sendMail(mailOptions);
@@ -268,13 +268,13 @@ export async function sendPaymentConfirmationEmail(data: PaymentConfirmationEmai
           <li>Acompanhe o status do seu pedido em sua conta</li>
         </ul>
       </div>
-      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Maria Pistache</strong>!</p>
+      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Modas Saraí</strong>!</p>
     `,
   });
   const mailOptions = {
-    from: `"Maria Pistache" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Pagamento Aprovado - Pedido ${data.orderNumber} - Maria Pistache`,
+    subject: `Pagamento Aprovado - Pedido ${data.orderNumber} - Modas Saraí`,
     html,
   };
   await transporter.sendMail(mailOptions);
@@ -319,28 +319,28 @@ export async function sendOrderShippedEmail(data: OrderShippedEmailData): Promis
           <li>Em caso de dúvidas, entre em contato conosco através do nosso site</li>
         </ul>
       </div>
-      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Maria Pistache</strong>!</p>
+      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Modas Saraí</strong>!</p>
     `,
     buttonText: 'Rastrear Pedido',
     buttonUrl: data.trackingUrl,
   });
   const mailOptions = {
-    from: `"Maria Pistache" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Seu Pedido Foi Enviado! - ${data.orderNumber} - Maria Pistache`,
+    subject: `Seu Pedido Foi Enviado! - ${data.orderNumber} - Modas Saraí`,
     html,
   };
   await transporter.sendMail(mailOptions);
 }
 export async function send2FACodeEmail(data: TwoFactorCodeEmailData): Promise<void> {
   const codeDisplay = data.code.match(/.{1,1}/g)?.join(' ') || data.code;
-  
+
   const html = generateEmailTemplate({
     title: 'Código de Verificação',
     greeting: 'Olá',
     name: data.name,
     content: `
-      <p style="margin: 0 0 20px 0;">Você solicitou acesso à sua conta na <strong style="color: #0F4024;">Maria Pistache</strong>.</p>
+      <p style="margin: 0 0 20px 0;">Você solicitou acesso à sua conta na <strong style="color: #0F4024;">Modas Saraí</strong>.</p>
       
       <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border: 2px solid #86EFAC; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center;">
         <p style="margin: 0 0 12px 0; color: #166534; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Seu Código de Verificação</p>
@@ -354,7 +354,7 @@ export async function send2FACodeEmail(data: TwoFactorCodeEmailData): Promise<vo
         <p style="margin: 0 0 8px 0; color: #1F2937; font-size: 15px; font-weight: 600;">⚠️ Importante:</p>
         <ul style="margin: 0; padding-left: 20px; color: #4B5563; font-size: 14px; line-height: 1.8;">
           <li>Nunca compartilhe este código com ninguém</li>
-          <li>A Maria Pistache nunca pedirá seu código por telefone ou e-mail</li>
+          <li>A Modas Saraí nunca pedirá seu código por telefone ou e-mail</li>
           <li>Se você não solicitou este código, ignore este e-mail e altere sua senha imediatamente</li>
         </ul>
       </div>
@@ -366,14 +366,14 @@ export async function send2FACodeEmail(data: TwoFactorCodeEmailData): Promise<vo
     expiryTime: '10 minutos',
     footerNote: 'Este código é válido por apenas 10 minutos e só pode ser usado uma vez. Se você não solicitou este código, sua conta pode estar em risco - altere sua senha imediatamente.',
   });
-  
+
   const mailOptions = {
-    from: `"Maria Pistache" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Código de Verificação - ${data.code} - Maria Pistache`,
+    subject: `Código de Verificação - ${data.code} - Modas Saraí`,
     html,
   };
-  
+
   try {
     const transporter = createTransporter();
     await transporter.verify();

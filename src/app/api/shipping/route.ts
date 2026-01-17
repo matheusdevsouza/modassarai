@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { CartItem, MelhorEnvioProduct, MelhorEnvioQuote } from '@/types'
 export const dynamic = 'force-dynamic'
-const DEFAULT_WEIGHT = 0.3 
-const DEFAULT_LENGTH = 20 
-const DEFAULT_WIDTH = 15 
-const DEFAULT_HEIGHT = 5 
+const DEFAULT_WEIGHT = 0.3
+const DEFAULT_LENGTH = 20
+const DEFAULT_WIDTH = 15
+const DEFAULT_HEIGHT = 5
 const ORIGIN_POSTAL_CODE = process.env.SHIPPING_ORIGIN_POSTAL_CODE
 
 interface ShippingRequest {
@@ -23,7 +23,7 @@ interface ShippingRequest {
 function formatProductForMelhorEnvio(product: ShippingRequest['products'][0]): MelhorEnvioProduct {
   return {
     id: product.id,
-    width: (product.width || DEFAULT_WIDTH) / 10, 
+    width: (product.width || DEFAULT_WIDTH) / 10,
     height: (product.height || DEFAULT_HEIGHT) / 10,
     length: (product.length || DEFAULT_LENGTH) / 10,
     weight: product.weight || DEFAULT_WEIGHT,
@@ -37,7 +37,7 @@ async function calculateShippingFromMelhorEnvio(
   products: MelhorEnvioProduct[]
 ): Promise<MelhorEnvioQuote[]> {
   let token = process.env.MELHOR_ENVIO_TOKEN
-  
+
   if (!token) {
     throw new Error('MELHOR_ENVIO_TOKEN não configurado nas variáveis de ambiente')
   }
@@ -77,7 +77,7 @@ async function calculateShippingFromMelhorEnvio(
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`,
-        'User-Agent': 'Maria Pistache (mariapistache@email.com)'
+        'User-Agent': 'Modas Saraí (mariapistache@email.com)'
       },
       body: JSON.stringify(requestBody)
     })
@@ -89,7 +89,7 @@ async function calculateShippingFromMelhorEnvio(
       try {
         const errorData = JSON.parse(responseText)
         errorMessage = errorData.message || errorData.error || errorData.errors?.join(', ') || errorMessage
-        
+
         console.error('❌ Erro na API Melhor Envio:', {
           status: response.status,
           statusText: response.statusText,
@@ -106,26 +106,26 @@ async function calculateShippingFromMelhorEnvio(
           responseText: responseText.substring(0, 500)
         })
       }
-      
+
       if (response.status === 401 || errorMessage.includes('unauthorized')) {
         throw new Error(`Token inválido ou expirado. Verifique se o MELHOR_ENVIO_TOKEN está correto e se não expirou. Status: ${response.status}`)
       }
-      
+
       if (response.status === 403) {
         throw new Error(`Acesso negado (403). O token não tem permissões suficientes. Gere um novo token em "Integrações > Permissões de Acesso" e selecione TODAS as permissões, especialmente "Calcular frete" e "Cotação de envios".`)
       }
-      
+
       throw new Error(errorMessage)
     }
 
     const data = JSON.parse(responseText)
-    
+
     const quotes = Array.isArray(data) ? data : (data.data || data.quotes || [])
-    
+
     if (!Array.isArray(quotes) || quotes.length === 0) {
       return []
     }
-    
+
     return quotes.map((quote: any) => ({
       id: quote.id || quote.service_id || quote.name,
       name: quote.name || quote.service_name || quote.company?.name || 'Frete',
@@ -162,10 +162,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body: ShippingRequest = await request.json()
-    
+
     if (!body.postalCode) {
       return NextResponse.json(
-        { 
+        {
           success: false,
           error: 'CEP é obrigatório',
           data: []
@@ -175,10 +175,10 @@ export async function POST(request: NextRequest) {
     }
 
     const cleanedPostalCode = body.postalCode.replace(/\D/g, '').slice(0, 8)
-    
+
     if (cleanedPostalCode.length !== 8) {
       return NextResponse.json(
-        { 
+        {
           success: false,
           error: 'CEP inválido. Deve conter 8 dígitos',
           data: []
@@ -194,13 +194,13 @@ export async function POST(request: NextRequest) {
           'Accept': 'application/json'
         }
       })
-      
+
       if (viaCepResponse.ok) {
         const viaCepData = await viaCepResponse.json()
-        
+
         if (viaCepData.erro) {
           return NextResponse.json(
-            { 
+            {
               success: false,
               error: 'CEP não encontrado. Por favor, verifique o CEP informado.',
               data: []
@@ -208,15 +208,15 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           )
         }
-        
+
         const invalidPatterns = [
           '00000000', '11111111', '22222222', '33333333', '44444444',
           '55555555', '66666666', '77777777', '88888888', '99999999'
         ]
-        
+
         if (invalidPatterns.includes(cleanedPostalCode)) {
           return NextResponse.json(
-            { 
+            {
               success: false,
               error: 'CEP inválido. Por favor, informe um CEP válido.',
               data: []
@@ -224,10 +224,10 @@ export async function POST(request: NextRequest) {
             { status: 400 }
           )
         }
-        
+
         if (!viaCepData.logradouro && !viaCepData.localidade) {
           return NextResponse.json(
-            { 
+            {
               success: false,
               error: 'CEP não encontrado. Por favor, verifique o CEP informado.',
               data: []
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
 
     if (!body.products || !Array.isArray(body.products) || body.products.length === 0) {
       return NextResponse.json(
-        { 
+        {
           success: false,
           error: 'Produtos são obrigatórios',
           data: []
@@ -275,8 +275,8 @@ export async function POST(request: NextRequest) {
         companyId: quote.company.id,
         deliveryRange: quote.delivery_range
       }))
-      .filter((option: any) => option.price > 0) 
-      .sort((a: any, b: any) => a.price - b.price) 
+      .filter((option: any) => option.price > 0)
+      .sort((a: any, b: any) => a.price - b.price)
 
     if (shippingOptions.length === 0) {
       return NextResponse.json({
@@ -292,9 +292,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('❌ Erro ao calcular frete:', error)
-    
+
     let errorMessage = error.message || 'Erro ao calcular frete. Tente novamente.'
-    
+
     if (errorMessage.includes('unauthorized') || errorMessage.includes('401')) {
       errorMessage = 'Token de autenticação inválido ou expirado. Verifique se o MELHOR_ENVIO_TOKEN está correto.'
     } else if (errorMessage.includes('403') || errorMessage.includes('Acesso negado')) {
@@ -302,7 +302,7 @@ export async function POST(request: NextRequest) {
     } else if (errorMessage.includes('404')) {
       errorMessage = 'Endpoint não encontrado. Verifique se o ambiente (sandbox/production) está correto.'
     }
-    
+
     return NextResponse.json(
       {
         success: false,

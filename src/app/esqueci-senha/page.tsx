@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
   }
   return (
     <section className="flex items-center justify-center bg-sand-100 px-4 pb-16 lg:pb-20" style={{ marginTop: '10.5rem', minHeight: 'calc(100vh - 10.5rem)', paddingTop: '2rem' }}>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
       >
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Maria Pistache Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-semibold text-sage-900 mb-2 text-center">Esqueci minha senha</h1>
           <p className="text-sage-800 text-center text-sm">Informe seu e-mail e enviaremos um link para redefinição de senha.</p>
@@ -77,14 +77,14 @@ export default function ForgotPasswordPage() {
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={{ 
-              scale: 1.02, 
+            whileHover={{
+              scale: 1.02,
               y: -1,
             }}
             whileTap={{ scale: 0.97 }}
-            transition={{ 
-              duration: 0.35, 
-              ease: [0.25, 0.46, 0.45, 0.94] 
+            transition={{
+              duration: 0.35,
+              ease: [0.25, 0.46, 0.45, 0.94]
             }}
             className="group relative mt-4 bg-primary-500 hover:bg-primary-600 disabled:bg-cloud-200 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg text-sm w-full shadow-lg shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
           >
@@ -95,9 +95,9 @@ export default function ForgotPasswordPage() {
                 x: ['-100%', '100%'],
               }}
               transition={{
-                opacity: { 
-                  duration: 0.5, 
-                  ease: [0.25, 0.46, 0.45, 0.94] 
+                opacity: {
+                  duration: 0.5,
+                  ease: [0.25, 0.46, 0.45, 0.94]
                 },
                 x: {
                   duration: 2,

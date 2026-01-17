@@ -5,10 +5,10 @@ import { Target, Heart, Eye, Sparkle, CheckCircle } from 'phosphor-react'
 
 const MissionValuesVisionSkeleton = () => (
   <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden" style={{
-    backgroundColor: '#0a1f13',
+    backgroundColor: '#1A1816',
     backgroundImage: `
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+      linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
     `,
     backgroundSize: '40px 40px'
   }}>
@@ -119,10 +119,10 @@ export function MissionValuesVisionSection() {
       ref={sectionRef}
       className="relative py-16 sm:py-24 md:py-32 overflow-hidden"
       style={{
-        backgroundColor: '#0a1f13',
+        backgroundColor: '#1A1816',
         backgroundImage: `
-          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+          linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px'
       }}
@@ -176,9 +176,9 @@ export function MissionValuesVisionSection() {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="relative z-20 text-lg md:text-xl text-sand-200/80 max-w-3xl mx-auto leading-relaxed"
+            className="relative z-20 text-lg md:text-xl text-sand-200/60 max-w-3xl mx-auto leading-relaxed"
           >
-            Conheça os pilares que guiam a Maria Pistache e definem nossa identidade como marca de moda feminina.
+            Conheça os pilares que guiam a Modas Saraí e definem nossa identidade como marca de moda feminina.
           </motion.p>
           <motion.div
             initial={{ width: 0 }}

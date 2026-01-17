@@ -41,7 +41,7 @@ export default function TermosDeUso() {
   return (
     <div className="min-h-screen bg-sand-100 pt-48 pb-12 px-4 md:px-0">
       <div className="max-w-4xl mx-auto flex flex-col gap-8">
-        <motion.div 
+        <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -51,7 +51,7 @@ export default function TermosDeUso() {
           <p className="text-sage-800 text-lg">Leia atentamente os termos de uso antes de utilizar nosso site</p>
         </motion.div>
         <section className="space-y-8">
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,9 +61,9 @@ export default function TermosDeUso() {
               <FaGavel className="text-primary-600" size={24} />
               <h2 className="text-xl font-semibold text-sage-900">1. Aceitação dos Termos</h2>
             </div>
-            <p className="text-sage-800">Ao acessar o site Maria Pistache, você concorda em cumprir estes Termos de Uso e todas as leis e regulamentos aplicáveis.</p>
+            <p className="text-sage-800">Ao acessar o site Modas Saraí, você concorda em cumprir estes Termos de Uso e todas as leis e regulamentos aplicáveis.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,7 +75,7 @@ export default function TermosDeUso() {
             </div>
             <p className="text-sage-800">Você se compromete a utilizar o site apenas para fins legais e de acordo com estes termos. É proibido utilizar o site para fins ilícitos ou que possam prejudicar terceiros.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export default function TermosDeUso() {
             </div>
             <p className="text-sage-800">Todo o conteúdo do site, incluindo textos, imagens, marcas e logotipos, é protegido por direitos autorais e não pode ser utilizado sem autorização prévia.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -99,7 +99,7 @@ export default function TermosDeUso() {
             </div>
             <p className="text-sage-800">Não nos responsabilizamos por danos decorrentes do uso ou da impossibilidade de uso do site, incluindo eventuais falhas técnicas ou indisponibilidade.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -111,7 +111,7 @@ export default function TermosDeUso() {
             </div>
             <p className="text-sage-800">Reservamo-nos o direito de modificar estes termos a qualquer momento. As alterações entram em vigor imediatamente após a publicação no site.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

@@ -97,7 +97,7 @@ export function ProductCard({ product, index = 0, priority = false, variant = 'd
                             onClick={handleFavoriteClick}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            className={`absolute top-3 right-3 z-10 p-2.5 rounded-full transition-all duration-300 ${isFavorited
+                            className={`absolute top-3 right-3 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${isFavorited
                                 ? 'bg-primary-500 text-white shadow-lg'
                                 : 'bg-white/90 text-sage-600 hover:bg-white hover:text-primary-500 shadow-md'
                                 }`}

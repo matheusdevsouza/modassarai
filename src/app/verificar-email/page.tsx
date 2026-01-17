@@ -46,7 +46,7 @@ function VerificarEmailContent() {
       <div className="w-full max-w-md bg-primary-50 rounded-3xl shadow-xl p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center gap-2">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Maria Pistache Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-extrabold text-sage-900 mb-2 text-center">Verificação de E-mail</h1>
           <p className="text-sage-800 text-center text-sm">Verificando sua conta...</p>
@@ -75,14 +75,14 @@ function VerificarEmailContent() {
               <p className="text-red-700 font-semibold text-lg mb-2">{message}</p>
               <motion.button
                 onClick={() => router.push('/login')}
-                whileHover={{ 
-                  scale: 1.02, 
+                whileHover={{
+                  scale: 1.02,
                   y: -1,
                 }}
                 whileTap={{ scale: 0.97 }}
-                transition={{ 
-                  duration: 0.35, 
-                  ease: [0.25, 0.46, 0.45, 0.94] 
+                transition={{
+                  duration: 0.35,
+                  ease: [0.25, 0.46, 0.45, 0.94]
                 }}
                 className="group relative mt-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-lg w-full shadow-lg shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
               >
@@ -93,9 +93,9 @@ function VerificarEmailContent() {
                     x: ['-100%', '100%'],
                   }}
                   transition={{
-                    opacity: { 
-                      duration: 0.5, 
-                      ease: [0.25, 0.46, 0.45, 0.94] 
+                    opacity: {
+                      duration: 0.5,
+                      ease: [0.25, 0.46, 0.45, 0.94]
                     },
                     x: {
                       duration: 2,

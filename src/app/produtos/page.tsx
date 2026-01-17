@@ -220,7 +220,7 @@ function ProdutosContent() {
                             onChange={handlePrecoChange}
                             className="w-full h-2 bg-cloud-200 rounded-lg appearance-none cursor-pointer slider"
                             style={{
-                              background: `linear-gradient(to right, #0F4024 0%, #0F4024 ${percentual}%, #D9D9D9 ${percentual}%, #D9D9D9 100%)`
+                              background: `linear-gradient(to right, #C49769 0%, #C49769 ${percentual}%, #D9D9D9 ${percentual}%, #D9D9D9 100%)`
                             }}
                             onMouseUp={commitPrecoFiltro}
                             onTouchEnd={commitPrecoFiltro}

@@ -89,7 +89,7 @@ export default function Entregas() {
   return (
     <div className="min-h-screen bg-sand-100 pt-48 pb-12 px-4 md:px-0">
       <div className="max-w-4xl mx-auto flex flex-col gap-8">
-        <motion.div 
+        <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -99,7 +99,7 @@ export default function Entregas() {
           <p className="text-sage-800 text-lg">Conheça nossas opções de entrega</p>
         </motion.div>
         <section className="space-y-8">
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -123,7 +123,7 @@ export default function Entregas() {
               </div>
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -147,7 +147,7 @@ export default function Entregas() {
               </div>
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -160,7 +160,7 @@ export default function Entregas() {
             <p className="text-sage-800 mb-4">
               Todos os produtos são embalados com cuidado para garantir que cheguem em perfeitas condições.
             </p>
-            <motion.ul 
+            <motion.ul
               className="text-sage-800 space-y-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -168,11 +168,11 @@ export default function Entregas() {
             >
               <li>• Embalagem resistente e segura</li>
               <li>• Proteção contra impactos e umidade</li>
-              <li>• Caixa personalizada da Maria Pistache</li>
+              <li>• Caixa personalizada da Modas Saraí</li>
               <li>• Produto lacrado e autenticado</li>
             </motion.ul>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

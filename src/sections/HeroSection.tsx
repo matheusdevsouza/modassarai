@@ -70,11 +70,11 @@ export function HeroSection() {
     setCurrentImage(index)
     setTimeout(() => setIsAnimating(false), 500)
   }
-  
+
   if (loading) {
     return <HeroSkeleton />
   }
-  
+
   return (
     <section className="relative min-h-[calc(100svh-112px)] sm:min-h-[calc(100vh-112px)] overflow-hidden bg-sand-100" style={{ marginTop: '112px' }}>
       <div className="absolute inset-0">
@@ -114,21 +114,21 @@ export function HeroSection() {
       <div className="absolute inset-0 flex items-center justify-center z-10 px-4">
         <div className="text-center max-w-4xl">
           <p className="text-white/80 text-sm md:text-base uppercase tracking-[0.3em] mb-4 font-semibold">
-            Maria Pistache
+            Modas Saraí
           </p>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-white mb-6 leading-tight">
             Moda feminina para viver seus melhores dias.
           </h1>
-          <p className="text-white/85 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+          <p className="text-white/70 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
             Peças leves, versáteis e contemporâneas, pensadas para acompanhar cada momento da sua rotina.
           </p>
           <motion.a
             href="/produtos"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-block px-8 py-4 bg-primary-500 text-white font-semibold uppercase tracking-[0.25em] transition-all duration-300 rounded-full shadow-lg hover:bg-primary-600"
+            className="inline-block px-8 py-4 bg-primary-500 text-white font-semibold tracking-wide transition-all duration-300 rounded-full shadow-lg hover:bg-primary-600"
           >
-            VER COLEÇÕES
+            Ver Coleções
           </motion.a>
         </div>
       </div>
@@ -137,11 +137,10 @@ export function HeroSection() {
           <button
             key={index}
             onClick={() => goToImage(index)}
-            className={`slider-indicator transition-all duration-300 rounded-full ${
-              index === currentImage
-                ? 'w-6 sm:w-8 h-1.5 sm:h-1.5 bg-primary-500 shadow-lg'
-                : 'w-5 sm:w-6 h-1.5 sm:h-1.5 bg-white/80 hover:bg-white'
-            }`}
+            className={`slider-indicator transition-all duration-300 rounded-full ${index === currentImage
+              ? 'w-6 sm:w-8 h-1.5 sm:h-1.5 bg-primary-500 shadow-lg'
+              : 'w-5 sm:w-6 h-1.5 sm:h-1.5 bg-white/80 hover:bg-white'
+              }`}
             aria-label={`Ir para slide ${index + 1}`}
             style={{ minHeight: 'auto', minWidth: 'auto' }}
           />

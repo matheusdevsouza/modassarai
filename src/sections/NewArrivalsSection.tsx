@@ -108,10 +108,10 @@ export function NewArrivalsSection() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-sage-900 mb-6 leading-tight"
           >
-            Chegou agora:{' '}
+            Novidades{' '}
             <span className="relative inline-block">
               <span className="relative z-10 bg-gradient-to-r from-primary-500 via-primary-700 to-primary-500 bg-clip-text text-transparent">
-                peças fresquinhas
+                Exclusivas
               </span>
               <motion.div
                 initial={{ width: 0 }}
@@ -135,9 +135,9 @@ export function NewArrivalsSection() {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : { opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-lg md:text-xl text-sage-700 max-w-3xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl text-sage-500 max-w-3xl mx-auto leading-relaxed"
           >
-            As peças mais recentes da coleção, com tecidos leves, caimento fluido e aquele toque de originalidade que é só da Maria Pistache.
+            Peças selecionadas com tecidos premium e design atemporal para elevar seu estilo.
           </motion.p>
           <motion.div
             initial={{ width: 0 }}
@@ -183,7 +183,7 @@ export function NewArrivalsSection() {
           >
             <Link href="/produtos?novidades=true">
               <button
-                className="group relative inline-flex items-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 bg-primary-500 text-sand-100 rounded-full font-semibold text-xs md:text-sm uppercase tracking-[0.15em] md:tracking-[0.2em] shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/50 transition-all duration-300 overflow-hidden"
+                className="group relative inline-flex items-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 bg-primary-500 text-sand-100 rounded-full font-semibold text-xs md:text-sm tracking-wide shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/50 transition-all duration-300 overflow-hidden"
               >
                 <span className="relative z-10 whitespace-nowrap">Ver Todas as Novidades</span>
                 <ArrowRight size={18} weight="thin" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
@@ -194,18 +194,18 @@ export function NewArrivalsSection() {
       </div>
       <div className="custom-shape-divider-bottom absolute bottom-0 left-0 w-full overflow-hidden leading-none pointer-events-none" style={{
         backgroundImage: `
-          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+          linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px',
-        backgroundColor: '#0a1f13'
+        backgroundColor: '#1A1816'
       }}>
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
-          className="relative block w-full h-[20px] md:h-[100px]"
+          className="relative block w-full h-[10px] md:h-[30px]"
           style={{ width: 'calc(100% + 1.3px)' }}
         >
           <path

@@ -8,10 +8,10 @@ import { ArrowRight } from 'phosphor-react'
 
 const CategoriesSkeleton = () => (
   <section className="relative py-24 overflow-hidden" style={{
-    backgroundColor: '#0a1f13',
+    backgroundColor: '#1A1816',
     backgroundImage: `
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+      linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
     `,
     backgroundSize: '40px 40px'
   }}>
@@ -54,13 +54,13 @@ const defaultCategories = [
     name: 'Elegância Clássica',
     slug: 'classica',
     description: 'Peças atemporais para ocasiões especiais',
-    image: 'https://mariapistache.vercel.app/images/elegancia-classe.jpg'
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80'
   },
   {
     name: 'Noite & Festa',
     slug: 'noite-festa',
     description: 'Brilhe em qualquer evento',
-    image: 'https://mariapistache.vercel.app/images/noite-festa.jpg'
+    image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80'
   }
 ]
 
@@ -69,7 +69,7 @@ function CategoryCard({ category, index, defaultImage }: { category: Category & 
     if (category.slug === 'noite-festa') {
       return 'center top'
     }
-    return 'center 5%' 
+    return 'center 5%'
   }
 
   return (
@@ -119,9 +119,10 @@ function CategoryCard({ category, index, defaultImage }: { category: Category & 
             <div className="pointer-events-auto">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-500 text-sand-100 rounded-lg font-semibold text-sm uppercase tracking-wide shadow-md category-card-button"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm tracking-wide shadow-md category-card-button"
+                style={{ backgroundColor: '#C49769', color: '#FAFAF8' }}
               >
-                EXPLORAR
+                Explorar
                 <ArrowRight
                   size={16}
                   weight="bold"
@@ -176,10 +177,10 @@ export function ElegantCategoriesSection() {
   }
   return (
     <section className="relative py-24 overflow-hidden" style={{
-      backgroundColor: '#0a1f13',
+      backgroundColor: '#1A1816',
       backgroundImage: `
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)
+        linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
       `,
       backgroundSize: '40px 40px'
     }}>
@@ -200,7 +201,7 @@ export function ElegantCategoriesSection() {
               <span>Explore o universo </span>
               <span className="relative inline-block">
                 <span className="relative z-10 bg-gradient-to-r from-primary-400 via-primary-300 to-primary-400 bg-clip-text text-transparent">
-                  Maria Pistache
+                  Modas Saraí
                 </span>
                 <motion.div
                   initial={{ width: 0 }}
@@ -222,7 +223,7 @@ export function ElegantCategoriesSection() {
               </span>
             </div>
           </h2>
-          <p className="relative z-20 text-sm sm:text-base md:text-lg lg:text-xl text-sand-200/80 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto">
+          <p className="relative z-20 text-sm sm:text-base md:text-lg lg:text-xl text-sand-200/60 max-w-lg sm:max-w-xl md:max-w-2xl mx-auto">
             Encontre as peças perfeitas para o trabalho, fim de semana ou ocasiões especiais.
           </p>
         </motion.div>

@@ -1,10 +1,10 @@
-# 👗 Maria Pistache
+# 👗 Modas Saraí
 
 **E-commerce de moda feminina**
 
 ## 📋 Sobre o Projeto
 
-A Maria Pistache é uma plataforma de e-commerce moderna desenvolvida em Next.js 14, focada na venda de moda feminina. O projeto oferece uma experiência de compra completa com integração ao Mercado Pago, sistema de autenticação seguro e painel administrativo.
+A Modas Saraí é uma plataforma de e-commerce moderna desenvolvida em Next.js 14, focada na venda de moda feminina. O projeto oferece uma experiência de compra completa com integração ao Mercado Pago, sistema de autenticação seguro e painel administrativo.
 
 ## 🚀 Tecnologias Utilizadas
 

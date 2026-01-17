@@ -20,7 +20,7 @@ export default function LoginPage() {
   const [sessionToken, setSessionToken] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   const [sending2FACode, setSending2FACode] = useState(false);
-  
+
   const { login, resendVerification, checkAuth } = useAuth();
   const router = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +35,7 @@ export default function LoginPage() {
     setMessage(null);
     setShowResendVerification(false);
     setShow2FAModal(false);
-    
+
     try {
       const response = await fetch('/api/auth/send-2fa-code', {
         method: 'POST',
@@ -48,16 +48,16 @@ export default function LoginPage() {
         }),
         credentials: 'include',
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         setSessionToken(data.sessionToken);
         setExpiresAt(data.expiresAt);
         setShow2FAModal(true);
-        setMessage({ 
-          type: 'success', 
-          text: 'Código de verificação enviado para seu e-mail!' 
+        setMessage({
+          type: 'success',
+          text: 'Código de verificação enviado para seu e-mail!'
         });
       } else {
         setMessage({ type: 'error', text: data.message || 'Erro ao enviar código de verificação' });
@@ -73,12 +73,12 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-  
+
   const handleResend2FACode = async (): Promise<{ success: boolean; message?: string; retryAfter?: number }> => {
     if (sending2FACode) {
       return { success: false, message: 'Aguarde...' };
     }
-    
+
     setSending2FACode(true);
     try {
       const response = await fetch('/api/auth/send-2fa-code', {
@@ -92,20 +92,20 @@ export default function LoginPage() {
         }),
         credentials: 'include',
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         setSessionToken(data.sessionToken);
         setExpiresAt(data.expiresAt);
-        return { 
-          success: true, 
+        return {
+          success: true,
           message: 'Código reenviado com sucesso!',
           retryAfter: data.retryAfter || 60
         };
       } else {
-        return { 
-          success: false, 
+        return {
+          success: false,
           message: data.message || 'Erro ao reenviar código',
           retryAfter: data.retryAfter || 60
         };
@@ -117,20 +117,20 @@ export default function LoginPage() {
       setSending2FACode(false);
     }
   };
-  
+
   const handle2FASuccess = async () => {
     setShow2FAModal(false);
     setMessage({ type: 'success', text: 'Login realizado com sucesso!' });
-    
+
     try {
       const meResponse = await fetch('/api/auth/me', {
         credentials: 'include'
       });
       const meData = await meResponse.json();
-      
+
       if (meData.success && meData.user) {
         await checkAuth();
-        
+
         setTimeout(() => {
           if (meData.user.is_admin) {
             router.push('/admin');
@@ -155,9 +155,9 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const result = await resendVerification(resendEmail);
-      setMessage({ 
-        type: result.success ? 'success' : 'error', 
-        text: result.message 
+      setMessage({
+        type: result.success ? 'success' : 'error',
+        text: result.message
       });
     } catch (error) {
       setMessage({ type: 'error', text: 'Erro ao reenviar verificação' });
@@ -170,17 +170,16 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-primary-50 rounded-xl shadow-xl p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Maria Pistache Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-semibold text-sage-900 mb-2 text-center">Entrar na sua conta</h1>
           <p className="text-sage-800 text-center text-sm">Bem-vindo de volta! Faça login para continuar.</p>
         </div>
         {message && (
-          <div className={`p-4 rounded-lg text-sm ${
-            message.type === 'success' 
-              ? 'bg-green-50 border border-green-200 text-green-700' 
+          <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
+              ? 'bg-green-50 border border-green-200 text-green-700'
               : 'bg-red-50 border border-red-200 text-red-700'
-          }`}>
+            }`}>
             {message.text}
           </div>
         )}
@@ -220,14 +219,14 @@ export default function LoginPage() {
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={{ 
-              scale: 1.02, 
+            whileHover={{
+              scale: 1.02,
               y: -1,
             }}
             whileTap={{ scale: 0.97 }}
-            transition={{ 
-              duration: 0.35, 
-              ease: [0.25, 0.46, 0.45, 0.94] 
+            transition={{
+              duration: 0.35,
+              ease: [0.25, 0.46, 0.45, 0.94]
             }}
             className="group relative mt-4 bg-primary-500 hover:bg-primary-600 disabled:bg-cloud-200 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg text-sm w-full shadow-lg shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
           >
@@ -238,9 +237,9 @@ export default function LoginPage() {
                 x: ['-100%', '100%'],
               }}
               transition={{
-                opacity: { 
-                  duration: 0.5, 
-                  ease: [0.25, 0.46, 0.45, 0.94] 
+                opacity: {
+                  duration: 0.5,
+                  ease: [0.25, 0.46, 0.45, 0.94]
                 },
                 x: {
                   duration: 2,
@@ -263,14 +262,14 @@ export default function LoginPage() {
             <motion.button
               onClick={handleResendVerification}
               disabled={loading}
-              whileHover={{ 
-                scale: 1.02, 
+              whileHover={{
+                scale: 1.02,
                 y: -1,
               }}
               whileTap={{ scale: 0.97 }}
-              transition={{ 
-                duration: 0.35, 
-                ease: [0.25, 0.46, 0.45, 0.94] 
+              transition={{
+                duration: 0.35,
+                ease: [0.25, 0.46, 0.45, 0.94]
               }}
               className="group relative w-full bg-primary-500 hover:bg-primary-600 disabled:bg-cloud-200 text-white font-semibold px-4 py-2 rounded-lg text-xs shadow-md shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
             >
@@ -281,9 +280,9 @@ export default function LoginPage() {
                   x: ['-100%', '100%'],
                 }}
                 transition={{
-                  opacity: { 
-                    duration: 0.5, 
-                    ease: [0.25, 0.46, 0.45, 0.94] 
+                  opacity: {
+                    duration: 0.5,
+                    ease: [0.25, 0.46, 0.45, 0.94]
                   },
                   x: {
                     duration: 2,
@@ -300,7 +299,7 @@ export default function LoginPage() {
           </div>
         )}
       </div>
-      
+
       <TwoFactorModal
         isOpen={show2FAModal}
         email={formData.email}

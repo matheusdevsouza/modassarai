@@ -114,7 +114,7 @@ export default function CriarContaPage() {
       <div className="w-full max-w-md bg-primary-50 rounded-3xl shadow-xl p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center gap-2">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Maria Pistache Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-extrabold text-sage-900 mb-2 text-center">Criar uma conta</h1>
           <p className="text-sage-800 text-center text-sm">Preencha os campos abaixo para se cadastrar.</p>
@@ -145,14 +145,14 @@ export default function CriarContaPage() {
                 <h2 className="text-xl font-bold text-sage-900 mb-2">Verifique seu e-mail</h2>
                 <p className="text-sage-800 mb-4">Enviamos um link de confirmação para o seu e-mail. Por favor, acesse sua caixa de entrada e clique no link para ativar sua conta.</p>
                 <motion.button
-                  whileHover={{ 
-                    scale: 1.02, 
+                  whileHover={{
+                    scale: 1.02,
                     y: -1,
                   }}
                   whileTap={{ scale: 0.97 }}
-                  transition={{ 
-                    duration: 0.35, 
-                    ease: [0.25, 0.46, 0.45, 0.94] 
+                  transition={{
+                    duration: 0.35,
+                    ease: [0.25, 0.46, 0.45, 0.94]
                   }}
                   className="group relative mt-2 px-6 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white font-bold shadow-lg shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
                   onClick={() => setShowVerifyEmailModal(false)}
@@ -164,9 +164,9 @@ export default function CriarContaPage() {
                       x: ['-100%', '100%'],
                     }}
                     transition={{
-                      opacity: { 
-                        duration: 0.5, 
-                        ease: [0.25, 0.46, 0.45, 0.94] 
+                      opacity: {
+                        duration: 0.5,
+                        ease: [0.25, 0.46, 0.45, 0.94]
                       },
                       x: {
                         duration: 2,
@@ -185,13 +185,12 @@ export default function CriarContaPage() {
           )}
         </AnimatePresence>
         {message && !showVerifyEmailModal && (
-          <div className={`p-4 rounded-lg text-sm ${
-            message.type === 'success' 
+          <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
               ? 'bg-green-50 border border-green-200 text-green-700'
               : message.type === 'warning'
-              ? 'bg-yellow-50 border border-yellow-200 text-yellow-700'
-              : 'bg-red-50 border border-red-200 text-red-700'
-          }`}>
+                ? 'bg-yellow-50 border border-yellow-200 text-yellow-700'
+                : 'bg-red-50 border border-red-200 text-red-700'
+            }`}>
             {message.text}
           </div>
         )}
@@ -273,22 +272,21 @@ export default function CriarContaPage() {
             {formData.password && (
               <div className="mt-2">
                 <div className="flex items-center gap-2 mb-2">
-                <div className="flex-1 bg-cloud-100 rounded-full h-2">
-                    <div 
+                  <div className="flex-1 bg-cloud-100 rounded-full h-2">
+                    <div
                       className={`h-2 rounded-full transition-all duration-300 ${getPasswordStrengthColor(passwordValidation.strength)}`}
                       style={{ width: `${(passwordValidation.strength / 5) * 100}%` }}
                     ></div>
                   </div>
-                  <span className={`text-xs font-medium ${
-                  passwordValidation.strength <= 2 ? 'text-red-600' :
-                  passwordValidation.strength <= 3 ? 'text-yellow-600' :
-                  passwordValidation.strength <= 4 ? 'text-blue-600' : 'text-green-600'
-                  }`}>
+                  <span className={`text-xs font-medium ${passwordValidation.strength <= 2 ? 'text-red-600' :
+                      passwordValidation.strength <= 3 ? 'text-yellow-600' :
+                        passwordValidation.strength <= 4 ? 'text-blue-600' : 'text-green-600'
+                    }`}>
                     {getPasswordStrengthText(passwordValidation.strength)}
                   </span>
                 </div>
-              <div className="text-xs text-sage-700 space-y-1">
-                <div className={`flex items-center gap-2 ${formData.password.length >= 8 ? 'text-green-600' : 'text-sage-500'}`}>
+                <div className="text-xs text-sage-700 space-y-1">
+                  <div className={`flex items-center gap-2 ${formData.password.length >= 8 ? 'text-green-600' : 'text-sage-500'}`}>
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
@@ -355,9 +353,8 @@ export default function CriarContaPage() {
               </button>
             </div>
             {formData.confirmPassword && (
-              <div className={`text-xs flex items-center gap-2 ${
-                formData.password === formData.confirmPassword ? 'text-green-600' : 'text-red-600'
-              }`}>
+              <div className={`text-xs flex items-center gap-2 ${formData.password === formData.confirmPassword ? 'text-green-600' : 'text-red-600'
+                }`}>
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
@@ -372,14 +369,14 @@ export default function CriarContaPage() {
           <motion.button
             type="submit"
             disabled={loading || !passwordValidation.isValid || formData.password !== formData.confirmPassword}
-            whileHover={{ 
-              scale: 1.02, 
+            whileHover={{
+              scale: 1.02,
               y: -1,
             }}
             whileTap={{ scale: 0.97 }}
-            transition={{ 
-              duration: 0.35, 
-              ease: [0.25, 0.46, 0.45, 0.94] 
+            transition={{
+              duration: 0.35,
+              ease: [0.25, 0.46, 0.45, 0.94]
             }}
             className="group relative mt-4 bg-primary-500 hover:bg-primary-600 disabled:bg-cloud-200 disabled:cursor-not-allowed text-white font-bold px-6 py-3 rounded-lg text-lg w-full shadow-lg shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
           >
@@ -390,9 +387,9 @@ export default function CriarContaPage() {
                 x: ['-100%', '100%'],
               }}
               transition={{
-                opacity: { 
-                  duration: 0.5, 
-                  ease: [0.25, 0.46, 0.45, 0.94] 
+                opacity: {
+                  duration: 0.5,
+                  ease: [0.25, 0.46, 0.45, 0.94]
                 },
                 x: {
                   duration: 2,
