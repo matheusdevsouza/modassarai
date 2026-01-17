@@ -21,27 +21,24 @@ const footerLinks = {
   informacoes: {
     title: 'Informações',
     links: [
-      { label: 'Sobre Nós', href: '/sobre' },
-      { label: 'Como Funciona', href: '/como-funciona' },
-      { label: 'Garantia', href: '/garantia' },
-      { label: 'Política de Frete', href: '/frete' },
+      { label: 'Como Comprar', href: '/como-comprar' },
+      { label: 'Entregas', href: '/entregas' },
+      { label: 'Trocas e Devoluções', href: '/trocas-e-devolucoes' },
     ]
   },
   ajuda: {
     title: 'Ajuda',
     links: [
       { label: 'FAQ', href: '/faq' },
-      { label: 'Como Comprar', href: '/como-comprar' },
-      { label: 'Trocas e Devoluções', href: '/trocas' },
-      { label: 'Entregas', href: '/entregas' },
+      { label: 'Contato', href: '/contato' },
+      { label: 'Rastrear Pedido', href: '/rastreio' },
     ]
   },
   institucional: {
     title: 'Institucional',
     links: [
-      { label: 'Política de Privacidade', href: '/privacidade' },
-      { label: 'Termos de Uso', href: '/termos' },
-      { label: 'Contato', href: '/contato' },
+      { label: 'Política de Privacidade', href: '/politica-de-privacidade' },
+      { label: 'Termos de Uso', href: '/termos-de-uso' },
     ]
   },
 }

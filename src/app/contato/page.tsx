@@ -28,11 +28,11 @@ const FAQItem = ({ faq, index }: FAQItemProps) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.05 + (index * 0.03), duration: 0.4 }}
-      className="bg-white/80 backdrop-blur-sm rounded-xl border border-sage-200/60 overflow-hidden"
+      className={`overflow-hidden rounded-xl bg-white/80 backdrop-blur-sm relative transition-all duration-300 ${open ? 'border-2 border-primary-400 shadow-md' : 'border border-sage-300'}`}
     >
       <button
         type="button"
-        className={`w-full flex items-center justify-between px-5 py-4 cursor-pointer text-left text-sm font-medium select-none transition-all duration-300 ${open ? 'text-primary-600 bg-primary-50/50' : 'text-sage-800'} focus:outline-none`}
+        className={`w-full flex items-center justify-between px-5 py-4 cursor-pointer text-left text-base font-semibold select-none transition-all duration-300 ${open ? 'text-primary-600' : 'text-sage-900'} focus:outline-none`}
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
@@ -66,7 +66,7 @@ const FAQItem = ({ faq, index }: FAQItemProps) => {
 };
 
 const ContatoSkeleton = () => (
-  <div className="min-h-screen bg-sand-100 pt-32 pb-12 px-4 md:px-0">
+  <div className="min-h-screen bg-sand-100 pt-48 pb-12 px-4 md:px-0">
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-12">
         <div className="h-10 bg-cloud-100 rounded-lg mx-auto max-w-sm mb-4 animate-pulse"></div>
@@ -122,7 +122,7 @@ export default function Contato() {
       description: 'Atendimento rápido',
       value: '+55 11 93005-5418',
       href: 'https://wa.me/5511930055418?text=Olá! Gostaria de saber mais sobre os produtos da Modas Saraí.',
-      color: 'bg-green-500',
+      color: 'bg-primary-500',
       external: true
     },
     {
@@ -140,7 +140,7 @@ export default function Contato() {
       description: 'Siga-nos',
       value: '@modassarai',
       href: 'https://instagram.com/modassarai',
-      color: 'bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400',
+      color: 'bg-primary-400',
       external: true
     },
     {
@@ -149,13 +149,13 @@ export default function Contato() {
       description: 'Nos acompanhe',
       value: '@modassarai',
       href: 'https://tiktok.com/@modassarai',
-      color: 'bg-black',
+      color: 'bg-sage-800',
       external: true
     }
   ]
 
   return (
-    <div className="min-h-screen bg-sand-100 pt-32 pb-16 px-4 md:px-6">
+    <div className="min-h-screen bg-sand-100 pt-48 pb-16 px-4 md:px-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div

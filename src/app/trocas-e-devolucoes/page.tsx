@@ -82,17 +82,17 @@ export default function TrocasEDevolucoes() {
   return (
     <div className="min-h-screen bg-sand-100 pt-48 pb-12 px-4 md:px-0">
       <div className="max-w-4xl mx-auto flex flex-col gap-8">
-        <motion.div 
+        <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-3xl md:text-4xl font-extrabold text-sage-900 mb-4">Trocas e Devoluções</h1>
-          <p className="text-sage-800 text-lg">Conheça nossa política de trocas e devoluções</p>
+          <p className="text-sage-500 text-lg">Conheça nossa política de trocas e devoluções</p>
         </motion.div>
         <section className="space-y-8">
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -105,7 +105,7 @@ export default function TrocasEDevolucoes() {
             <p className="text-sage-800 mb-4">
               Oferecemos troca gratuita em até 30 dias após o recebimento do produto, desde que esteja em perfeitas condições de uso.
             </p>
-            <motion.ul 
+            <motion.ul
               className="text-sage-800 space-y-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -116,7 +116,7 @@ export default function TrocasEDevolucoes() {
               <li>• Não aceitamos produtos com sinais de uso ou danos</li>
             </motion.ul>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -161,7 +161,7 @@ export default function TrocasEDevolucoes() {
               </motion.div>
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -172,7 +172,7 @@ export default function TrocasEDevolucoes() {
               <h2 className="text-xl font-semibold text-sage-900">Prazos e Condições</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <motion.div 
+              <motion.div
                 className="text-center"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -184,7 +184,7 @@ export default function TrocasEDevolucoes() {
                 <h3 className="text-lg font-semibold text-sage-900 mb-2">30 Dias</h3>
                 <p className="text-sage-800 text-sm">Prazo para solicitar troca após recebimento</p>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="text-center"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -196,7 +196,7 @@ export default function TrocasEDevolucoes() {
                 <h3 className="text-lg font-semibold text-sage-900 mb-2">5-7 Dias</h3>
                 <p className="text-sage-800 text-sm">Prazo para análise e envio do novo produto</p>
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="text-center"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -210,7 +210,7 @@ export default function TrocasEDevolucoes() {
               </motion.div>
             </div>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

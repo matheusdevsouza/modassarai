@@ -41,17 +41,17 @@ export default function PoliticaDePrivacidade() {
   return (
     <div className="min-h-screen bg-sand-100 pt-48 pb-12 px-4 md:px-0">
       <div className="max-w-4xl mx-auto flex flex-col gap-8">
-        <motion.div 
+        <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-3xl md:text-4xl font-extrabold text-sage-900 mb-4">Política de Privacidade</h1>
-          <p className="text-sage-800 text-lg">Sua privacidade é importante para nós</p>
+          <p className="text-sage-500 text-lg">Sua privacidade é importante para nós</p>
         </motion.div>
         <section className="space-y-8">
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export default function PoliticaDePrivacidade() {
             </div>
             <p className="text-sage-800">Coletamos informações fornecidas por você ao criar uma conta, realizar uma compra ou entrar em contato. Também coletamos dados automaticamente, como endereço IP e informações do navegador, para melhorar sua experiência.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,7 +75,7 @@ export default function PoliticaDePrivacidade() {
             </div>
             <p className="text-sage-800">Utilizamos seus dados para processar pedidos, oferecer suporte, enviar comunicações e melhorar nossos serviços. Não compartilhamos suas informações com terceiros, exceto quando necessário para cumprir obrigações legais ou processar pagamentos.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export default function PoliticaDePrivacidade() {
             </div>
             <p className="text-sage-800">Adotamos medidas de segurança para proteger seus dados contra acesso não autorizado, alteração ou divulgação.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -99,7 +99,7 @@ export default function PoliticaDePrivacidade() {
             </div>
             <p className="text-sage-800">Utilizamos cookies para melhorar a navegação e personalizar sua experiência. Você pode desativar os cookies nas configurações do seu navegador.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -111,7 +111,7 @@ export default function PoliticaDePrivacidade() {
             </div>
             <p className="text-sage-800">Podemos atualizar esta política periodicamente. Recomendamos que você revise esta página regularmente para estar ciente de eventuais mudanças.</p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

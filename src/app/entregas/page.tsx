@@ -96,7 +96,7 @@ export default function Entregas() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-3xl md:text-4xl font-extrabold text-sage-900 mb-4">Entregas</h1>
-          <p className="text-sage-800 text-lg">Conheça nossas opções de entrega</p>
+          <p className="text-sage-500 text-lg">Conheça nossas opções de entrega</p>
         </motion.div>
         <section className="space-y-8">
           <motion.div

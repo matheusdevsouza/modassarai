@@ -48,7 +48,7 @@ export default function TermosDeUso() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-3xl md:text-4xl font-extrabold text-sage-900 mb-4">Termos de Uso</h1>
-          <p className="text-sage-800 text-lg">Leia atentamente os termos de uso antes de utilizar nosso site</p>
+          <p className="text-sage-500 text-lg">Leia atentamente os termos de uso antes de utilizar nosso site</p>
         </motion.div>
         <section className="space-y-8">
           <motion.div
