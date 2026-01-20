@@ -1,54 +1,81 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { Star, ChatCircle } from 'phosphor-react'
+import { motion } from 'framer-motion'
+import { Star, MapPin } from 'lucide-react'
 
-interface Testimonial {
-  id: number
-  name: string
-  location: string
-  comment: string
-  rating: number
-}
-
-// Mock data as fallback
-const mockTestimonials: Testimonial[] = [
-  { id: 1, name: 'Ana Silva', location: 'São Paulo, SP', comment: 'Amei as roupas! Qualidade impecável e entrega super rápida.', rating: 5 },
-  { id: 2, name: 'Beatriz Santos', location: 'Rio de Janeiro, RJ', comment: 'O caimento das peças é perfeito. Com certeza comprarei novamente.', rating: 5 },
-  { id: 3, name: 'Carla Oliveira', location: 'Belo Horizonte, MG', comment: 'Atendimento excelente e produtos maravilhosos. Recomendo!', rating: 4 },
+// Mock Data
+const testimonials = [
+  {
+    id: 1,
+    name: 'Ana Cláudia',
+    role: 'Cliente Verified',
+    comment: 'Amei a qualidade das peças! O tecido é incrível e o caimento perfeito. Chegou super rápido.',
+    rating: 5,
+    date: 'há 2 dias',
+    location: 'São Paulo, SP'
+  },
+  {
+    id: 2,
+    name: 'Mariana Costa',
+    role: 'Cliente Verified',
+    comment: 'Primeira vez que compro e já virei fã. O atendimento no WhatsApp foi super atencioso.',
+    rating: 5,
+    date: 'há 1 semana',
+    location: 'Rio de Janeiro, RJ'
+  },
+  {
+    id: 3,
+    name: 'Juliana Silva',
+    role: 'Cliente Verified',
+    comment: 'As roupas são ainda mais lindas pessoalmente. Comprei um vestido para uma festa e arrasei!',
+    rating: 5,
+    date: 'há 2 semanas',
+    location: 'Belo Horizonte, MG'
+  }
 ]
 
 export function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(mockTestimonials)
-  // Logic to fetch from API could be added here, keeping mock for now/fallback
-
   return (
-    <section className="py-16 bg-white">
+    <section className="py-20 bg-white border-t border-gray-50">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold text-black uppercase tracking-wider mb-2">
-            Depoimentos
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-bold text-[#333333] mb-4">
+            Quem comprou, amou
           </h2>
+          <div className="mb-8"></div>
+          <p className="text-gray-500 font-light max-w-xl mx-auto">
+            Junte-se a milhares de clientes satisfeitas que escolheram a Sarai Modas.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.slice(0, 3).map((t) => (
-            <div key={t.id} className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-              <div className="flex gap-1 mb-4 text-black">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={testimonial.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-gray-50 p-8 rounded-xl relative group hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100"
+            >
+              <div className="flex gap-1 mb-4 text-yellow-400">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} weight={i < t.rating ? 'fill' : 'regular'} />
+                  <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
-              <p className="text-gray-600 mb-6 italic">&quot;{t.comment}&quot;</p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold">
-                  {t.name.charAt(0)}
+              <p className="text-[#333333] mb-6 leading-relaxed text-sm font-light italic">
+                &quot;{testimonial.comment}&quot;
+              </p>
+              <div className="flex items-center justify-between mt-auto border-t border-gray-200 pt-4">
+                <div className="flex flex-col">
+                  <span className="font-bold text-sm text-black">{testimonial.name}</span>
+                  <span className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                    <MapPin size={12} />
+                    {testimonial.location}
+                  </span>
                 </div>
-                <div>
-                  <h4 className="font-bold text-sm text-black">{t.name}</h4>
-                  <p className="text-xs text-gray-500">{t.location}</p>
-                </div>
+                <span className="text-xs text-gray-400">{testimonial.date}</span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

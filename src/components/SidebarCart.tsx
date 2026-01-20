@@ -95,7 +95,7 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
             <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
                 <ShoppingCart size={24} className="text-black" />
-                <span className="text-lg font-bold text-black uppercase tracking-wide">Sacola</span>
+                <span className="text-lg font-bold text-black">Sacola</span>
               </div>
               <button onClick={onClose} className="text-gray-500 hover:text-black transition-colors">
                 <X size={24} />
@@ -200,7 +200,7 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                           <button
                             onClick={() => calculateShipping(zipCode)}
                             disabled={isLoadingShipping}
-                            className="px-6 py-3 bg-black text-white text-sm font-bold uppercase disabled:opacity-50"
+                            className="px-6 py-3 bg-black text-white text-sm font-bold disabled:opacity-50"
                           >
                             {isLoadingShipping ? <Spinner size={18} className="animate-spin" /> : 'OK'}
                           </button>
@@ -254,14 +254,14 @@ export default function SidebarCart({ open, onClose }: SidebarCartProps) {
                   {!selectedOption && (
                     <button
                       onClick={() => setIsShippingMode(true)}
-                      className="w-full py-3 border border-black text-black font-bold uppercase text-sm hover:bg-black hover:text-white transition-colors"
+                      className="w-full py-3 border border-black text-black font-bold text-sm hover:bg-black hover:text-white transition-colors"
                     >
                       Calcular Frete
                     </button>
                   )}
                   <button
                     onClick={() => { onClose(); window.location.href = '/checkout' }}
-                    className="w-full py-4 bg-black text-white font-bold uppercase text-sm hover:opacity-90 transition-opacity"
+                    className="w-full py-4 bg-black text-white font-bold text-sm hover:opacity-90 transition-opacity"
                   >
                     Finalizar Compra
                   </button>

@@ -32,7 +32,8 @@ body {
 }
 
 body {
-  color: var(--cea-black);
+  color: #333333;
+  /* C&A Charcoal / Dark Gray */
   background: var(--cea-white);
   font-family: 'Inter', sans-serif;
   font-weight: 400;

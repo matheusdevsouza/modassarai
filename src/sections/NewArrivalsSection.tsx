@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight } from 'phosphor-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { ProductCard, ProductCardSkeleton } from '@/components/ProductCard'
 
 export function NewArrivalsSection() {
@@ -32,11 +32,10 @@ export function NewArrivalsSection() {
     <section className="py-12 sm:py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex flex-col items-center mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-black uppercase tracking-wider mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#333333] mb-2">
             Novidades
           </h2>
-          {/* Removed underline div as requested */}
-          <p className="text-gray-500 text-center max-w-2xl">
+          <p className="text-[#666666] text-center max-w-2xl font-light">
             Confira as últimas tendências que acabaram de chegar.
           </p>
         </div>
@@ -65,8 +64,7 @@ export function NewArrivalsSection() {
         <div className="mt-12 text-center">
           <Link
             href="/produtos?sort=newest"
-            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide hover:opacity-70 transition-opacity"
-          // Removed border-b as requested
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#333333] hover:opacity-70 transition-opacity"
           >
             Ver tudo <ArrowRight size={16} />
           </Link>

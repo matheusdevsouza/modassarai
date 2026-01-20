@@ -9,7 +9,7 @@ export function ElegantCategoriesSection() {
       id: 1,
       title: 'JEANSWEAR',
       subtitle: 'Conforto e estilo para o dia a dia',
-      image: 'https://images.unsplash.com/photo-1582418702059-97ebafb35d09?auto=format&fit=crop&w=800&q=80',
+      image: '/images/cat-jeans.jpg',
       href: '/produtos?categoria=jeans',
       button: 'VER JEANS'
     },
@@ -17,7 +17,7 @@ export function ElegantCategoriesSection() {
       id: 2,
       title: 'VESTIDOS',
       subtitle: 'Leveza e sofisticação',
-      image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80',
+      image: '/images/noite-festa.jpg',
       href: '/produtos?categoria=vestidos',
       button: 'VER VESTIDOS'
     }

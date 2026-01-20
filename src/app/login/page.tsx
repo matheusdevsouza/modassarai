@@ -166,8 +166,8 @@ export default function LoginPage() {
     }
   };
   return (
-    <section className="flex items-center justify-center bg-sand-100 px-4 pb-16 lg:pb-20" style={{ marginTop: '10.5rem', minHeight: 'calc(100vh - 10.5rem)', paddingTop: '2rem' }}>
-      <div className="w-full max-w-md bg-primary-50 rounded-xl shadow-xl p-8 flex flex-col gap-8">
+    <section className="flex items-center justify-center bg-[#F4F4F4] px-4 pb-16 lg:pb-20" style={{ marginTop: '10.5rem', minHeight: 'calc(100vh - 10.5rem)', paddingTop: '2rem' }}>
+      <div className="w-full max-w-md bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-16 h-16 mb-2">
             <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
@@ -177,8 +177,8 @@ export default function LoginPage() {
         </div>
         {message && (
           <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
-              ? 'bg-green-50 border border-green-200 text-green-700'
-              : 'bg-red-50 border border-red-200 text-red-700'
+            ? 'bg-green-50 border border-green-200 text-green-700'
+            : 'bg-red-50 border border-red-200 text-red-700'
             }`}>
             {message.text}
           </div>
@@ -194,7 +194,7 @@ export default function LoginPage() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="px-4 py-3 rounded-lg bg-white border border-cloud-100 text-sage-900 placeholder-sage-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-500 transition-all"
+              className="px-4 py-3 rounded-lg bg-white border border-gray-200 text-[#333333] placeholder-gray-400 focus:outline-none focus:border-[#333333] transition-all"
               placeholder="Digite seu e-mail"
             />
           </div>
@@ -208,7 +208,7 @@ export default function LoginPage() {
               required
               value={formData.password}
               onChange={handleChange}
-              className="px-4 py-3 rounded-lg bg-white border border-cloud-100 text-sage-900 placeholder-sage-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-500 transition-all"
+              className="px-4 py-3 rounded-lg bg-white border border-gray-200 text-[#333333] placeholder-gray-400 focus:outline-none focus:border-[#333333] transition-all"
               placeholder="Digite sua senha"
             />
           </div>
@@ -228,7 +228,7 @@ export default function LoginPage() {
               duration: 0.35,
               ease: [0.25, 0.46, 0.45, 0.94]
             }}
-            className="group relative mt-4 bg-primary-500 hover:bg-primary-600 disabled:bg-cloud-200 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg text-sm w-full shadow-lg shadow-primary-500/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+            className="group relative mt-4 bg-black hover:bg-[#333333] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium px-6 py-3 rounded-lg text-sm w-full shadow-lg shadow-black/10 overflow-hidden transition-all duration-300"
           >
             <motion.div
               initial={{ opacity: 0 }}

@@ -38,7 +38,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={`${inter.variable} font-sans bg-white text-black antialiased`}>
+      <body className={`${inter.variable} font-sans bg-white antialiased`}>
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>

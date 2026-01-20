@@ -71,11 +71,11 @@ export function HeroSection() {
             src={isMobile ? heroImages[currentImage].mobileImageUrl : heroImages[currentImage].imageUrl}
             alt={heroImages[currentImage].alt}
             fill
-            className="object-cover"
+            className="object-cover brightness-90"
             priority={true}
           />
           {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent sm:from-black/20" />
+          <div className="absolute inset-0 bg-black/40" />
 
           {/* Content */}
           <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-16 container mx-auto">
@@ -84,7 +84,7 @@ export function HeroSection() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 uppercase leading-tight"
+                className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
               >
                 {heroImages[currentImage].title}
               </motion.h2>
@@ -103,7 +103,7 @@ export function HeroSection() {
               >
                 <Link
                   href={heroImages[currentImage].link}
-                  className="inline-block bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-black hover:text-white transition-all duration-300 text-sm tracking-wide uppercase shadow-lg"
+                  className="inline-block bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-black hover:text-white transition-all duration-300 text-sm shadow-lg"
                 >
                   {heroImages[currentImage].cta}
                 </Link>

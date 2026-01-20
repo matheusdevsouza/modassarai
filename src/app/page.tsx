@@ -1,4 +1,5 @@
 import { HeroSection } from '@/sections/HeroSection'
+import { PromotionalBannerSection } from '@/sections/PromotionalBannerSection'
 import { CategoryCircles } from '@/components/CategoryCircles'
 import { NewArrivalsSection } from '@/sections/NewArrivalsSection'
 import { ElegantCategoriesSection } from '@/sections/ElegantCategoriesSection'
@@ -10,6 +11,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white overflow-x-hidden">
       <HeroSection />
+      <PromotionalBannerSection />
       <CategoryCircles />
       <NewArrivalsSection />
       <ElegantCategoriesSection />

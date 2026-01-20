@@ -44,12 +44,12 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
       transition: {
         duration: 0.8,
         delay: index * 0.15,
-        ease: [0.25, 0.46, 0.45, 0.94], 
+        ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
   }
   const imageVariants = {
-    rest: { 
+    rest: {
       scale: 1,
       transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -62,7 +62,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
     },
   }
   const overlayVariants = {
-    rest: { 
+    rest: {
       opacity: 0.7,
       transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -75,7 +75,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
     },
   }
   const contentVariants = {
-    rest: { 
+    rest: {
       y: 0, opacity: 1,
       transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -89,7 +89,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
     },
   }
   const buttonVariants = {
-    rest: { 
+    rest: {
       x: 0,
       scale: 1,
       backgroundColor: 'var(--logo-gold, #D4A574)',
@@ -106,7 +106,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
     },
   }
   const titleVariants = {
-    rest: { 
+    rest: {
       x: 0,
       transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -124,7 +124,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-50px' }}
-      whileHover={{ 
+      whileHover={{
         y: -12,
         scale: 1.02,
         transition: {
@@ -148,7 +148,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
             alt={collection.name}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
+            className="object-cover brightness-90"
             priority={index === 0}
           />
           <motion.div
@@ -159,7 +159,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
           />
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ 
+            animate={{
               opacity: isHovered ? 0.3 : 0,
             }}
             transition={{ duration: 0.6 }}
@@ -185,7 +185,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
           </motion.h3>
           <motion.p
             initial={{ opacity: 0.8 }}
-            animate={{ 
+            animate={{
               opacity: isHovered ? 1 : 0.8,
             }}
             transition={{ duration: 0.4 }}
@@ -197,7 +197,7 @@ function CollectionCard({ collection, index }: { collection: typeof collections[
             variants={buttonVariants}
             initial="rest"
             animate={isHovered ? 'hover' : 'rest'}
-            className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold text-sm uppercase tracking-wider shadow-lg"
+            className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold text-sm shadow-lg"
             style={{ color: '#0D0D0D' }}
           >
             <span>Explorar</span>
@@ -245,16 +245,16 @@ function AnimatedButton({ href }: { href: string }) {
   return (
     <Link href={href}>
       <motion.button
-        whileHover={{ 
-          scale: 1.02, 
+        whileHover={{
+          scale: 1.02,
           y: -1,
         }}
         whileTap={{ scale: 0.97 }}
-        transition={{ 
-          duration: 0.35, 
-          ease: [0.25, 0.46, 0.45, 0.94] 
+        transition={{
+          duration: 0.35,
+          ease: [0.25, 0.46, 0.45, 0.94]
         }}
-        className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[var(--logo-gold,#D4A574)] text-[#0D0D0D] rounded-xl font-semibold text-sm uppercase tracking-wider shadow-lg shadow-[var(--logo-gold,#D4A574)]/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+        className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[var(--logo-gold,#D4A574)] text-[#0D0D0D] rounded-xl font-semibold text-sm shadow-lg shadow-[var(--logo-gold,#D4A574)]/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
       >
         <motion.div
           initial={{ opacity: 0 }}
@@ -266,7 +266,7 @@ function AnimatedButton({ href }: { href: string }) {
           }}
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-500"
         />
-        <motion.span 
+        <motion.span
           className="relative z-10"
           initial={{ x: 0 }}
           whileHover={{ x: 2 }}
@@ -291,8 +291,8 @@ function FeaturedProductCard({ product, index, discount }: { product: any, index
   const [isHovered, setIsHovered] = useState(false)
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
@@ -302,7 +302,7 @@ function FeaturedProductCard({ product, index, discount }: { product: any, index
     }
   }
   const imageVariants = {
-    rest: { 
+    rest: {
       scale: 1,
       transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -315,7 +315,7 @@ function FeaturedProductCard({ product, index, discount }: { product: any, index
     },
   }
   const overlayVariants = {
-    rest: { 
+    rest: {
       opacity: 0.6,
       transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -328,7 +328,7 @@ function FeaturedProductCard({ product, index, discount }: { product: any, index
     },
   }
   const titleVariants = {
-    rest: { 
+    rest: {
       x: 0,
       transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -341,7 +341,7 @@ function FeaturedProductCard({ product, index, discount }: { product: any, index
     },
   }
   const buttonVariants = {
-    rest: { 
+    rest: {
       x: 0,
       scale: 1,
       backgroundColor: 'var(--logo-gold, #D4AF37)',
@@ -369,39 +369,39 @@ function FeaturedProductCard({ product, index, discount }: { product: any, index
     >
       <Link href={`/produto/${product.slug}`} className="block h-full w-full relative">
         <div className="absolute inset-0 overflow-hidden">
-          <motion.div 
-            className="relative w-full h-full" 
-            variants={imageVariants} 
-            initial="rest" 
+          <motion.div
+            className="relative w-full h-full"
+            variants={imageVariants}
+            initial="rest"
             animate={isHovered ? 'hover' : 'rest'}
           >
             <Image
               src={product.primary_image || (product.images && product.images[0]?.url) || 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&q=80'}
               alt={product.name}
               fill
-              className="object-cover"
+              className="object-cover brightness-90"
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           </motion.div>
         </div>
-        <motion.div 
-          className="absolute inset-0 bg-[#0D0D0D]" 
-          variants={overlayVariants} 
-          initial="rest" 
-          animate={isHovered ? 'hover' : 'rest'} 
+        <motion.div
+          className="absolute inset-0 bg-[#0D0D0D]"
+          variants={overlayVariants}
+          initial="rest"
+          animate={isHovered ? 'hover' : 'rest'}
         />
         {discount > 0 && (
           <div className="absolute top-4 right-4 z-10">
-            <span className="px-3 py-1 bg-[var(--logo-gold,#D4AF37)] text-[#0D0D0D] text-xs uppercase tracking-wider font-bold rounded-lg">
+            <span className="px-3 py-1 bg-[var(--logo-gold,#D4AF37)] text-[#0D0D0D] text-xs font-bold rounded-lg">
               -{discount}%
             </span>
           </div>
         )}
         <div className="absolute inset-0 flex flex-col justify-end p-8 z-10">
           <motion.div>
-            <motion.h3 
+            <motion.h3
               variants={titleVariants}
-              initial="rest" 
+              initial="rest"
               animate={isHovered ? 'hover' : 'rest'}
               className="text-2xl font-semibold mb-2 text-white group-hover:text-[var(--logo-gold,#D4AF37)] transition-colors duration-500"
             >
@@ -417,11 +417,11 @@ function FeaturedProductCard({ product, index, discount }: { product: any, index
                 </span>
               )}
             </div>
-            <motion.div 
+            <motion.div
               variants={buttonVariants}
-              initial="rest" 
+              initial="rest"
               animate={isHovered ? 'hover' : 'rest'}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-lg font-semibold text-sm uppercase tracking-wider shadow-lg"
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-lg font-semibold text-sm shadow-lg"
               style={{ color: '#0D0D0D' }}
             >
               <span>Ver Detalhes</span>
@@ -448,8 +448,8 @@ function LookCard({ look, index }: { look: typeof looks[0], index: number }) {
   const [isHovered, setIsHovered] = useState(false)
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
@@ -459,7 +459,7 @@ function LookCard({ look, index }: { look: typeof looks[0], index: number }) {
     }
   }
   const imageVariants = {
-    rest: { 
+    rest: {
       scale: 1,
       transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -472,7 +472,7 @@ function LookCard({ look, index }: { look: typeof looks[0], index: number }) {
     },
   }
   const overlayVariants = {
-    rest: { 
+    rest: {
       opacity: 0.7,
       transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -485,7 +485,7 @@ function LookCard({ look, index }: { look: typeof looks[0], index: number }) {
     },
   }
   const titleVariants = {
-    rest: { 
+    rest: {
       x: 0,
       transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
     },
@@ -498,7 +498,7 @@ function LookCard({ look, index }: { look: typeof looks[0], index: number }) {
     },
   }
   const buttonVariants = {
-    rest: { 
+    rest: {
       x: 0,
       scale: 1,
       backgroundColor: 'var(--logo-gold, #D4A574)',
@@ -525,70 +525,70 @@ function LookCard({ look, index }: { look: typeof looks[0], index: number }) {
       className="group relative h-[500px] rounded-xl overflow-hidden cursor-pointer shadow-lg border border-[#261E10] hover:border-[var(--logo-gold,#D4A574)]/20 transition-colors duration-500"
     >
       <Link href="/produtos" className="block h-full w-full relative">
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.div className="relative w-full h-full" variants={imageVariants} initial="rest" animate={isHovered ? 'hover' : 'rest'}>
-              <Image
-                  src={look.imageUrl}
-                  alt={look.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-              />
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div className="relative w-full h-full" variants={imageVariants} initial="rest" animate={isHovered ? 'hover' : 'rest'}>
+            <Image
+              src={look.imageUrl}
+              alt={look.title}
+              fill
+              className="object-cover brightness-90"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </motion.div>
+        </div>
+        <motion.div className="absolute inset-0 bg-[#0D0D0D]" variants={overlayVariants} initial="rest" animate={isHovered ? 'hover' : 'rest'} />
+        <div className="absolute inset-0 flex flex-col justify-end p-8 z-10">
+          <motion.div>
+            <motion.h3
+              variants={titleVariants}
+              initial="rest" animate={isHovered ? 'hover' : 'rest'}
+              className="text-2xl font-bold mb-2 text-white group-hover:text-[var(--logo-gold,#D4A574)] transition-colors duration-500"
+            >
+              {look.title}
+            </motion.h3>
+            <p className="text-gray-300 mb-4 font-light">
+              {look.description}
+            </p>
+            <ul className="space-y-2 mb-6">
+              {look.products.map((product, i) => (
+                <li key={i} className="text-sm text-gray-300 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-[var(--logo-gold,#D4A574)] rounded-full" />
+                  {product}
+                </li>
+              ))}
+            </ul>
+            <motion.div
+              variants={buttonVariants}
+              initial="rest" animate={isHovered ? 'hover' : 'rest'}
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-lg font-semibold text-sm shadow-lg"
+              style={{ color: '#0D0D0D' }}
+            >
+              <span>Ver Look Completo</span>
+              <motion.div
+                animate={{
+                  x: isHovered ? 4 : 0,
+                }}
+                transition={{
+                  duration: 0.4,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+              >
+                <ArrowRight size={16} weight="bold" />
+              </motion.div>
             </motion.div>
-          </div>
-          <motion.div className="absolute inset-0 bg-[#0D0D0D]" variants={overlayVariants} initial="rest" animate={isHovered ? 'hover' : 'rest'} />
-          <div className="absolute inset-0 flex flex-col justify-end p-8 z-10">
-             <motion.div>
-                <motion.h3 
-                  variants={titleVariants}
-                  initial="rest" animate={isHovered ? 'hover' : 'rest'}
-                  className="text-2xl font-bold mb-2 text-white group-hover:text-[var(--logo-gold,#D4A574)] transition-colors duration-500"
-                >
-                  {look.title}
-                </motion.h3>
-                <p className="text-gray-300 mb-4 font-light">
-                  {look.description}
-                </p>
-                <ul className="space-y-2 mb-6">
-                  {look.products.map((product, i) => (
-                    <li key={i} className="text-sm text-gray-300 flex items-center gap-2">
-                      <span className="w-2 h-2 bg-[var(--logo-gold,#D4A574)] rounded-full" />
-                      {product}
-                    </li>
-                  ))}
-                </ul>
-                <motion.div 
-                  variants={buttonVariants}
-                  initial="rest" animate={isHovered ? 'hover' : 'rest'}
-                  className="inline-flex items-center gap-3 px-4 py-2 rounded-lg font-semibold text-sm uppercase tracking-wider shadow-lg"
-                  style={{ color: '#0D0D0D' }}
-                >
-                  <span>Ver Look Completo</span>
-                  <motion.div
-                    animate={{
-                      x: isHovered ? 4 : 0,
-                    }}
-                    transition={{
-                      duration: 0.4,
-                      ease: [0.25, 0.46, 0.45, 0.94],
-                    }}
-                  >
-                    <ArrowRight size={16} weight="bold" />
-                  </motion.div>
-                </motion.div>
-             </motion.div>
-          </div>
+          </motion.div>
+        </div>
       </Link>
     </motion.div>
   )
 }
 function FlickeringGrid() {
   const [mounted, setMounted] = useState(false)
-  const [squares, setSquares] = useState<{id: number, x: number, y: number, delay: number, duration: number, repeatDelay: number}[]>([])
+  const [squares, setSquares] = useState<{ id: number, x: number, y: number, delay: number, duration: number, repeatDelay: number }[]>([])
   useEffect(() => {
     setMounted(true)
     const width = window.innerWidth
-    const height = 2500 
+    const height = 2500
     const cols = Math.floor(width / 60)
     const rows = Math.floor(height / 60)
     const newSquares = Array.from({ length: 15 }).map((_, i) => ({
@@ -597,7 +597,7 @@ function FlickeringGrid() {
       y: Math.floor(Math.random() * rows) * 60,
       delay: Math.random() * 10,
       duration: 1 + Math.random() * 2,
-      repeatDelay: 5 + Math.random() * 15 
+      repeatDelay: 5 + Math.random() * 15
     }))
     setSquares(newSquares)
   }, [])
@@ -616,7 +616,7 @@ function FlickeringGrid() {
             opacity: 0,
           }}
           animate={{
-            opacity: [0, 0.15, 0], 
+            opacity: [0, 0.15, 0],
           }}
           transition={{
             duration: sq.duration,
@@ -803,7 +803,7 @@ export function FeaturedCollectionsSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
-          transition={{ 
+          transition={{
             duration: 0.8,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
@@ -814,7 +814,7 @@ export function FeaturedCollectionsSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-block text-sm uppercase tracking-wider text-gray-400 mb-4 font-medium"
+            className="inline-block text-sm text-gray-400 mb-4 font-medium"
           >
             Nossas Coleções
           </motion.span>
@@ -853,7 +853,7 @@ export function FeaturedCollectionsSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ 
+          transition={{
             duration: 0.8,
             ease: [0.25, 0.46, 0.45, 0.94],
           }}
@@ -864,7 +864,7 @@ export function FeaturedCollectionsSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-block text-sm uppercase tracking-wider text-gray-400 mb-4 font-medium"
+            className="inline-block text-sm text-gray-400 mb-4 font-medium"
           >
             Lookbook
           </motion.span>
@@ -926,7 +926,7 @@ export function FeaturedCollectionsSection() {
             className="text-center mb-16"
           >
             <div className="inline-flex items-center gap-2 mb-4">
-              <span className="text-sm uppercase tracking-wider text-gray-400 font-medium">
+              <span className="text-sm text-gray-400 font-medium">
                 Ofertas Especiais
               </span>
             </div>
@@ -946,10 +946,10 @@ export function FeaturedCollectionsSection() {
                 ? Math.round(((parseFloat(product.originalPrice) - parseFloat(product.price)) / parseFloat(product.originalPrice)) * 100)
                 : 0
               return (
-                <FeaturedProductCard 
-                  key={product.id} 
-                  product={product} 
-                  index={index} 
+                <FeaturedProductCard
+                  key={product.id}
+                  product={product}
+                  index={index}
                   discount={discount}
                 />
               )
@@ -973,7 +973,7 @@ export function FeaturedCollectionsSection() {
               className="text-center mb-12 md:mb-16"
             >
               <div className="inline-flex items-center gap-2 mb-4">
-                <span className="text-sm uppercase tracking-wider text-gray-400 font-medium">
+                <span className="text-sm text-gray-400 font-medium">
                   Depoimentos
                 </span>
               </div>
@@ -1005,7 +1005,7 @@ export function FeaturedCollectionsSection() {
               </div>
             ) : testimonials.length > 0 ? (
               <div className="relative">
-                <div 
+                <div
                   className="overflow-hidden"
                   onMouseEnter={() => setIsPaused(true)}
                   onMouseLeave={() => setIsPaused(false)}
@@ -1086,11 +1086,10 @@ export function FeaturedCollectionsSection() {
                             })
                           }
                         }}
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          index === currentTestimonialIndex
-                            ? 'bg-[var(--logo-gold,#D4A574)] w-8'
-                            : 'bg-gray-600 hover:bg-gray-500 w-2'
-                        }`}
+                        className={`h-2 rounded-full transition-all duration-300 ${index === currentTestimonialIndex
+                          ? 'bg-[var(--logo-gold,#D4A574)] w-8'
+                          : 'bg-gray-600 hover:bg-gray-500 w-2'
+                          }`}
                       />
                     ))}
                   </div>
@@ -1098,16 +1097,16 @@ export function FeaturedCollectionsSection() {
                 <div className="text-center mt-8">
                   <Link href="/contato">
                     <motion.button
-                      whileHover={{ 
-                        scale: 1.02, 
+                      whileHover={{
+                        scale: 1.02,
                         y: -1,
                       }}
                       whileTap={{ scale: 0.97 }}
-                      transition={{ 
-                        duration: 0.35, 
-                        ease: [0.25, 0.46, 0.45, 0.94] 
+                      transition={{
+                        duration: 0.35,
+                        ease: [0.25, 0.46, 0.45, 0.94]
                       }}
-                      className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[var(--logo-gold,#D4A574)] text-[#0D0D0D] rounded-xl font-semibold text-sm uppercase tracking-wider shadow-lg shadow-[var(--logo-gold,#D4A574)]/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
+                      className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[var(--logo-gold,#D4A574)] text-[#0D0D0D] rounded-xl font-semibold text-sm shadow-lg shadow-[var(--logo-gold,#D4A574)]/20 overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
                     >
                       <motion.div
                         initial={{ opacity: 0 }}
@@ -1119,7 +1118,7 @@ export function FeaturedCollectionsSection() {
                         }}
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transition-opacity duration-500"
                       />
-                      <motion.span 
+                      <motion.span
                         className="relative z-10"
                         initial={{ x: 0 }}
                         whileHover={{ x: 2 }}

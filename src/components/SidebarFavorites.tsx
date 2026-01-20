@@ -144,7 +144,7 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
             <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
                 <Heart size={24} className="text-black" />
-                <span className="text-lg font-bold text-black uppercase tracking-wide">Meus Favoritos</span>
+                <span className="text-lg font-bold text-black">Meus Favoritos</span>
                 {state.itemCount > 0 && (
                   <span className="bg-black text-white text-xs font-bold px-2 py-0.5 rounded-full">
                     {state.itemCount}
@@ -211,7 +211,7 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                               onClick={onClose}
                               className="block"
                             >
-                              <h3 className="font-bold text-black text-sm uppercase truncate">
+                              <h3 className="font-bold text-black text-sm truncate">
                                 {favorite.product.name}
                               </h3>
                             </Link>
@@ -239,7 +239,7 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                                   (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione')) ||
                                   (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
                                 )}
-                                className="flex-1 bg-black hover:bg-gray-800 text-white px-3 py-2.5 text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
+                                className="flex-1 bg-black hover:bg-gray-800 text-white px-3 py-2.5 text-xs font-bold transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
                               >
                                 <ShoppingCart size={16} />
                                 <span>Adicionar</span>

@@ -30,19 +30,17 @@ const benefits = [
 
 export function MissionValuesVisionSection() {
   return (
-    <section className="py-8 bg-gray-50 border-t border-gray-100 border-b">
+    <section className="py-6 bg-gray-50 border-t border-gray-100 border-b">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
           {benefits.map((benefit) => {
             const Icon = benefit.icon
             return (
-              <div key={benefit.id} className="flex flex-col items-center text-center sm:flex-row sm:text-left sm:items-start gap-3">
-                <div className="p-2 bg-white rounded-full shadow-sm">
-                  <Icon size={24} className="text-black" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm text-black uppercase">{benefit.title}</h3>
-                  <p className="text-xs text-gray-500">{benefit.description}</p>
+              <div key={benefit.id} className="flex items-center gap-3 text-left min-w-max">
+                <Icon size={24} className="text-[#333333] flex-shrink-0" weight="light" />
+                <div className="flex flex-col">
+                  <h3 className="font-semibold text-sm text-[#333333] leading-tight">{benefit.title}</h3>
+                  <p className="text-xs text-gray-500 leading-tight">{benefit.description}</p>
                 </div>
               </div>
             )
