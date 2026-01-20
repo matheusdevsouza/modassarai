@@ -38,15 +38,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={`${montserrat.variable} ${inter.variable} ${montserrat.className} bg-sand-100 text-primary-700 antialiased relative`}>
-        <div
-          className="fixed inset-0 pointer-events-none z-[9999] opacity-5 md:opacity-0"
-          style={{
-            backgroundImage: 'url(/images/site-noise.png)',
-            backgroundRepeat: 'repeat',
-            backgroundSize: 'auto'
-          }}
-        />
+      <body className={`${inter.variable} font-sans bg-white text-black antialiased`}>
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>

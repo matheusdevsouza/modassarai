@@ -1,12 +1,31 @@
 "use client";
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { ScrollToTop } from '@/components/ScrollToTop';
+import SidebarCart from '@/components/SidebarCart';
+import SidebarFavorites from '@/components/SidebarFavorites';
 export function LayoutShell({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
 	const isAdmin = pathname?.startsWith('/admin');
+	const [isCartOpen, setIsCartOpen] = useState(false)
+	const [isFavoritesOpen, setIsFavoritesOpen] = useState(false)
+
+	useEffect(() => {
+		const openCart = () => setIsCartOpen(true)
+		const openFavorites = () => setIsFavoritesOpen(true)
+
+		document.addEventListener('openCart', openCart)
+		document.addEventListener('openFavorites', openFavorites)
+
+		return () => {
+			document.removeEventListener('openCart', openCart)
+			document.removeEventListener('openFavorites', openFavorites)
+		}
+	}, [])
+
 	if (isAdmin) {
 		return (
 			<>
@@ -28,6 +47,8 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
 		>
 			<ScrollToTop />
 			<Header />
+			<SidebarCart open={isCartOpen} onClose={() => setIsCartOpen(false)} />
+			<SidebarFavorites open={isFavoritesOpen} onClose={() => setIsFavoritesOpen(false)} />
 			<main className="overflow-x-hidden">
 				{children}
 			</main>

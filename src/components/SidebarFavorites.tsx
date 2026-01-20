@@ -73,16 +73,6 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
     return sizeData.available && sizeData.stock > 0
   }
 
-  const getSizeStock = (productId: string, size: string): number => {
-    const sizes = productSizes[productId] || []
-    const sizeData = sizes.find((s: any) =>
-      (typeof s === 'string' ? s : s.size) === size
-    )
-    if (!sizeData) return 0
-    if (typeof sizeData === 'string') return 999
-    return sizeData.stock || 0
-  }
-
   const getAvailableSizes = (productId: string): string[] => {
     const sizes = productSizes[productId] || []
     return sizes
@@ -110,29 +100,21 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
   useEffect(() => {
     if (open) {
       const scrollY = window.scrollY
-
       const htmlElement = document.documentElement
       const bodyElement = document.body
 
-      if (htmlElement) {
-        htmlElement.classList.add('lenis-stopped')
-      }
-
+      if (htmlElement) htmlElement.classList.add('lenis-stopped')
       bodyElement.style.position = 'fixed'
       bodyElement.style.top = `-${scrollY}px`
       bodyElement.style.width = '100%'
       bodyElement.style.overflow = 'hidden'
 
       return () => {
-        if (htmlElement) {
-          htmlElement.classList.remove('lenis-stopped')
-        }
-
+        if (htmlElement) htmlElement.classList.remove('lenis-stopped')
         bodyElement.style.position = ''
         bodyElement.style.top = ''
         bodyElement.style.width = ''
         bodyElement.style.overflow = ''
-
         window.scrollTo(0, scrollY)
       }
     }
@@ -155,34 +137,34 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.28, ease: 'easeOut' }}
-            className="fixed top-0 right-0 h-full w-full md:w-[70vw] max-w-4xl z-[200] bg-sage-50 border-l border-cloud-100 shadow-2xl flex flex-col"
+            transition={{ type: 'tween', duration: 0.3 }}
+            className="fixed top-0 right-0 h-full w-full md:w-[70vw] max-w-4xl z-[200] bg-white shadow-2xl flex flex-col"
             style={{ willChange: 'transform' }}
           >
-            <div className="flex items-center justify-between px-6 py-5 border-b border-cloud-100">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <Heart size={24} className="text-primary-600" weight="fill" />
-                <span className="text-lg font-bold text-sage-900">Meus Favoritos</span>
+                <Heart size={24} className="text-black" />
+                <span className="text-lg font-bold text-black uppercase tracking-wide">Meus Favoritos</span>
                 {state.itemCount > 0 && (
-                  <span className="bg-primary-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  <span className="bg-black text-white text-xs font-bold px-2 py-0.5 rounded-full">
                     {state.itemCount}
                   </span>
                 )}
               </div>
               <button
                 onClick={onClose}
-                className="text-sage-700 hover:text-primary-600 transition-colors"
+                className="text-gray-500 hover:text-black transition-colors"
               >
-                <X size={28} />
+                <X size={24} />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto scrollbar-hide px-6 py-4" style={{ contain: 'layout style paint' }}>
+            <div className="flex-1 overflow-y-auto px-6 py-4" style={{ contain: 'layout style paint' }}>
               {state.items.length === 0 ? (
-                <div className="text-center text-sage-700 mt-16">
-                  <Heart size={48} className="mx-auto mb-4 opacity-40 text-sage-400" weight="regular" />
+                <div className="text-center text-gray-500 mt-20">
+                  <Heart size={48} className="mx-auto mb-4 opacity-20" weight="regular" />
                   <p className="text-lg mb-2 font-semibold">Seus favoritos estão vazios</p>
-                  <p className="text-sm text-sage-600">Adicione produtos que você ama aos favoritos!</p>
+                  <p className="text-sm">Adicione produtos que você ama aos favoritos!</p>
                 </div>
               ) : (
                 <>
@@ -198,12 +180,11 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="bg-white/90 border border-sage-200/60 rounded-xl p-4 hover:border-primary-300 transition-all duration-300 ease-out shadow-sm relative group"
-                          style={{ willChange: 'opacity' }}
+                          className="bg-white border border-gray-200 rounded p-4 hover:border-black transition-all duration-200 relative group"
                         >
                           <button
                             onClick={() => removeFavorite(favorite.id)}
-                            className="absolute top-2 right-2 p-1.5 bg-cloud-100 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors opacity-0 group-hover:opacity-100 z-10"
+                            className="absolute top-2 right-2 p-1.5 bg-gray-100 text-gray-500 hover:bg-black hover:text-white rounded-full transition-colors opacity-0 group-hover:opacity-100 z-10"
                             title="Remover dos favoritos"
                           >
                             <Trash size={16} />
@@ -212,13 +193,13 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                           <Link
                             href={`/produto/${favorite.product.slug || favorite.product.id}`}
                             onClick={onClose}
-                            className="relative w-full h-48 rounded-lg overflow-hidden bg-sand-100 mb-3 block"
+                            className="relative w-full h-64 overflow-hidden bg-gray-50 mb-3 block"
                           >
                             <Image
                               src={favorite.image || favorite.product.image || '/images/Logo.png'}
                               alt={favorite.product.name}
                               fill
-                              className="object-cover transition-transform duration-200 group-hover:scale-105"
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
                               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                               loading="lazy"
                             />
@@ -230,58 +211,39 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                               onClick={onClose}
                               className="block"
                             >
-                              <h3 className="font-semibold text-sage-900 text-sm hover:text-primary-600 transition-colors break-words line-clamp-2">
+                              <h3 className="font-bold text-black text-sm uppercase truncate">
                                 {favorite.product.name}
                               </h3>
                             </Link>
 
-                            <div className="text-primary-600 font-bold text-base">
+                            <div className="font-bold text-black text-base">
                               R$ {favorite.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                             </div>
 
                             {(currentSize || favorite.color) && (
-                              <div className="text-xs text-sage-700 flex items-center gap-1.5 flex-wrap">
-                                {currentSize && (
-                                  <span className="px-2 py-0.5 bg-cloud-100 rounded-md">
-                                    <span className="font-semibold">{currentSize}</span>
-                                  </span>
-                                )}
+                              <div className="text-xs text-gray-500 flex items-center gap-2">
+                                {currentSize && <span>Tam: {currentSize}</span>}
                                 {favorite.color && (
-                                  <span className="px-2 py-0.5 bg-cloud-100 rounded-md">
-                                    <span className="font-semibold">{favorite.color}</span>
-                                  </span>
+                                  <>
+                                    <span>|</span>
+                                    <span>Cor: {favorite.color}</span>
+                                  </>
                                 )}
                               </div>
                             )}
 
-                            <div className="flex gap-2 pt-1">
+                            <div className="flex gap-2 pt-2">
                               <button
                                 onClick={() => handleAddToCart(favorite)}
                                 disabled={Boolean(
                                   (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione')) ||
                                   (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
                                 )}
-                                className="flex-1 bg-primary-500 hover:bg-primary-600 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-colors duration-200 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
-                                title={
-                                  (productHasSizes(favorite.product.id) && (!currentSize || currentSize.trim() === '' || currentSize === 'Selecione'))
-                                    ? 'Selecione um tamanho'
-                                    : (currentSize && productSizes[favorite.product.id] && productSizes[favorite.product.id].length > 0 && !isSizeAvailable(favorite.product.id, currentSize))
-                                      ? 'Tamanho esgotado'
-                                      : 'Adicionar ao carrinho'
-                                }
+                                className="flex-1 bg-black hover:bg-gray-800 text-white px-3 py-2.5 text-xs font-bold uppercase transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
                               >
                                 <ShoppingCart size={16} />
                                 <span>Adicionar</span>
                               </button>
-                              <Link
-                                href={`/produto/${favorite.product.slug || favorite.product.id}`}
-                                onClick={onClose}
-                                className="px-3 py-2 bg-cloud-100 hover:bg-cloud-200 text-sage-800 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
-                                title="Ver produto na loja"
-                              >
-                                <Eye size={16} />
-                                <span>Ver</span>
-                              </Link>
                             </div>
                           </div>
                         </motion.div>
@@ -290,16 +252,16 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
                   </div>
 
                   {state.items.length > 0 && (
-                    <div className="flex justify-center mt-6">
+                    <div className="flex justify-center mt-8">
                       <button
                         onClick={() => {
                           if (confirm('Tem certeza que deseja remover todos os favoritos?')) {
                             clearFavorites()
                           }
                         }}
-                        className="py-2 px-6 rounded-xl bg-cloud-100 text-sage-800 hover:bg-sage-200 transition-colors text-sm"
+                        className="text-xs text-gray-400 hover:text-gray-600 underline"
                       >
-                        Limpar Todos os Favoritos
+                        Limpar favoritos
                       </button>
                     </div>
                   )}
@@ -307,18 +269,9 @@ export default function SidebarFavorites({ open, onClose }: SidebarFavoritesProp
               )}
             </div>
 
-            {state.items.length > 0 && (
-              <div className="border-t border-cloud-100 px-6 py-4 bg-white">
-                <div className="text-center text-sm text-sage-700">
-                  <p className="font-semibold">
-                    {state.itemCount} {state.itemCount === 1 ? 'item favoritado' : 'itens favoritados'}
-                  </p>
-                  <p className="text-xs mt-1 text-sage-600">
-                    Clique em &quot;Ver&quot; para ver detalhes do produto
-                  </p>
-                </div>
-              </div>
-            )}
+            {/* Footer if needed */}
+            {state.items.length > 0 && <div className="p-4 border-t border-gray-100 bg-white" />}
+
           </motion.aside>
         </>
       )}

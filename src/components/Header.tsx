@@ -1,536 +1,269 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingCart, User, List, X, MagnifyingGlass, Truck, UserPlus, EnvelopeSimple, SignOut, UserCircle, Receipt, Heart } from 'phosphor-react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname, useRouter } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
+import { MagnifyingGlass, User, Heart, ShoppingBag, List, X, SignIn, UserPlus, EnvelopeSimple, SignOut, Receipt } from 'phosphor-react'
 import { useCart } from '@/contexts/CartContext'
 import { useFavorites } from '@/contexts/FavoritesContext'
-import SidebarCart from './SidebarCart'
-import SidebarFavorites from './SidebarFavorites'
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext'
+
 export function Header() {
-  const pathname = usePathname()
-  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const userMenuRef = useRef<HTMLDivElement>(null)
-  const { state: cartState, isCartSidebarOpen, setIsCartSidebarOpen } = useCart()
-  const { state: favoritesState, isFavoritesSidebarOpen, setIsFavoritesSidebarOpen } = useFavorites()
-  const { user, authenticated, logout } = useAuth();
-  const [isSearching, setIsSearching] = useState(false)
   const [isSearchFocused, setIsSearchFocused] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const { state: cartState } = useCart()
+  const cartCount = cartState.itemCount
+  const { state: favoritesState } = useFavorites()
+  const { authenticated, user, logout } = useAuth()
+
+  // Search Typing Animation
+  const placeholders = ["Vestidos", "Calças Jeans", "Blusas", "Acessórios", "Sapatos"]
+  const [displayText, setDisplayText] = useState("")
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [loopNum, setLoopNum] = useState(0)
+  const [typingSpeed, setTypingSpeed] = useState(150)
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+      setScrolled(window.scrollY > 20)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      setIsSearching(true)
-      window.location.href = `/pesquisa?q=${encodeURIComponent(searchQuery.trim())}`
-    }
-  }
-  const clearSearch = () => {
-    setSearchQuery('')
-  }
+
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setUserMenuOpen(false)
+    const handleTyping = () => {
+      const i = loopNum % placeholders.length
+      const fullText = placeholders[i]
+
+      setDisplayText(isDeleting
+        ? fullText.substring(0, displayText.length - 1)
+        : fullText.substring(0, displayText.length + 1)
+      )
+
+      setTypingSpeed(isDeleting ? 50 : 150)
+
+      if (!isDeleting && displayText === fullText) {
+        setTimeout(() => setIsDeleting(true), 1500)
+      } else if (isDeleting && displayText === "") {
+        setIsDeleting(false)
+        setLoopNum(loopNum + 1)
       }
     }
-    if (userMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [userMenuOpen])
 
-  useEffect(() => {
-    const isMobile = window.innerWidth < 1024
-    if (isMobile && isMenuOpen) {
-      document.body.style.overflow = 'hidden'
-      document.body.style.position = 'fixed'
-      document.body.style.width = '100%'
-    } else {
-      document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.width = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.width = ''
-    }
-  }, [isMenuOpen])
-  const menuItems = [
-    { label: 'Início', href: '/' },
-    { label: 'Produtos', href: '/produtos' },
-    { label: 'Vestidos', href: '/produtos?categoria=vestidos' },
-    { label: 'Conjuntos', href: '/produtos?categoria=conjuntos' },
-    { label: 'Acessórios', href: '/produtos?categoria=acessorios' },
+    const timer = setTimeout(handleTyping, typingSpeed)
+    return () => clearTimeout(timer)
+  }, [displayText, isDeleting, loopNum, typingSpeed, placeholders])
+
+  const categories = [
+    { name: 'NOVIDADES', href: '/produtos?sort=newest', highlight: false },
+    { name: 'FEMININO', href: '/produtos?categoria=feminino', highlight: false },
+    { name: 'JEANS', href: '/produtos?categoria=jeans', highlight: false },
+    { name: 'VESTIDOS', href: '/produtos?categoria=vestidos', highlight: false },
+    { name: 'OFERTAS', href: '/produtos?ofertas=true', highlight: true },
   ]
+
   return (
-    <header className="fixed top-0 w-full z-50">
-      <div className="bg-sand-100 shadow-sm border-b border-cloud-100/30 transition-all duration-300">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="relative flex items-center justify-between h-20">
-            <motion.a
-              href="/"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              whileHover={{ scale: 1.05 }}
-              className="flex items-center cursor-pointer group relative z-10"
-              title="Modas Saraí - Ir para a página inicial"
+    <>
+      <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-sm' : 'bg-white'}`}>
+        {/* Main Header Content */}
+        <div className="container mx-auto px-4 border-b border-gray-100">
+          <div className="flex items-center justify-between h-20">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="lg:hidden p-2 -ml-2 text-black"
             >
-              <div className="relative w-12 h-12 sm:w-16 sm:h-16 transition-transform duration-300 group-hover:scale-105">
-                <Image
-                  src="/images/logo.png"
-                  alt="Modas Saraí"
-                  fill
-                  sizes="(max-width: 640px) 48px, 64px"
-                  className="object-contain filter brightness-110"
-                  priority
-                />
-              </div>
-            </motion.a>
-            <div className="hidden lg:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl z-10">
-              <motion.form
-                onSubmit={handleSearch}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-                className="relative"
-                onFocus={() => setIsSearchFocused(true)}
-                onBlur={() => setIsSearchFocused(false)}
-              >
-                <div
-                  className={`relative flex items-center bg-white border rounded-full px-4 py-2.5 transition-all duration-300 ${isSearchFocused
-                    ? 'border-sage-400 shadow-lg shadow-primary-100/40 ring-1 ring-primary-200/50'
-                    : 'border-sage-200 shadow-sm hover:border-sage-300 hover:shadow-md'
-                    }`}
-                >
-                  <MagnifyingGlass
-                    size={20}
-                    weight="regular"
-                    className="text-sage-600 mr-3 flex-shrink-0"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Buscar produtos, vestidos, acessórios..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
-                    className="flex-1 bg-transparent text-sage-800 placeholder-sage-500 focus:outline-none text-sm font-normal w-full"
-                  />
-                  {searchQuery && (
-                    <motion.button
-                      type="button"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      onClick={clearSearch}
-                      className="ml-2 text-sage-400 hover:text-sage-700 transition-colors p-1 rounded-full hover:bg-cloud-100"
-                    >
-                      <X size={16} weight="bold" />
-                    </motion.button>
-                  )}
-                </div>
-              </motion.form>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <motion.button
-                whileHover={{ scale: 1.08, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative p-2.5 text-sage-700 hover:text-primary-600 transition-all duration-300 hidden sm:flex"
-                title="Rastrear Pedido"
-                onClick={() => router.push('/rastreio')}
-              >
-                <Truck size={20} weight="regular" className="relative z-10" />
-              </motion.button>
+              <List size={24} />
+            </button>
 
-              <motion.button
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsFavoritesSidebarOpen(true)}
-                className="relative p-3 bg-transparent text-sage-600 hover:text-primary-600 rounded-2xl transition-all duration-300 group"
-                title="Favoritos"
-              >
-                <Heart size={22} weight="regular" className="relative z-10" />
-                {favoritesState.itemCount > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 bg-primary-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md border-2 border-white z-20"
-                  >
-                    {favoritesState.itemCount}
-                  </motion.span>
-                )}
-              </motion.button>
+            {/* Logo */}
+            <Link href="/" className="relative w-32 h-10 flex-shrink-0 mx-auto lg:mx-0">
+              <Image
+                src="/images/logo.png"
+                alt="Modas Saraí"
+                fill
+                className="object-contain" // Changed to contain to ensure it fits well
+                priority
+              />
+            </Link>
 
-              <motion.button
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsCartSidebarOpen(true)}
-                className="relative p-3 bg-transparent text-sage-600 hover:text-primary-600 rounded-2xl transition-all duration-300 group"
-                title="Carrinho"
-              >
-                <ShoppingCart size={22} weight="regular" className="relative z-10" />
-                {cartState.itemCount > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 bg-primary-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md border-2 border-white z-20"
-                  >
-                    {cartState.itemCount}
-                  </motion.span>
-                )}
-              </motion.button>
-
-              <div className="relative">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="relative p-2.5 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-300 flex items-center justify-center sm:justify-start gap-2 group overflow-hidden bg-primary-500 text-white shadow-md hover:shadow-lg"
-                  title="Minha Conta"
-                  onClick={() => setUserMenuOpen((open) => !open)}
-                  id="user-menu-trigger"
-                >
-                  <User size={18} weight="regular" className="relative z-10" />
-                  <span className="relative z-10 font-medium text-sm hidden sm:inline">
-                    {authenticated && user
-                      ? (() => {
-                        const displayName = user.display_name?.trim();
-                        const userName = user.name?.trim();
-                        if (displayName && displayName !== '' && displayName !== '[Dados protegidos]') {
-                          return displayName;
-                        }
-                        if (userName && userName !== '' && userName !== 'Usuário' && userName !== '[Dados protegidos]') {
-                          return userName.split(' ')[0];
-                        }
-                        return 'Conta';
-                      })()
-                      : 'Conta'}
-                  </span>
-                </motion.button>
-                <AnimatePresence>
-                  {userMenuOpen && (
-                    <motion.div
-                      ref={userMenuRef}
-                      className="absolute z-50 min-w-[260px] bg-white rounded-2xl shadow-xl py-3 mt-2 border border-cloud-100"
-                      style={{ right: 0, top: '100%' }}
-                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {authenticated && user ? (
-                        <>
-                          <div className="px-5 py-3 text-sage-900 font-semibold flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center">
-                              <User size={20} className="text-primary-600" weight="regular" />
-                            </div>
-                            <div>
-                              <p className="text-sm">
-                                {(() => {
-                                  const displayName = user.display_name?.trim();
-                                  const userName = user.name?.trim();
-                                  if (displayName && displayName !== '' && displayName !== '[Dados protegidos]') {
-                                    return `Olá, ${displayName}!`;
-                                  }
-                                  if (userName && userName !== '' && userName !== 'Usuário' && userName !== '[Dados protegidos]') {
-                                    return `Olá, ${userName.split(' ')[0]}!`;
-                                  }
-                                  if (user.email && user.email !== 'email@exemplo.com') {
-                                    return `Olá, ${user.email.split('@')[0]}!`;
-                                  }
-                                  return 'Olá, Usuário!';
-                                })()}
-                              </p>
-                              <p className="text-xs text-sage-600 font-normal">{user.email}</p>
-                            </div>
-                          </div>
-                          <div className="border-t border-cloud-100 my-2 mx-2"></div>
-                          <div className="py-2">
-                            <a href="/meus-pedidos" className="group flex items-center gap-3 px-5 py-3 text-sage-800 hover:bg-primary-50 hover:text-primary-600 transition-colors rounded-lg mx-2">
-                              <Receipt size={18} className="text-sage-600 group-hover:text-primary-600 transition-colors" weight="regular" />
-                              <span className="text-sm">Meus Pedidos</span>
-                            </a>
-                            <a href="/rastreio" className="group flex items-center gap-3 px-5 py-3 text-sage-800 hover:bg-primary-50 hover:text-primary-600 transition-colors rounded-lg mx-2">
-                              <Truck size={18} className="text-sage-600 group-hover:text-primary-600 transition-colors" weight="regular" />
-                              <span className="text-sm">Rastrear Pedido</span>
-                            </a>
-                            <a href="/contato" className="group flex items-center gap-3 px-5 py-3 text-sage-800 hover:bg-primary-50 hover:text-primary-600 transition-colors rounded-lg mx-2">
-                              <EnvelopeSimple size={18} className="text-sage-600 group-hover:text-primary-600 transition-colors" weight="regular" />
-                              <span className="text-sm">Contato</span>
-                            </a>
-                            {user.is_admin && (
-                              <>
-                                <div className="border-t border-cloud-100 my-2 mx-2"></div>
-                                <a href="/admin" className="group flex items-center gap-3 px-5 py-3 text-sage-800 hover:bg-primary-50 hover:text-primary-600 transition-colors rounded-lg mx-2">
-                                  <div className="w-6 h-6 bg-primary-500 rounded-lg flex items-center justify-center">
-                                    <span className="text-white text-xs font-bold">A</span>
-                                  </div>
-                                  <span className="text-sm">Dashboard Admin</span>
-                                </a>
-                              </>
-                            )}
-                          </div>
-                          <div className="border-t border-cloud-100 my-2 mx-2"></div>
-                          <div className="pt-2 px-2 pb-2">
-                            <button
-                              onClick={async () => {
-                                await logout();
-                                setUserMenuOpen(false);
-                                if (pathname.startsWith('/admin')) {
-                                  router.push('/');
-                                } else {
-                                  router.refresh();
-                                }
-                              }}
-                              className="group w-full flex items-center gap-3 px-5 py-3 text-sage-700 hover:bg-red-50 hover:text-red-600 transition-colors rounded-lg"
-                            >
-                              <SignOut size={18} className="text-sage-600 group-hover:text-red-600 transition-colors" weight="regular" />
-                              <span className="text-sm">Sair</span>
-                            </button>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <a href="/login" className={`group flex items-center gap-3 px-5 py-3 transition-colors rounded-lg mx-2 ${pathname === '/login'
-                            ? 'bg-primary-50 text-primary-600 font-medium'
-                            : 'text-sage-800 hover:bg-primary-50 hover:text-primary-600'
-                            }`}>
-                            <User size={18} className={`transition-colors ${pathname === '/login'
-                              ? 'text-primary-600'
-                              : 'text-sage-600 group-hover:text-primary-600'
-                              }`} weight="regular" />
-                            <span className="text-sm">Fazer Login</span>
-                          </a>
-                          <a href="/criar-conta" className={`group flex items-center gap-3 px-5 py-3 transition-colors rounded-lg mx-2 ${pathname === '/criar-conta'
-                            ? 'bg-primary-50 text-primary-600 font-medium'
-                            : 'text-sage-800 hover:bg-primary-50 hover:text-primary-600'
-                            }`}>
-                            <UserPlus size={18} className={`transition-colors ${pathname === '/criar-conta'
-                              ? 'text-primary-600'
-                              : 'text-sage-600 group-hover:text-primary-600'
-                              }`} weight="regular" />
-                            <span className="text-sm">Criar Conta</span>
-                          </a>
-                          <div className="border-t border-cloud-100 my-2 mx-2"></div>
-                          <a href="/contato" className={`group flex items-center gap-3 px-5 py-3 transition-colors rounded-lg mx-2 ${pathname === '/contato'
-                            ? 'bg-primary-50 text-primary-600 font-medium'
-                            : 'text-sage-800 hover:bg-primary-50 hover:text-primary-600'
-                            }`}>
-                            <EnvelopeSimple size={18} className={`transition-colors ${pathname === '/contato'
-                              ? 'text-primary-600'
-                              : 'text-sage-600 group-hover:text-primary-600'
-                              }`} weight="regular" />
-                            <span className="text-sm">Contato</span>
-                          </a>
-                        </>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              <motion.button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="lg:hidden p-2.5 sm:p-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center"
-              >
-                {isMenuOpen ? (
-                  <X size={20} weight="bold" />
-                ) : (
-                  <List size={20} weight="regular" />
-                )}
-              </motion.button>
-            </div>
-          </div>
-
-          <div className="lg:hidden pb-4">
-            <form onSubmit={handleSearch} className="relative">
-              <div
-                className={`relative flex items-center bg-white border rounded-full px-4 py-3 transition-all duration-300 ${isSearchFocused
-                  ? 'border-sage-400 shadow-lg shadow-primary-100/40 ring-1 ring-primary-200/50'
-                  : 'border-sage-200 shadow-sm hover:border-sage-300'
-                  }`}
-              >
-                <MagnifyingGlass
-                  size={20}
-                  weight="regular"
-                  className="text-sage-600 mr-3 flex-shrink-0"
-                />
+            {/* Centralized Search Bar - Advanced Typing */}
+            <div className="hidden lg:flex flex-1 max-w-xl mx-8 relative">
+              <div className={`relative w-full group transition-all duration-300 ${isSearchFocused ? 'scale-105' : ''}`}>
                 <input
                   type="text"
-                  placeholder="Buscar produtos..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
+                  placeholder={`Buscar por ${displayText}`}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setIsSearchFocused(false)}
-                  className="flex-1 bg-transparent text-sage-800 placeholder-sage-500 focus:outline-none text-sm font-normal"
+                  className="w-full h-11 pl-12 pr-4 bg-white border border-gray-300 rounded-full text-sm outline-none focus:border-black transition-all placeholder-gray-500"
                 />
-                {searchQuery && (
-                  <motion.button
-                    type="button"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    onClick={clearSearch}
-                    className="ml-2 text-sage-400 hover:text-sage-700 transition-colors p-1 rounded-full hover:bg-cloud-100"
-                  >
-                    <X size={16} weight="bold" />
-                  </motion.button>
-                )}
+                <MagnifyingGlass
+                  size={18}
+                  className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${isSearchFocused ? 'text-black' : 'text-gray-400'}`}
+                />
               </div>
-            </form>
+            </div>
+
+            {/* Icons */}
+            <div className="flex items-center gap-1 sm:gap-2 -mr-2">
+              <div className="relative group z-50">
+                <Link href={authenticated ? "/conta" : "/login"} className="p-2 text-gray-600 hover:text-black hover:bg-gray-50 rounded-full transition-colors hidden sm:flex flex-col items-center gap-0.5" onClick={(e) => authenticated ? null : e.preventDefault()}>
+                  <User size={20} />
+                  <span className="text-[10px] font-medium hidden sm:block group-hover:font-bold">
+                    {authenticated ? 'Conta' : 'Entrar'}
+                  </span>
+                </Link>
+
+                {/* Dropdown Menu */}
+                <div className="absolute top-full right-0 w-56 bg-white shadow-xl rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 border border-gray-100 mt-2 z-50">
+                  <div className="absolute top-0 right-4 w-3 h-3 bg-white border-t border-l border-gray-100 transform rotate-45 -translate-y-1/2"></div>
+
+                  {authenticated ? (
+                    // Logged In State
+                    <>
+                      <div className="px-4 py-2 border-b border-gray-100 mb-1">
+                        <p className="text-xs text-gray-500">Olá, {user?.name?.split(' ')[0]}</p>
+                      </div>
+                      <Link href="/conta" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors">
+                        <User size={18} />
+                        Minha Conta
+                      </Link>
+                      <Link href="/conta/pedidos" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors">
+                        <Receipt size={18} />
+                        Meus Pedidos
+                      </Link>
+                      <div className="border-t border-gray-100 my-1"></div>
+                      <button
+                        onClick={() => logout()}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                      >
+                        <SignOut size={18} />
+                        Sair
+                      </button>
+                    </>
+                  ) : (
+                    // Logged Out State
+                    <>
+                      <Link href="/login" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors">
+                        <SignIn size={18} />
+                        Fazer Login
+                      </Link>
+                      <Link href="/criar-conta" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors">
+                        <UserPlus size={18} />
+                        Criar Conta
+                      </Link>
+                      <div className="border-t border-gray-100 my-1"></div>
+                      <Link href="/contato" className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors">
+                        <EnvelopeSimple size={18} />
+                        Contato
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={() => document.dispatchEvent(new CustomEvent('openFavorites'))}
+                className="p-2 text-gray-600 hover:text-black hover:bg-gray-50 rounded-full transition-colors flex flex-col items-center gap-0.5 group relative"
+              >
+                <Heart size={20} />
+                <span className="text-[10px] font-medium hidden sm:block group-hover:font-bold">Favoritos</span>
+                {favoritesState.itemCount > 0 && (
+                  <span className="absolute top-1 right-2 w-2 h-2 bg-black rounded-full border border-white"></span>
+                )}
+              </button>
+              <button
+                onClick={() => document.dispatchEvent(new CustomEvent('openCart'))}
+                className="p-2 text-gray-600 hover:text-black hover:bg-gray-50 rounded-full transition-colors flex flex-col items-center gap-0.5 group relative"
+              >
+                <ShoppingBag size={20} />
+                <span className="text-[10px] font-medium hidden sm:block group-hover:font-bold">Sacola</span>
+                {cartCount > 0 && (
+                  <span className="absolute top-0 right-1 bg-black text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        className="bg-primary-500 relative z-40"
-      >
-        <div className="container mx-auto px-4">
-          <nav className="hidden lg:flex items-center justify-center gap-2 py-4">
-            {menuItems.map((item, index) => (
-              <motion.a
-                key={item.href}
-                href={item.href}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                whileHover={{ scale: 1.05 }}
-                className="relative px-6 py-2.5 text-sand-100 font-medium text-sm uppercase tracking-wide rounded-xl group overflow-hidden"
-              >
-                <motion.div
-                  className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300"
-                  initial={false}
-                />
-                <motion.div
-                  className="absolute bottom-1.5 left-1/2 h-[2px] w-0 group-hover:w-12 bg-sand-100 rounded-full opacity-0 group-hover:opacity-100 -translate-x-1/2 transition-all duration-300"
-                />
-                <span className="relative z-10 block transition-all duration-300 group-hover:text-white">
-                  {item.label}
-                </span>
-              </motion.a>
-            ))}
-          </nav>
+
+        {/* Secondary Navigation - Centered */}
+        <div className="hidden lg:block border-b border-gray-100">
+          <div className="container mx-auto px-4">
+            <nav className="flex items-center justify-center gap-10 h-14">
+              {categories.map((cat) => (
+                <Link
+                  key={cat.name}
+                  href={cat.href}
+                  className={`text-xs font-bold tracking-widest transition-colors relative group py-5 ${cat.highlight ? 'text-red-600 hover:text-red-700' : 'text-gray-800 hover:text-black'}`}
+                >
+                  {cat.name}
+                  <span className={`absolute bottom-0 left-0 w-full h-[3px] transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${cat.highlight ? 'bg-red-600' : 'bg-black'}`} />
+                </Link>
+              ))}
+            </nav>
+          </div>
         </div>
-      </div>
+      </header>
+
+      {/* Spacer for fixed header - Adjusted for smaller height without marquee */}
+      <div className="h-[136px]"></div>
+
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMenuOpen && (
-          <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-[60] lg:hidden"
+            onClick={() => setIsMenuOpen(false)}
+          >
             <motion.div
-              className="fixed inset-0 z-[99] lg:hidden bg-black/40"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <motion.div
-              className="fixed right-0 top-0 bottom-0 z-[100] lg:hidden w-full max-w-sm bg-sand-100 shadow-2xl"
-              initial={{ x: '100%' }}
+              initial={{ x: '-100%' }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'tween', ease: 'easeOut', duration: 0.3 }}
+              className="absolute top-0 left-0 h-full w-[80%] max-w-sm bg-white shadow-xl overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-full flex flex-col">
-                <div className="flex items-center justify-between p-6 border-b border-cloud-200/40">
-                  <div className="relative w-20 h-20">
-                    <Image
-                      src="/images/logo.png"
-                      alt="Modas Saraí"
-                      fill
-                      sizes="80px"
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="p-2 rounded-full bg-cloud-100 hover:bg-cloud-200 text-sage-700 hover:text-sage-900 transition-colors flex items-center justify-center"
-                  >
-                    <X size={24} weight="bold" />
-                  </button>
+              <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                <span className="font-bold text-lg">Menu</span>
+                <button onClick={() => setIsMenuOpen(false)}>
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div className="p-4 space-y-4">
+                {/* Mobile Search */}
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="O que você procura?"
+                    className="w-full h-10 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-black"
+                  />
+                  <MagnifyingGlass size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                 </div>
 
-                <div className="flex-1 overflow-y-auto px-6 py-8">
-                  <nav className="space-y-3">
-                    {menuItems.map((item) => (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        className="block px-6 py-4 text-sage-900 font-semibold text-lg uppercase tracking-wide rounded-xl bg-white border border-cloud-200/50 hover:bg-primary-50 hover:border-primary-200/50 hover:text-primary-700 transition-all duration-200"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <span className="flex items-center justify-between">
-                          <span>{item.label}</span>
-                          <FontAwesomeIcon icon={faChevronRight} size="sm" className="text-sage-400" />
-                        </span>
-                      </a>
-                    ))}
-                  </nav>
-                </div>
-
-                {authenticated && user && (
-                  <div className="px-6 pb-8 pt-4 border-t border-cloud-200/40 space-y-3">
-                    <div className="flex items-center gap-3 px-5 py-3 bg-white border border-cloud-200/50 rounded-xl">
-                      <div className="w-10 h-10 rounded-full bg-primary-500/10 flex items-center justify-center">
-                        <UserCircle size={24} className="text-primary-600" weight="fill" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sage-900 font-semibold text-sm truncate">
-                          {(() => {
-                            const displayName = user.display_name?.trim();
-                            const userName = user.name?.trim();
-                            if (displayName && displayName !== '' && displayName !== '[Dados protegidos]') {
-                              return displayName;
-                            }
-                            if (userName && userName !== '' && userName !== 'Usuário' && userName !== '[Dados protegidos]') {
-                              return userName.split(' ')[0];
-                            }
-                            return 'Usuário';
-                          })()}
-                        </p>
-                        <p className="text-sage-600 text-xs truncate">{user.email}</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={async () => {
-                        await logout()
-                        setIsMenuOpen(false)
-                        if (pathname.startsWith('/admin')) {
-                          router.push('/');
-                        } else {
-                          router.refresh();
-                        }
-                      }}
-                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-50 border border-red-200 text-red-700 rounded-xl font-semibold hover:bg-red-100 hover:border-red-300 transition-colors"
+                <nav className="flex flex-col space-y-2">
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.name}
+                      href={cat.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`py-3 border-b border-gray-50 text-sm font-bold ${cat.highlight ? 'text-red-600' : 'text-gray-800'}`}
                     >
-                      <SignOut size={18} weight="bold" />
-                      <span>Sair</span>
-                    </button>
-                  </div>
-                )}
+                      {cat.name}
+                    </Link>
+                  ))}
+                </nav>
               </div>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
-      <SidebarCart open={isCartSidebarOpen} onClose={() => setIsCartSidebarOpen(false)} />
-      <SidebarFavorites open={isFavoritesSidebarOpen} onClose={() => setIsFavoritesSidebarOpen(false)} />
-    </header>
+    </>
   )
 }

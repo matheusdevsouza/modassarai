@@ -1,42 +1,14 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { formatPrice } from '@/lib/utils'
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowRight, Sparkle } from 'phosphor-react'
+import { ArrowRight } from 'phosphor-react'
 import { ProductCard, ProductCardSkeleton } from '@/components/ProductCard'
-
-const NewArrivalsSkeleton = () => (
-  <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden bg-sand-100">
-    <div className="container mx-auto px-4 sm:px-6">
-      <div className="text-center mb-12 md:mb-16 space-y-6">
-        <div className="h-5 w-48 bg-black/20 rounded-full mx-auto animate-pulse" />
-        <div className="h-12 md:h-16 w-full max-w-3xl bg-black/30 rounded-lg mx-auto animate-pulse" />
-        <div className="h-6 w-full max-w-2xl bg-black/20 rounded-lg mx-auto animate-pulse" />
-        <div className="h-px w-32 bg-black/10 mx-auto" />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-black/10">
-            <div className="absolute inset-0 animate-pulse" style={{ background: 'linear-gradient(to bottom right, #FDF8F2, #F5F0E8, #FDF8F2)' }} />
-            <div className="absolute bottom-0 left-0 right-0 p-5 space-y-3">
-              <div className="h-6 w-3/4 bg-black/40 rounded animate-pulse" />
-              <div className="h-8 w-1/2 bg-black/50 rounded animate-pulse" />
-              <div className="h-12 w-full bg-black/60 rounded-xl animate-pulse" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-)
 
 export function NewArrivalsSection() {
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-50px' })
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,117 +25,32 @@ export function NewArrivalsSection() {
     }
     fetchData()
   }, [])
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  }
-  const itemVariants = {
-    hidden: { opacity: 0, y: 60, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  }
+
   const hasProducts = products && products.length > 0
 
-  if (loading) {
-    return <NewArrivalsSkeleton />
-  }
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-16 sm:py-24 md:py-32 overflow-hidden bg-sand-100"
-    >
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 justify-center text-xs uppercase tracking-[0.2em] text-sage-500 mb-4 font-medium px-4 py-1.5 rounded-full border border-sage-300/50 bg-sage-100/50"
-          >
-            <Sparkle size={12} weight="fill" className="text-sage-400" />
-            novidades da semana
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-sage-900 mb-6 leading-tight"
-          >
-            Novidades{' '}
-            <span className="relative inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-primary-500 via-primary-700 to-primary-500 bg-clip-text text-transparent">
-                Exclusivas
-              </span>
-              <motion.div
-                initial={{ width: 0 }}
-                animate={isInView ? {
-                  width: ['0%', '100%', '100%', '0%', '0%']
-                } : { width: 0 }}
-                transition={{
-                  duration: 12,
-                  delay: 0.8,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  ease: "easeInOut",
-                  times: [0, 0.08, 0.5, 0.58, 1]
-                }}
-                className="absolute bottom-2 left-0 h-3 bg-primary-400/20 -z-0"
-                style={{ transform: 'skewX(-12deg)' }}
-              />
-            </span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-lg md:text-xl text-sage-500 max-w-3xl mx-auto leading-relaxed"
-          >
-            Peças selecionadas com tecidos premium e design atemporal para elevar seu estilo.
-          </motion.p>
-          <motion.div
-            initial={{ width: 0 }}
-            animate={isInView ? { width: '120px' } : {}}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="mx-auto mt-8 h-px bg-gradient-to-r from-transparent via-primary-400/60 to-transparent"
-          />
-        </motion.div>
-        {!loading && !hasProducts ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-center py-16"
-          >
-            <p className="text-lg md:text-xl text-sage-700">
-              Nenhum produto está disponível no momento.
-            </p>
-          </motion.div>
+    <section className="py-12 sm:py-16 bg-white">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex flex-col items-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-black uppercase tracking-wider mb-2">
+            Novidades
+          </h2>
+          {/* Removed underline div as requested */}
+          <p className="text-gray-500 text-center max-w-2xl">
+            Confira as últimas tendências que acabaram de chegar.
+          </p>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+            {[...Array(4)].map((_, i) => <ProductCardSkeleton key={i} />)}
+          </div>
+        ) : !hasProducts ? (
+          <div className="text-center py-10 text-gray-500">
+            Nenhum produto encontrado.
+          </div>
         ) : (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'visible'}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
-          >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
             {products.map((product, index) => (
               <ProductCard
                 key={product.id}
@@ -172,47 +59,18 @@ export function NewArrivalsSection() {
                 priority={index < 2}
               />
             ))}
-          </motion.div>
+          </div>
         )}
-        {hasProducts && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-center mt-8 sm:mt-12 md:mt-16"
+
+        <div className="mt-12 text-center">
+          <Link
+            href="/produtos?sort=newest"
+            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide hover:opacity-70 transition-opacity"
+          // Removed border-b as requested
           >
-            <Link href="/produtos?novidades=true">
-              <button
-                className="group relative inline-flex items-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 bg-primary-500 text-sand-100 rounded-full font-semibold text-xs md:text-sm tracking-wide shadow-lg shadow-primary-500/30 hover:shadow-xl hover:shadow-primary-500/50 transition-all duration-300 overflow-hidden"
-              >
-                <span className="relative z-10 whitespace-nowrap">Ver Todas as Novidades</span>
-                <ArrowRight size={18} weight="thin" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-              </button>
-            </Link>
-          </motion.div>
-        )}
-      </div>
-      <div className="custom-shape-divider-bottom absolute bottom-0 left-0 w-full overflow-hidden leading-none pointer-events-none" style={{
-        backgroundImage: `
-          linear-gradient(rgba(196, 151, 105, 0.06) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(196, 151, 105, 0.06) 1px, transparent 1px)
-        `,
-        backgroundSize: '40px 40px',
-        backgroundColor: '#1A1816'
-      }}>
-        <svg
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="relative block w-full h-[10px] md:h-[30px]"
-          style={{ width: 'calc(100% + 1.3px)' }}
-        >
-          <path
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            fill="#FDF8F2"
-          />
-        </svg>
+            Ver tudo <ArrowRight size={16} />
+          </Link>
+        </div>
       </div>
     </section>
   )

@@ -195,3 +195,4 @@ exports/
 !prisma/schema.prisma
 !README.md
 !.gitignore
+.vercel
