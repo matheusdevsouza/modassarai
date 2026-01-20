@@ -41,7 +41,7 @@ export function PromotionalBannerSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: index * 0.2 }}
-                            className="relative aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/3] group overflow-hidden rounded-lg"
+                            className="relative aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/3] group overflow-hidden"
                         >
                             <Link href={banner.link} className="block w-full h-full relative">
                                 {/* Image */}
