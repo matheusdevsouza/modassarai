@@ -17,8 +17,8 @@ const inter = Inter({
   variable: '--font-inter',
 })
 export const metadata: Metadata = {
-  title: 'Modas Saraí - Moda Feminina',
-  description: 'Moda feminina sofisticada, leve e contemporânea. Descubra as coleções da Modas Saraí.',
+  title: 'Luxúria Modas - Moda Feminina',
+  description: 'Moda feminina sofisticada, leve e contemporânea. Descubra as coleções da Luxúria Modas.',
   icons: {
     icon: '/images/icon.png',
     shortcut: '/images/icon.png',

@@ -43,7 +43,7 @@ export function TestimonialsSection() {
           </h2>
           <div className="mb-8"></div>
           <p className="text-gray-500 font-light max-w-xl mx-auto">
-            Junte-se a milhares de clientes satisfeitas que escolheram a Sarai Modas.
+            Junte-se a milhares de clientes satisfeitas que escolheram a Luxúria Modas.
           </p>
         </div>
 

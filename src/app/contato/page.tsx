@@ -120,8 +120,8 @@ export default function Contato() {
       icon: faWhatsapp,
       title: 'WhatsApp',
       description: 'Atendimento rápido',
-      value: '+55 11 93005-5418',
-      href: 'https://wa.me/5511930055418?text=Olá! Gostaria de saber mais sobre os produtos da Modas Saraí.',
+      value: '(11) 99999-9999',
+      href: 'https://wa.me/5511999999999?text=Olá! Gostaria de saber mais sobre os produtos da Luxúria Modas.',
       color: 'bg-primary-500',
       external: true
     },
@@ -129,8 +129,8 @@ export default function Contato() {
       icon: faEnvelope,
       title: 'E-mail',
       description: 'Resposta em até 24h',
-      value: 'contato@modassarai.com.br',
-      href: 'mailto:contato@modassarai.com.br',
+      value: 'contato@luxuriamodas.com.br',
+      href: 'mailto:contato@luxuriamodas.com.br',
       color: 'bg-primary-500',
       external: false
     },
@@ -138,8 +138,8 @@ export default function Contato() {
       icon: faInstagram,
       title: 'Instagram',
       description: 'Siga-nos',
-      value: '@modassarai',
-      href: 'https://instagram.com/modassarai',
+      value: '@luxuriamodas',
+      href: 'https://instagram.com/luxuriamodas',
       color: 'bg-primary-400',
       external: true
     },
@@ -147,8 +147,8 @@ export default function Contato() {
       icon: faTiktok,
       title: 'TikTok',
       description: 'Nos acompanhe',
-      value: '@modassarai',
-      href: 'https://tiktok.com/@modassarai',
+      value: '@luxuriamodas',
+      href: 'https://tiktok.com/@luxuriamodas',
       color: 'bg-sage-800',
       external: true
     }

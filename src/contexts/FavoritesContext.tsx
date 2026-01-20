@@ -33,9 +33,9 @@ const favoritesReducer = (state: FavoritesState, action: FavoritesAction): Favor
     case 'ADD_FAVORITE': {
       const { product, size, color, image } = action.payload
       const existingFavorite = state.items.find(
-        item => 
-          item.product.id === product.id && 
-          item.size === size && 
+        item =>
+          item.product.id === product.id &&
+          item.size === size &&
           item.color === color
       )
 
@@ -103,7 +103,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedFavorites = localStorage.getItem('mariapistache_favorites')
+      const savedFavorites = localStorage.getItem('luxuriamodas_favorites')
       if (savedFavorites) {
         try {
           const favoritesData = JSON.parse(savedFavorites)
@@ -115,7 +115,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
               }
             } catch (error) {
 
-              localStorage.removeItem('mariapistache_favorites')
+              localStorage.removeItem('luxuriamodas_favorites')
             }
           } else if (favoritesData.items && Array.isArray(favoritesData.items)) {
             try {
@@ -125,12 +125,12 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
               }
             } catch (error) {
 
-              localStorage.removeItem('mariapistache_favorites')
+              localStorage.removeItem('luxuriamodas_favorites')
             }
           }
         } catch (error) {
 
-          localStorage.removeItem('mariapistache_favorites')
+          localStorage.removeItem('luxuriamodas_favorites')
         }
       }
       setIsLoaded(true)
@@ -231,7 +231,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         itemCount: state.itemCount,
         lastUpdated: new Date().toISOString()
       }
-      localStorage.setItem('mariapistache_favorites', JSON.stringify(favoritesData))
+      localStorage.setItem('luxuriamodas_favorites', JSON.stringify(favoritesData))
     }
   }, [state, isLoaded])
 
@@ -240,20 +240,20 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     if (hasSizes) {
       if (!size || (typeof size === 'string' && (size.trim() === '' || size === 'Selecione'))) {
 
-        return 
+        return
       }
     }
-    
+
     const hasColors = (product as any).colorVariations && Array.isArray((product as any).colorVariations) && (product as any).colorVariations.length > 0
     if (hasColors) {
       if (!color || (typeof color === 'string' && color.trim() === '')) {
 
-        return 
+        return
       }
     }
-    
+
     dispatch({ type: 'ADD_FAVORITE', payload: { product, size, color, image } })
-    
+
     if (typeof window !== 'undefined' && product.id) {
       const productIdentifier = (product as any).slug || product.id;
       fetch(`/api/products/${productIdentifier}/stats`, {
@@ -277,24 +277,24 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const clearFavorites = () => {
     dispatch({ type: 'CLEAR_FAVORITES' })
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('mariapistache_favorites')
+      localStorage.removeItem('luxuriamodas_favorites')
     }
   }
 
   const isFavorite = (productId: string, size?: string, color?: string): boolean => {
     return state.items.some(
-      item => 
-        item.product.id === productId && 
-        item.size === size && 
+      item =>
+        item.product.id === productId &&
+        item.size === size &&
         item.color === color
     )
   }
 
   const getFavoriteId = (productId: string, size?: string, color?: string): string | null => {
     const favorite = state.items.find(
-      item => 
-        item.product.id === productId && 
-        item.size === size && 
+      item =>
+        item.product.id === productId &&
+        item.size === size &&
         item.color === color
     )
     return favorite ? favorite.id : null
@@ -334,16 +334,16 @@ export function useFavorites() {
     if (typeof window === 'undefined') {
       return {
         state: { items: [], itemCount: 0 },
-        addFavorite: () => {},
-        removeFavorite: () => {},
-        updateFavorite: () => {},
-        clearFavorites: () => {},
+        addFavorite: () => { },
+        removeFavorite: () => { },
+        updateFavorite: () => { },
+        clearFavorites: () => { },
         isFavorite: () => false,
         isProductFavorite: () => false,
         getFavoriteId: () => null,
         getProductFavoriteId: () => null,
         isFavoritesSidebarOpen: false,
-        setIsFavoritesSidebarOpen: () => {},
+        setIsFavoritesSidebarOpen: () => { },
       }
     }
     throw new Error('useFavorites deve ser usado dentro de um FavoritesProvider')

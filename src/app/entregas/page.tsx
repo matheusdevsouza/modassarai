@@ -168,7 +168,7 @@ export default function Entregas() {
             >
               <li>• Embalagem resistente e segura</li>
               <li>• Proteção contra impactos e umidade</li>
-              <li>• Caixa personalizada da Modas Saraí</li>
+              <li>• Caixa personalizada da Luxúria Modas</li>
               <li>• Produto lacrado e autenticado</li>
             </motion.ul>
           </motion.div>

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  
+
   images: {
     remotePatterns: [
       {
@@ -13,7 +13,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'mariapistache.com.br',
+        hostname: 'luxuriamodas.vercel.app',
         pathname: '/uploads/**',
       }
     ],
@@ -24,15 +24,15 @@ const nextConfig = {
 
   async headers() {
     const isDevelopment = process.env.NODE_ENV === 'development';
-    
+
     const scriptSrc = isDevelopment
       ? "'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com ws://localhost:3000"
       : "'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com";
-    
+
     const connectSrc = isDevelopment
       ? "'self' https://api.mercadopago.com https://viacep.com.br https://www.googletagmanager.com https://www.google-analytics.com https://17track.net ws://localhost:3000 http://localhost:3000"
       : "'self' https://api.mercadopago.com https://viacep.com.br https://www.googletagmanager.com https://www.google-analytics.com https://17track.net";
-    
+
     return [
       {
         source: '/:path*',
@@ -73,14 +73,14 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['pg'],
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'mariapistache.com.br']
+      allowedOrigins: ['localhost:3000', 'luxuriamodas.vercel.app']
     }
   },
 
   typescript: {
     ignoreBuildErrors: false,
   },
-  
+
   eslint: {
     ignoreDuringBuilds: false,
   },

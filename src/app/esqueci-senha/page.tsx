@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
       >
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Luxúria Modas Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-semibold text-sage-900 mb-2 text-center">Esqueci minha senha</h1>
           <p className="text-sage-800 text-center text-sm">Informe seu e-mail e enviaremos um link para redefinição de senha.</p>

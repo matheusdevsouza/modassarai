@@ -163,7 +163,7 @@ export default function AdminLayout({
             <div className={`relative flex-shrink-0 ${sidebarExpanded ? 'w-10 h-10 lg:w-12 lg:h-12' : 'w-10 h-10'}`}>
               <Image
                 src="/images/logo.png"
-                alt="Modas Saraí"
+                alt="Luxúria Modas"
                 fill
                 sizes={sidebarExpanded ? "(max-width: 1024px) 40px, 48px" : "40px"}
                 className="object-contain"
@@ -290,7 +290,7 @@ export default function AdminLayout({
             <div className="relative w-10 h-10 flex-shrink-0">
               <Image
                 src="/images/logo.png"
-                alt="Modas Saraí"
+                alt="Luxúria Modas"
                 fill
                 sizes="40px"
                 className="object-contain"
@@ -328,8 +328,8 @@ export default function AdminLayout({
                     <Link
                       href={item.href}
                       className={`group relative flex items-center px-3 py-2.5 transition-all duration-300 rounded-lg border overflow-hidden ${pathname === item.href
-                          ? 'text-primary-600 bg-primary-100 border-primary-500'
-                          : 'text-sage-700 hover:text-primary-600 border-transparent hover:border-primary-200 hover:bg-primary-50'
+                        ? 'text-primary-600 bg-primary-100 border-primary-500'
+                        : 'text-sage-700 hover:text-primary-600 border-transparent hover:border-primary-200 hover:bg-primary-50'
                         }`}
                       onClick={() => setSidebarOpen(false)}
                     >

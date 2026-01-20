@@ -77,7 +77,7 @@ async function calculateShippingFromMelhorEnvio(
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`,
-        'User-Agent': 'Modas Saraí (mariapistache@email.com)'
+        'User-Agent': 'Luxúria Modas (contato@luxuriamodas.com.br)'
       },
       body: JSON.stringify(requestBody)
     })

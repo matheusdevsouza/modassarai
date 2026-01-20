@@ -6,11 +6,11 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useShipping } from '@/hooks/useShipping'
-import { 
-  CreditCard, 
-  MapPin, 
-  User, 
-  Phone, 
+import {
+  CreditCard,
+  MapPin,
+  User,
+  Phone,
   Envelope,
   Trash,
   Plus,
@@ -83,11 +83,11 @@ export default function CheckoutPage() {
   const handleFieldBlur = (fieldName: string) => {
     setTouchedFields(prev => ({ ...prev, [fieldName]: true }))
   }
-  
+
   const shouldShowError = (fieldName: string, value: string) => {
     return touchedFields[fieldName] && value.trim() === ''
   }
-  
+
   const shouldShowEmailConfirmError = () => {
     if (!touchedFields.emailConfirm) return false
     return customerData.emailConfirm.trim() === '' || customerData.email !== customerData.emailConfirm
@@ -115,17 +115,17 @@ export default function CheckoutPage() {
       installments: [1]
     }
   ]
-  
-  const { 
-    options: shippingOptions, 
-    selectedOption: selectedShipping, 
-    isLoading: isLoadingShipping, 
+
+  const {
+    options: shippingOptions,
+    selectedOption: selectedShipping,
+    isLoading: isLoadingShipping,
     error: shippingError,
     calculateShipping,
     selectOption: selectShippingOption,
     zipCode: shippingZipCode
   } = useShipping({ cartItems: cartState.items, initialZipCode: customerData.zipCode })
-  
+
   useEffect(() => {
     if (shippingZipCode && shippingZipCode.length === 8 && shippingZipCode !== customerData.zipCode) {
       setCustomerData(prev => ({
@@ -134,22 +134,22 @@ export default function CheckoutPage() {
       }))
     }
   }, [shippingZipCode, customerData.zipCode])
-  
+
   const shippingCost = selectedShipping?.price || 0
   const total = cartState.total + shippingCost
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    
+
     try {
-      const savedShipping = sessionStorage.getItem('mariapistache_shipping')
+      const savedShipping = sessionStorage.getItem('luxuriamodas_shipping')
       if (savedShipping) {
         const shippingData = JSON.parse(savedShipping)
-        
+
         const oneHour = 60 * 60 * 1000
         if (shippingData.timestamp && Date.now() - shippingData.timestamp < oneHour) {
           const savedZipCode = shippingData.zipCode
-          
+
           if (savedZipCode && savedZipCode.length === 8) {
             setCustomerData(prev => {
               if (prev.zipCode !== savedZipCode) {
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
               }
               return prev
             })
-            
+
             const currentStreet = customerData.street
             const currentCity = customerData.city
             if (!currentStreet || !currentCity) {
@@ -186,8 +186,8 @@ export default function CheckoutPage() {
     } catch (error) {
       console.error('Erro ao carregar frete salvo:', error)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (user?.email && customerData.email === user.email) {
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
           }
         })
         setTouchedFields(prev => ({ ...prev, ...fieldsToMarkAsTouched }))
-        
+
         showErrorMessages(validationErrors)
         return
       }
@@ -285,7 +285,7 @@ export default function CheckoutPage() {
         items: cartState.items.map(item => ({
           product_id: item.product.id,
           name: item.product.name,
-          sku: (item.product as any).sku || null, 
+          sku: (item.product as any).sku || null,
           price: item.price,
           quantity: item.quantity,
           size: item.size || null,
@@ -325,11 +325,11 @@ export default function CheckoutPage() {
       if (!result.success) {
         throw new Error(result.error || 'Erro ao criar pedido')
       }
-      
+
       const orderToken = result.accessToken || result.orderId
-      
+
       clearCart()
-      
+
       router.push(`/pedido-status/${orderToken}?redirect=true`)
     } catch (error) {
       showErrorMessages([`Erro ao finalizar pedido: ${(error as Error).message}`])
@@ -366,7 +366,7 @@ export default function CheckoutPage() {
     setShowErrors(true)
     setTimeout(() => {
       setShowErrors(false)
-    }, 5000) 
+    }, 5000)
   }
   if (cartState.items.length === 0) {
     return (
@@ -474,17 +474,15 @@ export default function CheckoutPage() {
               <div className="flex items-center justify-center mb-6 sm:mb-8 overflow-x-auto pb-2">
                 {[1, 2, 3].map((step) => (
                   <div key={step} className="flex items-center flex-shrink-0">
-                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-lg ${
-                      currentStep >= step 
-                        ? 'bg-primary-500 text-white shadow-md' 
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-lg ${currentStep >= step
+                        ? 'bg-primary-500 text-white shadow-md'
                         : 'bg-cloud-200 text-sage-600'
-                    }`}>
+                      }`}>
                       {step}
                     </div>
                     {step < 3 && (
-                      <div className={`w-12 sm:w-24 md:w-32 lg:w-64 h-1 mx-1 sm:mx-2 ${
-                        currentStep > step ? 'bg-primary-500' : 'bg-cloud-200'
-                      }`} />
+                      <div className={`w-12 sm:w-24 md:w-32 lg:w-64 h-1 mx-1 sm:mx-2 ${currentStep > step ? 'bg-primary-500' : 'bg-cloud-200'
+                        }`} />
                     )}
                   </div>
                 ))}
@@ -505,11 +503,10 @@ export default function CheckoutPage() {
                       <input
                         type="text"
                         value={customerData.name}
-                        onChange={(e) => setCustomerData({...customerData, name: e.target.value})}
+                        onChange={(e) => setCustomerData({ ...customerData, name: e.target.value })}
                         onBlur={() => handleFieldBlur('name')}
-                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                          shouldShowError('name', customerData.name) ? 'border-red-500' : 'border-cloud-200'
-                        }`}
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('name', customerData.name) ? 'border-red-500' : 'border-cloud-200'
+                          }`}
                         placeholder="Seu nome"
                         required
                       />
@@ -519,11 +516,10 @@ export default function CheckoutPage() {
                       <input
                         type="email"
                         value={customerData.email}
-                        onChange={(e) => setCustomerData({...customerData, email: e.target.value})}
+                        onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
                         onBlur={() => handleFieldBlur('email')}
-                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                          shouldShowError('email', customerData.email) ? 'border-red-500' : 'border-cloud-200'
-                        }`}
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('email', customerData.email) ? 'border-red-500' : 'border-cloud-200'
+                          }`}
                         placeholder="seu@email.com"
                         required
                       />
@@ -533,11 +529,10 @@ export default function CheckoutPage() {
                       <input
                         type="email"
                         value={customerData.emailConfirm}
-                        onChange={(e) => setCustomerData({...customerData, emailConfirm: e.target.value})}
+                        onChange={(e) => setCustomerData({ ...customerData, emailConfirm: e.target.value })}
                         onBlur={() => handleFieldBlur('emailConfirm')}
-                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                          shouldShowEmailConfirmError() ? 'border-red-500' : 'border-cloud-200'
-                        }`}
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowEmailConfirmError() ? 'border-red-500' : 'border-cloud-200'
+                          }`}
                         placeholder="Confirme seu e-mail"
                         required
                       />
@@ -550,11 +545,10 @@ export default function CheckoutPage() {
                       <input
                         type="tel"
                         value={customerData.phone}
-                        onChange={(e) => setCustomerData({...customerData, phone: e.target.value})}
+                        onChange={(e) => setCustomerData({ ...customerData, phone: e.target.value })}
                         onBlur={() => handleFieldBlur('phone')}
-                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                          shouldShowError('phone', customerData.phone) ? 'border-red-500' : 'border-cloud-200'
-                        }`}
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('phone', customerData.phone) ? 'border-red-500' : 'border-cloud-200'
+                          }`}
                         placeholder="(11) 99999-9999"
                         required
                       />
@@ -564,11 +558,10 @@ export default function CheckoutPage() {
                       <input
                         type="text"
                         value={customerData.cpf}
-                        onChange={(e) => setCustomerData({...customerData, cpf: e.target.value})}
+                        onChange={(e) => setCustomerData({ ...customerData, cpf: e.target.value })}
                         onBlur={() => handleFieldBlur('cpf')}
-                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                          shouldShowError('cpf', customerData.cpf) ? 'border-red-500' : 'border-cloud-200'
-                        }`}
+                        className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('cpf', customerData.cpf) ? 'border-red-500' : 'border-cloud-200'
+                          }`}
                         placeholder="000.000.000-00"
                         required
                       />
@@ -588,15 +581,14 @@ export default function CheckoutPage() {
                             value={customerData.zipCode}
                             onChange={(e) => {
                               const value = e.target.value.replace(/\D/g, '').slice(0, 8)
-                              setCustomerData({...customerData, zipCode: value})
+                              setCustomerData({ ...customerData, zipCode: value })
                               if (value.length === 8) {
                                 calculateShipping(value)
                               }
                             }}
                             onBlur={() => handleFieldBlur('zipCode')}
-                            className={`flex-1 px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                              shouldShowError('zipCode', customerData.zipCode) ? 'border-red-500' : 'border-cloud-200'
-                            }`}
+                            className={`flex-1 px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('zipCode', customerData.zipCode) ? 'border-red-500' : 'border-cloud-200'
+                              }`}
                             placeholder="06790100"
                             maxLength={8}
                             required
@@ -613,7 +605,7 @@ export default function CheckoutPage() {
                           )}
                         </div>
                       </div>
-                      
+
                       {(customerData.zipCode.length === 8 || shippingOptions.length > 0) && (
                         <div className="sm:col-span-2">
                           {isLoadingShipping ? (
@@ -636,11 +628,10 @@ export default function CheckoutPage() {
                                     key={option.id}
                                     type="button"
                                     onClick={() => selectShippingOption(option)}
-                                    className={`w-full text-left p-2.5 sm:p-3 rounded-lg border transition-colors ${
-                                      selectedShipping?.id === option.id
+                                    className={`w-full text-left p-2.5 sm:p-3 rounded-lg border transition-colors ${selectedShipping?.id === option.id
                                         ? 'border-primary-500 bg-primary-50'
                                         : 'border-cloud-200 hover:border-primary-300'
-                                    }`}
+                                      }`}
                                   >
                                     <div className="flex items-center justify-between gap-2 sm:gap-4">
                                       <div className="flex-1 min-w-0">
@@ -660,17 +651,16 @@ export default function CheckoutPage() {
                           ) : null}
                         </div>
                       )}
-                      
+
                       <div className="sm:col-span-2">
                         <label className="block text-sage-900 mb-1.5 sm:mb-2 font-medium text-sm sm:text-base">Rua <span className="text-red-500">*</span></label>
                         <input
                           type="text"
                           value={customerData.street}
-                          onChange={(e) => setCustomerData({...customerData, street: e.target.value})}
+                          onChange={(e) => setCustomerData({ ...customerData, street: e.target.value })}
                           onBlur={() => handleFieldBlur('street')}
-                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                            shouldShowError('street', customerData.street) ? 'border-red-500' : 'border-cloud-200'
-                          }`}
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('street', customerData.street) ? 'border-red-500' : 'border-cloud-200'
+                            }`}
                           placeholder="Nome da rua"
                           required
                         />
@@ -680,11 +670,10 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           value={customerData.number}
-                          onChange={(e) => setCustomerData({...customerData, number: e.target.value})}
+                          onChange={(e) => setCustomerData({ ...customerData, number: e.target.value })}
                           onBlur={() => handleFieldBlur('number')}
-                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                            shouldShowError('number', customerData.number) ? 'border-red-500' : 'border-cloud-200'
-                          }`}
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('number', customerData.number) ? 'border-red-500' : 'border-cloud-200'
+                            }`}
                           placeholder="123"
                           required
                         />
@@ -694,7 +683,7 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           value={customerData.complement}
-                          onChange={(e) => setCustomerData({...customerData, complement: e.target.value})}
+                          onChange={(e) => setCustomerData({ ...customerData, complement: e.target.value })}
                           className="w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border border-cloud-200 rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base"
                           placeholder="Apto, bloco, etc."
                         />
@@ -704,11 +693,10 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           value={customerData.neighborhood}
-                          onChange={(e) => setCustomerData({...customerData, neighborhood: e.target.value})}
+                          onChange={(e) => setCustomerData({ ...customerData, neighborhood: e.target.value })}
                           onBlur={() => handleFieldBlur('neighborhood')}
-                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                            shouldShowError('neighborhood', customerData.neighborhood) ? 'border-red-500' : 'border-cloud-200'
-                          }`}
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('neighborhood', customerData.neighborhood) ? 'border-red-500' : 'border-cloud-200'
+                            }`}
                           placeholder="Nome do bairro"
                           required
                         />
@@ -718,11 +706,10 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           value={customerData.city}
-                          onChange={(e) => setCustomerData({...customerData, city: e.target.value})}
+                          onChange={(e) => setCustomerData({ ...customerData, city: e.target.value })}
                           onBlur={() => handleFieldBlur('city')}
-                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                            shouldShowError('city', customerData.city) ? 'border-red-500' : 'border-cloud-200'
-                          }`}
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('city', customerData.city) ? 'border-red-500' : 'border-cloud-200'
+                            }`}
                           placeholder="Nome da cidade"
                           required
                         />
@@ -732,11 +719,10 @@ export default function CheckoutPage() {
                         <input
                           type="text"
                           value={customerData.state}
-                          onChange={(e) => setCustomerData({...customerData, state: e.target.value})}
+                          onChange={(e) => setCustomerData({ ...customerData, state: e.target.value })}
                           onBlur={() => handleFieldBlur('state')}
-                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${
-                            shouldShowError('state', customerData.state) ? 'border-red-500' : 'border-cloud-200'
-                          }`}
+                          className={`w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-white border rounded-lg text-sage-900 placeholder-sage-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-sm sm:text-base ${shouldShowError('state', customerData.state) ? 'border-red-500' : 'border-cloud-200'
+                            }`}
                           placeholder="UF"
                           required
                         />
@@ -772,11 +758,10 @@ export default function CheckoutPage() {
                     {paymentMethods.map((method) => (
                       <div
                         key={method.id}
-                        className={`p-3 sm:p-4 rounded-lg border cursor-pointer transition-colors ${
-                          selectedPaymentMethod === method.id
+                        className={`p-3 sm:p-4 rounded-lg border cursor-pointer transition-colors ${selectedPaymentMethod === method.id
                             ? 'border-primary-500 bg-primary-50 shadow-sm'
                             : 'border-cloud-200 hover:border-primary-300 bg-white'
-                        }`}
+                          }`}
                         onClick={() => setSelectedPaymentMethod(method.id)}
                       >
                         <div className="flex items-center gap-2 sm:gap-3">
@@ -789,11 +774,10 @@ export default function CheckoutPage() {
                             <h3 className="font-semibold text-sage-900 text-sm sm:text-base">{method.name}</h3>
                             <p className="text-xs sm:text-sm text-sage-700">{method.description}</p>
                           </div>
-                          <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex-shrink-0 ${
-                            selectedPaymentMethod === method.id
+                          <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex-shrink-0 ${selectedPaymentMethod === method.id
                               ? 'border-primary-500 bg-primary-500'
                               : 'border-cloud-300'
-                          }`}>
+                            }`}>
                             {selectedPaymentMethod === method.id && (
                               <div className="w-full h-full rounded-full bg-white scale-50" />
                             )}
@@ -836,116 +820,116 @@ export default function CheckoutPage() {
                   <div className="bg-white border border-cloud-100 rounded-lg p-3 sm:p-4 shadow-sm">
                     <h3 className="font-semibold text-sage-900 mb-2 sm:mb-3 text-sm sm:text-base">Resumo do Pedido</h3>
                     <div className="space-y-2 text-xs sm:text-sm text-sage-800">
-                       <div className="flex justify-between">
-                         <span>Itens:</span>
-                         <span>{cartState.itemCount} produto{cartState.itemCount !== 1 ? 's' : ''}</span>
-                       </div>
-                       <div className="flex justify-between">
-                         <span>Subtotal:</span>
+                      <div className="flex justify-between">
+                        <span>Itens:</span>
+                        <span>{cartState.itemCount} produto{cartState.itemCount !== 1 ? 's' : ''}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Subtotal:</span>
                         <span>R$ {cartState.total.toFixed(2).replace('.', ',')}</span>
-                       </div>
-                       <div className="flex justify-between">
-                         <span>Frete:</span>
-                         <span>
-                           {selectedShipping ? (
-                             <>R$ {selectedShipping.price.toFixed(2).replace('.', ',')}</>
-                           ) : (
-                             <span className="text-sage-500">Não selecionado</span>
-                           )}
-                         </span>
-                       </div>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Frete:</span>
+                        <span>
+                          {selectedShipping ? (
+                            <>R$ {selectedShipping.price.toFixed(2).replace('.', ',')}</>
+                          ) : (
+                            <span className="text-sage-500">Não selecionado</span>
+                          )}
+                        </span>
+                      </div>
                       <div className="border-t border-cloud-200 pt-2 mt-2">
                         <div className="flex justify-between font-semibold text-sage-900">
-                           <span>Total Final:</span>
+                          <span>Total Final:</span>
                           <span className="text-base sm:text-lg text-primary-600">R$ {total.toFixed(2).replace('.', ',')}</span>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                   {!authenticated && (
-                     <motion.div
-                       initial={{ opacity: 0, y: 20 }}
-                       animate={{ opacity: 1, y: 0 }}
-                       className="bg-white border border-cloud-100 rounded-lg p-4 sm:p-6 shadow-sm"
-                     >
-                       <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                         <Warning size={20} className="text-yellow-600 sm:w-6 sm:h-6 flex-shrink-0" />
-                         <h3 className="text-base sm:text-lg font-semibold text-sage-900">Importante para Usuários sem Conta</h3>
-                       </div>
-                       <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-                         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
-                           <p className="text-yellow-800 text-xs sm:text-sm leading-relaxed">
-                             <strong>⚠️ Atenção:</strong> Como você não está logado em uma conta, algumas funcionalidades estarão limitadas:
-                           </p>
-                           <ul className="mt-2 space-y-1 text-yellow-700 text-xs sm:text-sm">
-                             <li>• Não será possível acompanhar o pedido na seção &quot;Meus Pedidos&quot;</li>
-                             <li>• O histórico de compras não ficará salvo no site</li>
-                             <li>• Não será possível alterar dados do pedido após a compra</li>
-                           </ul>
-                         </div>
-                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
-                           <p className="text-blue-800 text-xs sm:text-sm leading-relaxed">
-                             <strong>📧 Boa notícia:</strong> Quando seu pedido for despachado, você receberá um e-mail com:
-                           </p>
-                           <ul className="mt-2 space-y-1 text-blue-700 text-xs sm:text-sm">
-                             <li>• Código de rastreio completo</li>
-                             <li>• Link direto para o 17Track</li>
-                             <li>• Instruções para rastreio manual no site</li>
-                             <li>• Todas as informações do pedido</li>
-                           </ul>
-                         </div>
-                       </div>
-                       <div className="space-y-2.5 sm:space-y-3">
-                         <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
-                           <input
-                             type="checkbox"
-                             checked={guestChecklist.acceptTerms}
-                             onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptTerms: e.target.checked }))}
-                             className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2 flex-shrink-0"
-                           />
-                           <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
-                             <span className="text-primary-600 font-medium">Aceito os termos de compra</span> e entendo que não estarei logado em uma conta
-                           </span>
-                         </label>
-                         <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
-                           <input
-                             type="checkbox"
-                             checked={guestChecklist.acceptTracking}
-                             onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptTracking: e.target.checked }))}
-                             className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2 flex-shrink-0"
-                           />
-                           <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
-                             <span className="text-primary-600 font-medium">Aceito receber o código de rastreio por e-mail</span> quando o pedido for despachado
-                           </span>
-                         </label>
-                         <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
-                           <input
-                             type="checkbox"
-                             checked={guestChecklist.acceptPrivacy}
-                             onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptPrivacy: e.target.checked }))}
-                             className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-2 focus:ring-primary-500 flex-shrink-0"
-                           />
-                           <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
-                             <span className="text-primary-600 font-medium">Aceito a política de privacidade</span> e autorizo o uso dos meus dados para processamento do pedido
-                           </span>
-                         </label>
-                       </div>
-                       {Object.values(guestChecklist).every(accepted => accepted) && (
-                         <motion.div
-                           initial={{ opacity: 0, scale: 0.95 }}
-                           animate={{ opacity: 1, scale: 1 }}
-                           className="mt-3 sm:mt-4 bg-green-50 border border-green-200 rounded-lg p-2.5 sm:p-3"
-                         >
-                           <div className="flex items-center gap-2 text-green-700 text-xs sm:text-sm">
-                             <CheckCircle size={14} className="text-green-600 sm:w-4 sm:h-4 flex-shrink-0" />
-                             <span>
-                               <strong>Perfeito!</strong> Todos os termos foram aceitos. Você pode prosseguir com a compra.
-                             </span>
-                           </div>
-                         </motion.div>
-                       )}
-                     </motion.div>
-                   )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {!authenticated && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-white border border-cloud-100 rounded-lg p-4 sm:p-6 shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                        <Warning size={20} className="text-yellow-600 sm:w-6 sm:h-6 flex-shrink-0" />
+                        <h3 className="text-base sm:text-lg font-semibold text-sage-900">Importante para Usuários sem Conta</h3>
+                      </div>
+                      <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
+                          <p className="text-yellow-800 text-xs sm:text-sm leading-relaxed">
+                            <strong>⚠️ Atenção:</strong> Como você não está logado em uma conta, algumas funcionalidades estarão limitadas:
+                          </p>
+                          <ul className="mt-2 space-y-1 text-yellow-700 text-xs sm:text-sm">
+                            <li>• Não será possível acompanhar o pedido na seção &quot;Meus Pedidos&quot;</li>
+                            <li>• O histórico de compras não ficará salvo no site</li>
+                            <li>• Não será possível alterar dados do pedido após a compra</li>
+                          </ul>
+                        </div>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+                          <p className="text-blue-800 text-xs sm:text-sm leading-relaxed">
+                            <strong>📧 Boa notícia:</strong> Quando seu pedido for despachado, você receberá um e-mail com:
+                          </p>
+                          <ul className="mt-2 space-y-1 text-blue-700 text-xs sm:text-sm">
+                            <li>• Código de rastreio completo</li>
+                            <li>• Link direto para o 17Track</li>
+                            <li>• Instruções para rastreio manual no site</li>
+                            <li>• Todas as informações do pedido</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="space-y-2.5 sm:space-y-3">
+                        <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={guestChecklist.acceptTerms}
+                            onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptTerms: e.target.checked }))}
+                            className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2 flex-shrink-0"
+                          />
+                          <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
+                            <span className="text-primary-600 font-medium">Aceito os termos de compra</span> e entendo que não estarei logado em uma conta
+                          </span>
+                        </label>
+                        <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={guestChecklist.acceptTracking}
+                            onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptTracking: e.target.checked }))}
+                            className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-primary-500 focus:ring-2 flex-shrink-0"
+                          />
+                          <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
+                            <span className="text-primary-600 font-medium">Aceito receber o código de rastreio por e-mail</span> quando o pedido for despachado
+                          </span>
+                        </label>
+                        <label className="flex items-start gap-2 sm:gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={guestChecklist.acceptPrivacy}
+                            onChange={(e) => setGuestChecklist(prev => ({ ...prev, acceptPrivacy: e.target.checked }))}
+                            className="mt-0.5 sm:mt-1 w-4 h-4 text-primary-500 bg-white border-cloud-300 rounded focus:ring-2 focus:ring-primary-500 flex-shrink-0"
+                          />
+                          <span className="text-xs sm:text-sm text-sage-800 leading-relaxed">
+                            <span className="text-primary-600 font-medium">Aceito a política de privacidade</span> e autorizo o uso dos meus dados para processamento do pedido
+                          </span>
+                        </label>
+                      </div>
+                      {Object.values(guestChecklist).every(accepted => accepted) && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="mt-3 sm:mt-4 bg-green-50 border border-green-200 rounded-lg p-2.5 sm:p-3"
+                        >
+                          <div className="flex items-center gap-2 text-green-700 text-xs sm:text-sm">
+                            <CheckCircle size={14} className="text-green-600 sm:w-4 sm:h-4 flex-shrink-0" />
+                            <span>
+                              <strong>Perfeito!</strong> Todos os termos foram aceitos. Você pode prosseguir com a compra.
+                            </span>
+                          </div>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  )}
                   <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 pt-4 sm:pt-6">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
@@ -1060,10 +1044,10 @@ export default function CheckoutPage() {
                     )}
                   </span>
                 </div>
-                 <div className="flex justify-between text-base sm:text-lg font-bold text-sage-900 border-t border-cloud-200 pt-2 sm:pt-3">
-                   <span>Total Final</span>
-                   <span className="text-primary-600">R$ {total.toFixed(2).replace('.', ',')}</span>
-                 </div>
+                <div className="flex justify-between text-base sm:text-lg font-bold text-sage-900 border-t border-cloud-200 pt-2 sm:pt-3">
+                  <span>Total Final</span>
+                  <span className="text-primary-600">R$ {total.toFixed(2).replace('.', ',')}</span>
+                </div>
               </div>
               <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
                 <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-sage-800">

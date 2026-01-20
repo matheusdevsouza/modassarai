@@ -61,7 +61,7 @@ export default function TermosDeUso() {
               <FaGavel className="text-primary-600" size={24} />
               <h2 className="text-xl font-semibold text-sage-900">1. Aceitação dos Termos</h2>
             </div>
-            <p className="text-sage-800">Ao acessar o site Modas Saraí, você concorda em cumprir estes Termos de Uso e todas as leis e regulamentos aplicáveis.</p>
+            <p className="text-sage-800">Ao acessar o site Luxúria Modas, você concorda em cumprir estes Termos de Uso e todas as leis e regulamentos aplicáveis.</p>
           </motion.div>
           <motion.div
             className="bg-primary-50 rounded-2xl p-8 shadow-sm"

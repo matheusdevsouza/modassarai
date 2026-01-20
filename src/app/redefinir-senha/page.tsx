@@ -113,7 +113,7 @@ function ResetPasswordInner() {
       <div className="w-full max-w-md bg-primary-50 rounded-xl shadow-xl p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Luxúria Modas Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-semibold text-sage-900 mb-2 text-center">Redefinir Senha</h1>
           <p className="text-sage-800 text-center text-sm">Crie uma nova senha para sua conta.</p>
@@ -121,8 +121,8 @@ function ResetPasswordInner() {
 
         {message && (
           <div className={`p-4 rounded-lg text-sm ${message.type === 'success'
-              ? 'bg-green-50 border border-green-200 text-green-700'
-              : 'bg-red-50 border border-red-200 text-red-700'
+            ? 'bg-green-50 border border-green-200 text-green-700'
+            : 'bg-red-50 border border-red-200 text-red-700'
             }`}>
             {message.text}
           </div>
@@ -162,8 +162,8 @@ function ResetPasswordInner() {
                     />
                   </div>
                   <span className={`text-xs font-medium ${passwordValidation.strength <= 2 ? 'text-red-600' :
-                      passwordValidation.strength <= 3 ? 'text-yellow-600' :
-                        passwordValidation.strength <= 4 ? 'text-blue-600' : 'text-green-600'
+                    passwordValidation.strength <= 3 ? 'text-yellow-600' :
+                      passwordValidation.strength <= 4 ? 'text-blue-600' : 'text-green-600'
                     }`}>
                     {getPasswordStrengthText(passwordValidation.strength)}
                   </span>

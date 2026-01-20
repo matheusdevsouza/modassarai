@@ -131,18 +131,18 @@ export async function sendVerificationEmail(data: VerificationEmailData): Promis
     greeting: 'Olá',
     name: data.name,
     content: `
-      <p style="margin: 0 0 16px 0;">Obrigado por se cadastrar na <strong style="color: #0F4024;">Modas Saraí</strong>! Estamos muito felizes em tê-lo(a) conosco.</p>
+      <p style="margin: 0 0 16px 0;">Obrigado por se cadastrar na <strong style="color: #0F4024;">Luxúria Modas</strong>! Estamos muito felizes em tê-lo(a) conosco.</p>
       <p style="margin: 0;">Para ativar sua conta e começar a aproveitar todos os benefícios, clique no botão abaixo para verificar seu endereço de e-mail.</p>
     `,
     buttonText: 'Verificar E-mail',
     buttonUrl: verificationUrl,
     expiryTime: '24 horas',
-    footerNote: 'Se você não criou uma conta na Modas Saraí, pode ignorar este e-mail com segurança.',
+    footerNote: 'Se você não criou uma conta na Luxúria Modas, pode ignorar este e-mail com segurança.',
   });
   const mailOptions = {
-    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Luxúria Modas" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: "Verifique sua conta - Modas Saraí",
+    subject: "Verifique sua conta - Luxúria Modas",
     html,
   };
   try {
@@ -161,7 +161,7 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
     greeting: 'Olá',
     name: data.name,
     content: `
-      <p style="margin: 0 0 16px 0;">Recebemos uma solicitação para redefinir a senha da sua conta na <strong style="color: #0F4024;">Modas Saraí</strong>.</p>
+      <p style="margin: 0 0 16px 0;">Recebemos uma solicitação para redefinir a senha da sua conta na <strong style="color: #0F4024;">Luxúria Modas</strong>.</p>
       <p style="margin: 0;">Clique no botão abaixo para criar uma nova senha segura.</p>
     `,
     buttonText: 'Redefinir Senha',
@@ -170,9 +170,9 @@ export async function sendPasswordResetEmail(data: PasswordResetEmailData): Prom
     footerNote: 'Se você não solicitou a redefinição de senha, pode ignorar este e-mail com segurança. Sua senha permanecerá inalterada.',
   });
   const mailOptions = {
-    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Luxúria Modas" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: "Redefinir Senha - Modas Saraí",
+    subject: "Redefinir Senha - Luxúria Modas",
     html,
   };
   await transporter.sendMail(mailOptions);
@@ -211,9 +211,9 @@ export async function sendTrackingEmail(data: TrackingEmailData): Promise<void> 
     buttonUrl: data.trackingUrl,
   });
   const mailOptions = {
-    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Luxúria Modas" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Rastreamento do Pedido ${data.orderNumber} - Modas Saraí`,
+    subject: `Rastreamento do Pedido ${data.orderNumber} - Luxúria Modas`,
     html,
   };
   await transporter.sendMail(mailOptions);
@@ -268,13 +268,13 @@ export async function sendPaymentConfirmationEmail(data: PaymentConfirmationEmai
           <li>Acompanhe o status do seu pedido em sua conta</li>
         </ul>
       </div>
-      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Modas Saraí</strong>!</p>
+      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Luxúria Modas</strong>!</p>
     `,
   });
   const mailOptions = {
-    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Luxúria Modas" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Pagamento Aprovado - Pedido ${data.orderNumber} - Modas Saraí`,
+    subject: `Pagamento Aprovado - Pedido ${data.orderNumber} - Luxúria Modas`,
     html,
   };
   await transporter.sendMail(mailOptions);
@@ -319,15 +319,15 @@ export async function sendOrderShippedEmail(data: OrderShippedEmailData): Promis
           <li>Em caso de dúvidas, entre em contato conosco através do nosso site</li>
         </ul>
       </div>
-      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Modas Saraí</strong>!</p>
+      <p style="margin: 20px 0 0 0; color: #4B5563; font-size: 15px;">Obrigado por escolher a <strong style="color: #0F4024;">Luxúria Modas</strong>!</p>
     `,
     buttonText: 'Rastrear Pedido',
     buttonUrl: data.trackingUrl,
   });
   const mailOptions = {
-    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Luxúria Modas" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Seu Pedido Foi Enviado! - ${data.orderNumber} - Modas Saraí`,
+    subject: `Seu Pedido Foi Enviado! - ${data.orderNumber} - Luxúria Modas`,
     html,
   };
   await transporter.sendMail(mailOptions);
@@ -340,7 +340,7 @@ export async function send2FACodeEmail(data: TwoFactorCodeEmailData): Promise<vo
     greeting: 'Olá',
     name: data.name,
     content: `
-      <p style="margin: 0 0 20px 0;">Você solicitou acesso à sua conta na <strong style="color: #0F4024;">Modas Saraí</strong>.</p>
+      <p style="margin: 0 0 20px 0;">Você solicitou acesso à sua conta na <strong style="color: #0F4024;">Luxúria Modas</strong>.</p>
       
       <div style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); border: 2px solid #86EFAC; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center;">
         <p style="margin: 0 0 12px 0; color: #166534; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Seu Código de Verificação</p>
@@ -354,7 +354,7 @@ export async function send2FACodeEmail(data: TwoFactorCodeEmailData): Promise<vo
         <p style="margin: 0 0 8px 0; color: #1F2937; font-size: 15px; font-weight: 600;">⚠️ Importante:</p>
         <ul style="margin: 0; padding-left: 20px; color: #4B5563; font-size: 14px; line-height: 1.8;">
           <li>Nunca compartilhe este código com ninguém</li>
-          <li>A Modas Saraí nunca pedirá seu código por telefone ou e-mail</li>
+          <li>A Luxúria Modas nunca pedirá seu código por telefone ou e-mail</li>
           <li>Se você não solicitou este código, ignore este e-mail e altere sua senha imediatamente</li>
         </ul>
       </div>
@@ -368,9 +368,9 @@ export async function send2FACodeEmail(data: TwoFactorCodeEmailData): Promise<vo
   });
 
   const mailOptions = {
-    from: `"Modas Saraí" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
+    from: `"Luxúria Modas" <${process.env.SMTP_FROM || process.env.EMAIL_FROM}>`,
     to: data.email,
-    subject: `Código de Verificação - ${data.code} - Modas Saraí`,
+    subject: `Código de Verificação - ${data.code} - Luxúria Modas`,
     html,
   };
 

@@ -10,9 +10,9 @@ const heroImages = [
     imageUrl: 'https://images.unsplash.com/photo-1564485377539-4af72d1f6a2f?auto=format&fit=crop&w=1920&q=80',
     mobileImageUrl: 'https://images.unsplash.com/photo-1564485377539-4af72d1f6a2f?auto=format&fit=crop&w=768&q=80',
     alt: 'Nova Coleção Feminina',
-    title: 'NOVA COLEÇÃO',
-    subtitle: 'Descubra as tendências da estação',
-    cta: 'CONFIRA',
+    title: 'Sua Essência, Seu Estilo',
+    subtitle: 'Uma curadoria exclusiva que une sofisticação e leveza para realçar sua autenticidade.',
+    cta: 'Explorar Coleção',
     link: '/produtos'
   },
   {
@@ -20,9 +20,9 @@ const heroImages = [
     imageUrl: 'https://images.unsplash.com/photo-1512101903502-7eb0c9022c74?q=80&w=1887&auto=format&fit=crop',
     mobileImageUrl: 'https://images.unsplash.com/photo-1512101903502-7eb0c9022c74?q=80&w=768&auto=format&fit=crop',
     alt: 'Vestidos Elegantes',
-    title: 'VESTIDOS',
-    subtitle: 'Elegância para todos os momentos',
-    cta: 'COMPRAR AGORA',
+    title: 'Elegância em Movimento',
+    subtitle: 'Peças fluidas e cortes impecáveis desenhados para mulheres que inspiram presença.',
+    cta: 'Ver Vestidos',
     link: '/produtos?categoria=vestidos'
   }
 ]
@@ -71,20 +71,20 @@ export function HeroSection() {
             src={isMobile ? heroImages[currentImage].mobileImageUrl : heroImages[currentImage].imageUrl}
             alt={heroImages[currentImage].alt}
             fill
-            className="object-cover brightness-90"
+            className="object-cover brightness-75"
             priority={true}
           />
-          {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-black/40" />
+          {/* Enhanced Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-black/60" />
 
           {/* Content */}
           <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-16 container mx-auto">
-            <div className="max-w-md text-white drop-shadow-md">
+            <div className="max-w-2xl text-white drop-shadow-md">
               <motion.h2
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
+                className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
               >
                 {heroImages[currentImage].title}
               </motion.h2>
@@ -92,7 +92,7 @@ export function HeroSection() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="text-base sm:text-lg mb-8 font-medium"
+                className="text-base sm:text-lg lg:text-xl mb-10 font-light max-w-lg leading-relaxed text-gray-100"
               >
                 {heroImages[currentImage].subtitle}
               </motion.p>
@@ -103,7 +103,7 @@ export function HeroSection() {
               >
                 <Link
                   href={heroImages[currentImage].link}
-                  className="inline-block bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-black hover:text-white transition-all duration-300 text-sm shadow-lg"
+                  className="inline-block bg-white text-black font-semibold py-4 px-10 rounded-full hover:bg-gray-200 transition-all duration-300 text-sm tracking-wide shadow-xl transform hover:-translate-y-1"
                 >
                   {heroImages[currentImage].cta}
                 </Link>

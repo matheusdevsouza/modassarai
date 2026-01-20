@@ -114,7 +114,7 @@ export default function CriarContaPage() {
       <div className="w-full max-w-md bg-white rounded-xl shadow-sm border border-gray-100 p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center gap-2">
           <div className="relative w-16 h-16 mb-2">
-            <Image src="/images/logo.png" alt="Modas Saraí Logo" fill sizes="64px" className="object-contain" priority />
+            <Image src="/images/logo.png" alt="Luxúria Modas Logo" fill sizes="64px" className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-bold text-[#333333] mb-2 text-center">Criar uma conta</h1>
           <p className="text-gray-600 text-center text-sm">Preencha os campos abaixo para se cadastrar.</p>

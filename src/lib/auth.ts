@@ -7,10 +7,10 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 if (!process.env.JWT_SECRET) {
   throw new Error('ERRO CRÍTICO DE SEGURANÇA: A variável de ambiente JWT_SECRET não está definida. O servidor não pode iniciar sem ela.');
 }
-const JWT_EXPIRES_IN = '24h'; 
+const JWT_EXPIRES_IN = '24h';
 const REFRESH_TOKEN_EXPIRES_IN = '7d';
 const MAX_LOGIN_ATTEMPTS = 5;
-const LOCKOUT_DURATION = 15 * 60 * 1000; 
+const LOCKOUT_DURATION = 15 * 60 * 1000;
 const PASSWORD_HISTORY_SIZE = 5;
 const loginAttempts = new Map<string, { count: number; lockoutUntil: number }>();
 const passwordHistory = new Map<number, string[]>();
@@ -30,7 +30,7 @@ export interface RefreshTokenPayload {
   tokenVersion: number;
 }
 export async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 15; 
+  const saltRounds = 15;
   return await bcrypt.hash(password, saltRounds);
 }
 export async function comparePassword(password: string, hashedPassword: string): Promise<boolean> {
@@ -84,9 +84,9 @@ export function checkLoginRateLimit(identifier: string): { allowed: boolean; rem
     return { allowed: true, remainingTime: 0 };
   }
   if (attempt.lockoutUntil > now) {
-    return { 
-      allowed: false, 
-      remainingTime: Math.ceil((attempt.lockoutUntil - now) / 1000) 
+    return {
+      allowed: false,
+      remainingTime: Math.ceil((attempt.lockoutUntil - now) / 1000)
     };
   }
   if (attempt.count >= MAX_LOGIN_ATTEMPTS) {
@@ -118,11 +118,11 @@ export function generateToken(payload: Omit<JWTPayload, 'iat' | 'exp' | 'session
     sessionId,
     iat: Math.floor(Date.now() / 1000),
   };
-  return jwt.sign(tokenPayload, JWT_SECRET, { 
+  return jwt.sign(tokenPayload, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN,
-    algorithm: 'HS512', 
-    issuer: 'mariapistache',
-    audience: 'mariapistache-users'
+    algorithm: 'HS512',
+    issuer: 'luxuriamodas',
+    audience: 'luxuriamodas-users'
   });
 }
 export function generateRefreshToken(userId: number, sessionId: string): string {
@@ -131,19 +131,19 @@ export function generateRefreshToken(userId: number, sessionId: string): string 
     sessionId,
     tokenVersion: Date.now()
   };
-  return jwt.sign(payload, JWT_SECRET, { 
+  return jwt.sign(payload, JWT_SECRET, {
     expiresIn: REFRESH_TOKEN_EXPIRES_IN,
     algorithm: 'HS512',
-    issuer: 'mariapistache',
-    audience: 'mariapistache-refresh'
+    issuer: 'luxuriamodas',
+    audience: 'luxuriamodas-refresh'
   });
 }
 export function verifyToken(token: string): JWTPayload | null {
   try {
     const payload = jwt.verify(token, JWT_SECRET, {
       algorithms: ['HS512'],
-      issuer: 'mariapistache',
-      audience: 'mariapistache-users'
+      issuer: 'luxuriamodas',
+      audience: 'luxuriamodas-users'
     }) as unknown as JWTPayload;
     return payload;
   } catch (error) {
@@ -154,8 +154,8 @@ export function verifyRefreshToken(token: string): RefreshTokenPayload | null {
   try {
     return jwt.verify(token, JWT_SECRET, {
       algorithms: ['HS512'],
-      issuer: 'mariapistache',
-      audience: 'mariapistache-refresh'
+      issuer: 'luxuriamodas',
+      audience: 'luxuriamodas-refresh'
     }) as unknown as RefreshTokenPayload;
   } catch (error) {
     return null;
@@ -173,7 +173,7 @@ export function invalidateAllUserSessions(userId: number): void {
 }
 export function cleanupInactiveSessions(): void {
   const now = Date.now();
-  const maxInactiveTime = 24 * 60 * 60 * 1000; 
+  const maxInactiveTime = 24 * 60 * 60 * 1000;
   for (const [sessionId, session] of Array.from(activeSessions.entries())) {
     if (now - session.lastActivity > maxInactiveTime) {
       activeSessions.delete(sessionId);
@@ -184,16 +184,16 @@ export function setAuthCookie(response: NextResponse, token: string, refreshToke
   response.cookies.set('auth-token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax', 
-    maxAge: 24 * 60 * 60, 
+    sameSite: 'lax',
+    maxAge: 24 * 60 * 60,
     path: '/',
   });
   if (refreshToken) {
     response.cookies.set('refresh-token', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax', 
-      maxAge: 7 * 24 * 60 * 60, 
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
       path: '/api/auth/refresh',
     });
   }
@@ -201,7 +201,7 @@ export function setAuthCookie(response: NextResponse, token: string, refreshToke
 }
 export function clearAuthCookies(response: NextResponse, request?: NextRequest): NextResponse {
   const isProduction = process.env.NODE_ENV === 'production';
-  
+
   if (request) {
     const token = getTokenFromRequest(request);
     if (token) {
@@ -214,15 +214,15 @@ export function clearAuthCookies(response: NextResponse, request?: NextRequest):
       }
     }
   }
-  
+
   const secureFlag = isProduction ? '; Secure' : '';
   const sameSiteFlag = '; SameSite=Lax';
-  
+
   const headers = response.headers;
   headers.append('Set-Cookie', `auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly${sameSiteFlag}${secureFlag}`);
   headers.append('Set-Cookie', `auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly${sameSiteFlag}${secureFlag}`);
   headers.append('Set-Cookie', `refresh-token=; Path=/api/auth/refresh; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly${sameSiteFlag}${secureFlag}`);
-  
+
   response.cookies.delete('auth-token');
   response.cookies.set('auth-token', '', {
     httpOnly: true,
@@ -232,7 +232,7 @@ export function clearAuthCookies(response: NextResponse, request?: NextRequest):
     path: '/',
     expires: new Date(0),
   });
-  
+
   response.cookies.delete('refresh-token');
   response.cookies.set('refresh-token', '', {
     httpOnly: true,
@@ -242,7 +242,7 @@ export function clearAuthCookies(response: NextResponse, request?: NextRequest):
     path: '/api/auth/refresh',
     expires: new Date(0),
   });
-  
+
   return response;
 }
 export function getTokenFromRequest(request: NextRequest): string | null {
@@ -283,7 +283,7 @@ export function isEmailVerified(payload: JWTPayload | null): boolean {
 }
 export function canAccessProtectedPages(payload: JWTPayload | null): boolean {
   return isAuthenticated(payload) && isEmailVerified(payload);
-} 
+}
 export function isAdmin(payload: JWTPayload | null): boolean {
   return payload?.isAdmin || false;
 }
@@ -295,13 +295,13 @@ export async function verifyAdminFromDatabase(userId: number, queryFunction: Fun
       return false;
     }
     const dbValue = users[0].is_admin;
-    
+
     let isAdmin = false;
-    
+
     if (dbValue === null || dbValue === undefined) {
       return false;
     }
-    
+
     if (dbValue === true || dbValue === 1 || dbValue === '1' || dbValue === 't' || dbValue === 'T') {
       isAdmin = true;
     }
@@ -315,7 +315,7 @@ export async function verifyAdminFromDatabase(userId: number, queryFunction: Fun
     else if (typeof dbValue === 'boolean') {
       isAdmin = dbValue === true;
     }
-    
+
     return isAdmin;
   } catch (error) {
     console.error(`[VERIFY_ADMIN] Erro ao verificar admin no banco de dados para userId ${userId}:`, error);
@@ -332,7 +332,7 @@ export async function verifyAdminAccess(user: JWTPayload | null, queryFunction: 
   if (!user || !user.userId) {
     return false;
   }
-  
+
   let userId: number;
   if (typeof user.userId === 'number') {
     userId = user.userId;
@@ -344,13 +344,13 @@ export async function verifyAdminAccess(user: JWTPayload | null, queryFunction: 
   } else {
     return false;
   }
-  
+
   if (userId <= 0 || !Number.isInteger(userId)) {
     return false;
   }
-  
+
   const dbIsAdmin = await verifyAdminFromDatabase(userId, queryFunction);
-  
+
   return dbIsAdmin;
 }
 export function canAccessResource(payload: JWTPayload | null, resourceOwnerId: number): boolean {

@@ -118,7 +118,7 @@ export function Header() {
           <Link href="/" className="relative w-32 h-8 sm:w-40 sm:h-10 flex-shrink-0">
             <Image
               src="/images/logo.png"
-              alt="Modas Saraí"
+              alt="Luxúria Modas"
               fill
               className="object-contain object-left md:object-center lg:object-left"
               priority

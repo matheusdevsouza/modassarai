@@ -26,7 +26,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
     case 'ADD_ITEM': {
       const { product, quantity = 1, size, color, image } = action.payload
-      
+
       const hasSizes = (product as any).sizes && Array.isArray((product as any).sizes) && (product as any).sizes.length > 0
       if (hasSizes) {
         if (!size || (typeof size === 'string' && (size.trim() === '' || size === 'Selecione'))) {
@@ -34,14 +34,14 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
           if (typeof window !== 'undefined') {
             alert('Por favor, selecione um tamanho antes de adicionar ao carrinho.')
           }
-          return state 
+          return state
         }
       }
-      
-      const existingItem = state.items.find(item => 
-        item.product.id === product.id && 
-        item.size === size && 
-        item.color === color && 
+
+      const existingItem = state.items.find(item =>
+        item.product.id === product.id &&
+        item.size === size &&
+        item.color === color &&
         item.image === image
       )
       let newItems: CartItem[]
@@ -129,34 +129,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false)
   useEffect(() => {
     if (typeof window !== 'undefined') {
-    const savedCart = localStorage.getItem('mariapistache_cart')
-    if (savedCart) {
-      try {
-        const cartData = JSON.parse(savedCart)
-        if (Array.isArray(cartData)) {
-          try {
-            const restoredItems = restoreCartFromStorage(cartData)
-            if (restoredItems.length > 0) {
-              dispatch({ type: 'LOAD_CART', payload: restoredItems })
+      const savedCart = localStorage.getItem('luxuriamodas_cart')
+      if (savedCart) {
+        try {
+          const cartData = JSON.parse(savedCart)
+          if (Array.isArray(cartData)) {
+            try {
+              const restoredItems = restoreCartFromStorage(cartData)
+              if (restoredItems.length > 0) {
+                dispatch({ type: 'LOAD_CART', payload: restoredItems })
+              }
+            } catch (error) {
+
+              localStorage.removeItem('luxuriamodas_cart')
             }
-          } catch (error) {
+          } else if (cartData.items && Array.isArray(cartData.items)) {
+            try {
+              const restoredItems = restoreCartFromStorage(cartData.items)
+              if (restoredItems.length > 0) {
+                dispatch({ type: 'LOAD_CART', payload: restoredItems })
+              }
+            } catch (error) {
 
-            localStorage.removeItem('mariapistache_cart')
-          }
-        } else if (cartData.items && Array.isArray(cartData.items)) {
-          try {
-            const restoredItems = restoreCartFromStorage(cartData.items)
-            if (restoredItems.length > 0) {
-              dispatch({ type: 'LOAD_CART', payload: restoredItems })
+              localStorage.removeItem('luxuriamodas_cart')
             }
-          } catch (error) {
-
-            localStorage.removeItem('mariapistache_cart')
           }
-        }
-      } catch (error) {
+        } catch (error) {
 
-          localStorage.removeItem('mariapistache_cart')
+          localStorage.removeItem('luxuriamodas_cart')
         }
       }
       setIsLoaded(true)
@@ -245,16 +245,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         itemCount: state.itemCount,
         lastUpdated: new Date().toISOString()
       }
-      localStorage.setItem('mariapistache_cart', JSON.stringify(cartData))
+      localStorage.setItem('luxuriamodas_cart', JSON.stringify(cartData))
     }
   }, [state, isLoaded])
   const addItem = (product: Product, quantity: number = 1, size?: string, color?: string, image?: string) => {
     dispatch({ type: 'ADD_ITEM', payload: { product, quantity, size, color, image } })
-    
+
     if (typeof window !== 'undefined' && product.id) {
       const cartKey = `cart_stat_${product.id}_${size || 'unico'}`
       const alreadyRecorded = sessionStorage.getItem(cartKey)
-      
+
       if (!alreadyRecorded) {
         sessionStorage.setItem(cartKey, 'true')
         const productIdentifier = (product as any).slug || product.id;
@@ -277,7 +277,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = () => {
     dispatch({ type: 'CLEAR_CART' })
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('mariapistache_cart')
+      localStorage.removeItem('luxuriamodas_cart')
     }
   }
   const getItemQuantity = (productId: string): number => {
@@ -306,12 +306,12 @@ export function useCart() {
     if (typeof window === 'undefined') {
       return {
         state: { items: [], total: 0, itemCount: 0 },
-        addItem: () => {},
-        removeItem: () => {},
-        updateQuantity: () => {},
-        clearCart: () => {},
+        addItem: () => { },
+        removeItem: () => { },
+        updateQuantity: () => { },
+        clearCart: () => { },
         isCartSidebarOpen: false,
-        setIsCartSidebarOpen: () => {},
+        setIsCartSidebarOpen: () => { },
       };
     }
     throw new Error('useCart deve ser usado dentro de um CartProvider')

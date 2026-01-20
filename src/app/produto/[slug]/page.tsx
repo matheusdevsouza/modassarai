@@ -227,7 +227,7 @@ export default function ProdutoPage() {
       try {
         await navigator.share({
           title: product?.name || 'Produto',
-          text: `Confira ${product?.name || 'este produto'} na Modas Saraí!`,
+          text: `Confira ${product?.name || 'este produto'} na Luxúria Modas!`,
           url: window.location.href,
         });
       } catch (error) {
@@ -443,8 +443,8 @@ export default function ProdutoPage() {
                 <div
                   ref={zoomRef}
                   className={`relative w-full aspect-square rounded-2xl overflow-hidden bg-sand-100 shadow-lg transition-all duration-300 ${effectiveZoomEnabled
-                      ? 'cursor-zoom-in border-primary-500 ring-2 ring-primary-500/30'
-                      : 'cursor-pointer hover:border-primary-500/50'
+                    ? 'cursor-zoom-in border-primary-500 ring-2 ring-primary-500/30'
+                    : 'cursor-pointer hover:border-primary-500/50'
                     }`}
                   onMouseMove={effectiveZoomEnabled ? handleMouseMove : undefined}
                   onMouseLeave={handleMouseLeave}
@@ -494,10 +494,10 @@ export default function ProdutoPage() {
                       onClick={() => setZoomEnabled(!zoomEnabled)}
                       disabled={isCurrentMediaVideo}
                       className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-sm ${isCurrentMediaVideo
-                          ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                          : effectiveZoomEnabled
-                            ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
-                            : 'bg-white/90 text-sage-800 hover:bg-primary-500 hover:text-white hover:shadow-lg hover:shadow-primary-500/30'
+                        ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
+                        : effectiveZoomEnabled
+                          ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+                          : 'bg-white/90 text-sage-800 hover:bg-primary-500 hover:text-white hover:shadow-lg hover:shadow-primary-500/30'
                         }`}
                       title={isCurrentMediaVideo ? 'Zoom não disponível para vídeos' : effectiveZoomEnabled ? 'Desativar zoom' : 'Ativar zoom'}
                     >
@@ -541,8 +541,8 @@ export default function ProdutoPage() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border transition-all duration-300 ${selectedImage === idx
-                          ? "border-primary-500 ring-2 ring-primary-500/30"
-                          : "border-cloud-100 hover:border-primary-400"
+                        ? "border-primary-500 ring-2 ring-primary-500/30"
+                        : "border-cloud-100 hover:border-primary-400"
                         }`}
                     >
                       {media.type === 'video' ? (
@@ -584,8 +584,8 @@ export default function ProdutoPage() {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`flex-1 px-6 py-4 text-sm font-medium transition-all duration-300 ${activeTab === tab
-                        ? 'text-primary-600 border-b-2 border-primary-500 bg-primary-50'
-                        : 'text-sage-800 hover:text-primary-600 hover:bg-sage-100'
+                      ? 'text-primary-600 border-b-2 border-primary-500 bg-primary-50'
+                      : 'text-sage-800 hover:text-primary-600 hover:bg-sage-100'
                       }`}
                   >
                     {tab === 'description' && 'Descrição'}
@@ -638,10 +638,10 @@ export default function ProdutoPage() {
                   onClick={toggleFavorite}
                   disabled={isFavoriteButtonDisabled}
                   className={`w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 ${isFavoriteButtonDisabled
-                      ? 'bg-dark-800/50 text-gray-600 cursor-not-allowed opacity-50'
-                      : isFavorite
-                        ? 'bg-red-500 text-white hover:bg-red-600'
-                        : 'bg-primary-500 text-white hover:bg-primary-600'
+                    ? 'bg-dark-800/50 text-gray-600 cursor-not-allowed opacity-50'
+                    : isFavorite
+                      ? 'bg-red-500 text-white hover:bg-red-600'
+                      : 'bg-primary-500 text-white hover:bg-primary-600'
                     }`}
                   title={
                     isFavoriteButtonDisabled
@@ -678,10 +678,10 @@ export default function ProdutoPage() {
                     onClick={toggleFavorite}
                     disabled={isFavoriteButtonDisabled}
                     className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${isFavoriteButtonDisabled
-                        ? 'bg-dark-800/50 text-gray-600 cursor-not-allowed opacity-50'
-                        : isFavorite
-                          ? 'bg-red-500 text-white hover:bg-red-600'
-                          : 'bg-primary-500 text-white hover:bg-primary-600'
+                      ? 'bg-dark-800/50 text-gray-600 cursor-not-allowed opacity-50'
+                      : isFavorite
+                        ? 'bg-red-500 text-white hover:bg-red-600'
+                        : 'bg-primary-500 text-white hover:bg-primary-600'
                       }`}
                     title={
                       isFavoriteButtonDisabled
@@ -750,10 +750,10 @@ export default function ProdutoPage() {
                           whileTap={!isOutOfStock ? { scale: 0.95 } : {}}
                           disabled={isOutOfStock}
                           className={`py-3 px-2 rounded-xl border font-bold transition-all duration-300 relative ${isOutOfStock
-                              ? 'cursor-not-allowed size-out-of-stock bg-cloud-100 border-cloud-200'
-                              : isSelected
-                                ? 'border-primary-500 bg-primary-500 text-white shadow-lg shadow-primary-500/25 size-available'
-                                : 'border-cloud-100 bg-white text-sage-800 hover:border-primary-400 hover:bg-primary-50 size-available'
+                            ? 'cursor-not-allowed size-out-of-stock bg-cloud-100 border-cloud-200'
+                            : isSelected
+                              ? 'border-primary-500 bg-primary-500 text-white shadow-lg shadow-primary-500/25 size-available'
+                              : 'border-cloud-100 bg-white text-sage-800 hover:border-primary-400 hover:bg-primary-50 size-available'
                             }`}
                         >
                           <span className="relative z-10">{size}</span>
@@ -787,10 +787,10 @@ export default function ProdutoPage() {
                           whileTap={!isOutOfStock ? { scale: 0.95 } : {}}
                           disabled={isOutOfStock}
                           className={`py-3 px-4 rounded-xl border font-bold transition-all duration-300 relative whitespace-nowrap ${isOutOfStock
-                              ? 'cursor-not-allowed bg-cloud-100 border-cloud-200'
-                              : isSelected
-                                ? 'border-primary-500 bg-primary-500 text-white shadow-lg shadow-primary-500/25'
-                                : 'border-cloud-100 bg-white text-sage-800 hover:border-primary-400 hover:bg-primary-50'
+                            ? 'cursor-not-allowed bg-cloud-100 border-cloud-200'
+                            : isSelected
+                              ? 'border-primary-500 bg-primary-500 text-white shadow-lg shadow-primary-500/25'
+                              : 'border-cloud-100 bg-white text-sage-800 hover:border-primary-400 hover:bg-primary-50'
                             }`}
                           title={color.color_name}
                         >
@@ -900,8 +900,8 @@ export default function ProdutoPage() {
                         key={option.id}
                         onClick={() => setSelectedShipping(option)}
                         className={`w-full text-left p-2.5 sm:p-3 rounded-lg border transition-colors ${selectedShipping?.id === option.id
-                            ? 'border-primary-500 bg-primary-50'
-                            : 'border-cloud-200 hover:border-primary-300'
+                          ? 'border-primary-500 bg-primary-50'
+                          : 'border-cloud-200 hover:border-primary-300'
                           }`}
                       >
                         <div className="flex items-center justify-between gap-3">
@@ -977,8 +977,8 @@ export default function ProdutoPage() {
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`flex-1 px-6 py-4 text-sm font-medium transition-all duration-300 ${activeTab === tab
-                        ? 'text-primary-600 border-b-2 border-primary-500 bg-primary-50'
-                        : 'text-sage-800 hover:text-primary-600 hover:bg-sage-100'
+                      ? 'text-primary-600 border-b-2 border-primary-500 bg-primary-50'
+                      : 'text-sage-800 hover:text-primary-600 hover:bg-sage-100'
                       }`}
                   >
                     {tab === 'description' && 'Descrição'}
@@ -1029,7 +1029,7 @@ export default function ProdutoPage() {
         >
           <div className="bg-sage-50 rounded-3xl p-8 md:p-12 shadow-sm">
             <h3 className="text-2xl md:text-3xl font-bold text-sage-900 mb-8 text-center">
-              Por que escolher a Modas Saraí?
+              Por que escolher a Luxúria Modas?
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               <motion.div
@@ -1234,7 +1234,7 @@ export default function ProdutoPage() {
                 </button>
                 <button
                   onClick={() => {
-                    window.open(`https://wa.me/?text=Confira ${product?.name || 'este produto'} na Modas Saraí! ${window.location.href}`, '_blank');
+                    window.open(`https://wa.me/?text=Confira ${product?.name || 'este produto'} na Luxúria Modas! ${window.location.href}`, '_blank');
                     setShowShareModal(false);
                   }}
                   className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-xl font-semibold transition-colors"

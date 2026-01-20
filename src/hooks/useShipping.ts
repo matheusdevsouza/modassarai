@@ -7,11 +7,11 @@ interface UseShippingProps {
   initialZipCode?: string
 }
 
-const SHIPPING_STORAGE_KEY = 'mariapistache_shipping'
+const SHIPPING_STORAGE_KEY = 'luxuriamodas_shipping'
 
 const saveShippingToStorage = (zipCode: string, options: ShippingOption[], selectedOption: ShippingOption | null) => {
   if (typeof window === 'undefined') return
-  
+
   try {
     const shippingData = {
       zipCode: zipCode.replace(/\D/g, ''),
@@ -27,19 +27,19 @@ const saveShippingToStorage = (zipCode: string, options: ShippingOption[], selec
 
 const loadShippingFromStorage = (): { zipCode: string; options: ShippingOption[]; selectedOption: ShippingOption | null } | null => {
   if (typeof window === 'undefined') return null
-  
+
   try {
     const saved = sessionStorage.getItem(SHIPPING_STORAGE_KEY)
     if (!saved) return null
-    
+
     const data = JSON.parse(saved)
-    
+
     const oneHour = 60 * 60 * 1000
     if (Date.now() - data.timestamp > oneHour) {
       sessionStorage.removeItem(SHIPPING_STORAGE_KEY)
       return null
     }
-    
+
     return {
       zipCode: data.zipCode || '',
       options: data.options || [],
@@ -55,7 +55,7 @@ export function useShipping({ cartItems, initialZipCode = '' }: UseShippingProps
   const [state, setState] = useState<ShippingState>(() => {
     const saved = loadShippingFromStorage()
     const cleanedInitialZip = initialZipCode.replace(/\D/g, '')
-    
+
     if (saved && saved.zipCode && saved.options && saved.options.length > 0) {
       if (cleanedInitialZip === saved.zipCode || !cleanedInitialZip) {
         return {
@@ -67,7 +67,7 @@ export function useShipping({ cartItems, initialZipCode = '' }: UseShippingProps
         }
       }
     }
-    
+
     return {
       options: [],
       selectedOption: null,
@@ -163,11 +163,11 @@ export function useShipping({ cartItems, initialZipCode = '' }: UseShippingProps
         ...prev,
         selectedOption: option
       }
-      
+
       if (prev.zipCode && prev.options.length > 0) {
         saveShippingToStorage(prev.zipCode, prev.options, option)
       }
-      
+
       return newState
     })
   }, [])
@@ -180,7 +180,7 @@ export function useShipping({ cartItems, initialZipCode = '' }: UseShippingProps
       error: null,
       zipCode: ''
     })
-    
+
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem(SHIPPING_STORAGE_KEY)
     }
@@ -189,7 +189,7 @@ export function useShipping({ cartItems, initialZipCode = '' }: UseShippingProps
   useEffect(() => {
     const cleanedInitialZip = initialZipCode.replace(/\D/g, '')
     const saved = loadShippingFromStorage()
-    
+
     if (saved && saved.zipCode && saved.options && saved.options.length > 0) {
       if (cleanedInitialZip === saved.zipCode || !cleanedInitialZip) {
         setState(prev => {
@@ -223,7 +223,7 @@ export function useShipping({ cartItems, initialZipCode = '' }: UseShippingProps
       if (saved && saved.zipCode === state.zipCode && saved.options.length > 0) {
         return
       }
-      
+
       const timer = setTimeout(() => {
         calculateShipping(state.zipCode)
       }, 500)

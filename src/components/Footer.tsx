@@ -54,7 +54,7 @@ export function Footer() {
             <Link href="/" className="inline-block mb-6 relative w-32 h-8">
               <Image
                 src="/images/logo.png"
-                alt="Modas Saraí"
+                alt="Luxúria Modas"
                 fill
                 className="object-contain"
               />
@@ -68,7 +68,7 @@ export function Footer() {
             <div className="flex items-center gap-4">
               <span className="text-xs text-[#999999] font-medium">Siga-nos:</span>
               <a
-                href="https://www.instagram.com/modassarai"
+                href="https://www.instagram.com/luxuriamodas"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#666666] hover:text-black transition-colors duration-300"
@@ -111,27 +111,26 @@ export function Footer() {
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-gray-400 mb-1">Endereço</span>
                   <span className="text-sm text-[#333333] leading-snug">
-                    Shopping Novo Porto Brás<br />
-                    R. Tiers, 282 - Box 2562 (2º Andar)<br />
-                    Canínde, São Paulo - SP
+                    Endereço da Loja, 123<br />
+                    Bairro - Cidade, Estado - UF
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <a href="tel:5511930055418" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <a href="tel:[Telefone com DDD]" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                   <Phone size={18} className="text-black" strokeWidth={1.5} />
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold text-gray-400">Telefone</span>
-                    <span className="text-sm text-[#333333] font-medium">+55 11 93005-5418</span>
+                    <span className="text-sm text-[#333333] font-medium">(11) 99999-9999</span>
                   </div>
                 </a>
 
-                <a href="mailto:contato@modassarai.com.br" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <a href="mailto:contato@luxuriamodas.com.br" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                   <Mail size={18} className="text-black" strokeWidth={1.5} />
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold text-gray-400">E-mail</span>
-                    <span className="text-sm text-[#333333] font-medium">contato@modassarai.com.br</span>
+                    <span className="text-sm text-[#333333] font-medium">contato@luxuriamodas.com.br</span>
                   </div>
                 </a>
               </div>
@@ -146,7 +145,7 @@ export function Footer() {
         <div className="container mx-auto px-4 sm:px-6 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs text-[#999999] text-center md:text-left font-light">
-              © {new Date().getFullYear()} Modas Saraí. CNPJ: 31.434.414/0001-52
+              © {new Date().getFullYear()} Luxúria Modas. CNPJ: 00.000.000/0001-00
             </p>
           </div>
         </div>

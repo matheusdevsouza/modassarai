@@ -1,10 +1,10 @@
-# 👗 Modas Saraí
+# 👗 Luxúria Modas
 
 **E-commerce de moda feminina**
 
 ## 📋 Sobre o Projeto
 
-A Modas Saraí é uma plataforma de e-commerce moderna desenvolvida em Next.js 14, focada na venda de moda feminina. O projeto oferece uma experiência de compra completa com integração ao Mercado Pago, sistema de autenticação seguro e painel administrativo.
+A Luxúria Modas é uma plataforma de e-commerce moderna desenvolvida em Next.js 14, focada na venda de moda feminina. O projeto oferece uma experiência de compra completa com integração ao Mercado Pago, sistema de autenticação seguro e painel administrativo.
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -18,7 +18,7 @@ A Modas Saraí é uma plataforma de e-commerce moderna desenvolvida em Next.js 1
 ## 📁 Estrutura do Projeto
 
 ```
-MariaPistache/
+luxuriamodas/
 ├── 📁 src/                    # Código fonte da aplicação
 │   ├── 📁 app/               # App Router do Next.js
 │   │   ├── 📁 admin/         # Painel administrativo
@@ -60,8 +60,8 @@ Logs de erro, debug e arquivos temporários gerados durante a execução.
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/matheusdevsouza/mariapistache.git
-cd mariapistache
+git clone https://github.com/matheusdevsouza/luxuriamodas.git
+cd luxuriamodas
 ```
 
 ### 2. Instale as dependências

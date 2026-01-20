@@ -70,7 +70,7 @@ export function PromotionalBannerSection() {
                                         <div className={`relative w-24 h-8 mb-6 opacity-90 ${banner.theme === 'light' ? 'invert-0' : 'invert brightness-0 bg-white/10 rounded px-2'}`}>
                                             <Image
                                                 src="/images/logo.png"
-                                                alt="Modas Saraí"
+                                                alt="Luxúria Modas"
                                                 fill
                                                 className="object-contain"
                                             />

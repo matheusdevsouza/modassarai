@@ -63,7 +63,7 @@ export function generateEmailTemplate(options: EmailTemplateOptions): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>${title} - Modas Saraí</title>
+  <title>${title} - Luxúria Modas</title>
   <!--[if mso]>
   <style type="text/css">
     body, table, td {font-family: Arial, sans-serif !important;}
@@ -83,7 +83,7 @@ export function generateEmailTemplate(options: EmailTemplateOptions): string {
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100">
                 <tr>
                   <td align="center">
-                    <img src="${LOGO_URL}" alt="Modas Saraí" width="100" height="100" style="display: block; margin: 0 auto;" />
+                    <img src="${LOGO_URL}" alt="Luxúria Modas" width="100" height="100" style="display: block; margin: 0 auto;" />
                   </td>
                 </tr>
               </table>
@@ -91,7 +91,7 @@ export function generateEmailTemplate(options: EmailTemplateOptions): string {
               <!--[if !mso]><!-->
               <img 
                 src="${LOGO_URL}" 
-                alt="Modas Saraí" 
+                alt="Luxúria Modas" 
                 width="100" 
                 height="100" 
                 style="display: block; margin: 0 auto; max-width: 100px; height: auto; border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;" 
@@ -103,7 +103,7 @@ export function generateEmailTemplate(options: EmailTemplateOptions): string {
           ` : `
           <tr>
             <td align="center" style="padding: 30px 30px 20px; background-color: ${BG_WHITE}; border-bottom: 2px solid ${PRIMARY_COLOR};">
-              <h1 style="margin: 0; color: ${TEXT_DARK}; font-size: 28px; font-weight: 700; letter-spacing: 0.5px;">Modas Saraí</h1>
+              <h1 style="margin: 0; color: ${TEXT_DARK}; font-size: 28px; font-weight: 700; letter-spacing: 0.5px;">Luxúria Modas</h1>
             </td>
           </tr>
           `}
@@ -193,7 +193,7 @@ export function generateEmailTemplate(options: EmailTemplateOptions): string {
                 <tr>
                   <td align="center" style="padding-bottom: 12px;">
                     <p style="margin: 0; color: ${TEXT_LIGHT}; font-size: 12px; line-height: 1.5;">
-                      © ${new Date().getFullYear()} <strong style="color: ${PRIMARY_COLOR};">Modas Saraí</strong>. Todos os direitos reservados.
+                      © ${new Date().getFullYear()} <strong style="color: ${PRIMARY_COLOR};">Luxúria Modas</strong>. Todos os direitos reservados.
                     </p>
                   </td>
                 </tr>
